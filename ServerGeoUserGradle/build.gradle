@@ -41,23 +41,16 @@ dependencies {
  	compile 'com.google.code.findbugs:annotations:3+'
 }
 
-
-task customFindbugs(type: FindBugs) {
+//findbugs tasks settings
+findbugs {
     ignoreFailures = false
+    reportsDir = file("$project.buildDir/findbugsReports")
     effort = "default"
     reportLevel = "medium"
-    classes = files("$project.buildDir/intermediates/classes")
-    excludeFilter = file("$rootProject.rootDir/config/findbugs/exclude.xml")
-
-    source = fileTree('src/main/java/')
-    classpath = files()
+}
+tasks.withType(FindBugs) {
     reports {
         xml.enabled = false
-        xml.withMessages = true
-        html.enabled = !xml.isEnabled()
-        xml.destination "$project.buildDir/outputs/findbugs/findbugs-output.xml"
-        html.destination "$project.buildDir/outputs/findbugs/findbugs-output.html"
+        html.enabled = true
     }
 }
-// UPDATE: renamed the task to customFindbugs and made it automatically be called when build is called
-build.dependsOn customFindbugs
