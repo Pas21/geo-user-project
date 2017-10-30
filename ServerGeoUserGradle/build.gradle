@@ -44,8 +44,8 @@ dependencies {
 
 task customFindbugs(type: FindBugs) {
     ignoreFailures = false
-    effort = "max"
-    reportLevel = "low"
+    effort = "default"
+    reportLevel = "medium"
     classes = files("$project.buildDir/intermediates/classes")
     excludeFilter = file("$rootProject.rootDir/config/findbugs/exclude.xml")
 
