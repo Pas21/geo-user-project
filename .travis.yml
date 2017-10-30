@@ -1,6 +1,8 @@
 language: java
 
-before_install: cd ServerGeoUserGradle
+before_install: 
+- cd ServerGeoUserGradle
+- chmod +x gradlew
 
 jdk: oraclejdk8
 
