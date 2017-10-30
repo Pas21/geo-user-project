@@ -43,7 +43,7 @@ dependencies {
 
 //findbugs tasks settings
 findbugs {
-    ignoreFailures = false
+    ignoreFailures = true
     reportsDir = file("$project.buildDir/findbugsReports")
     effort = "default"
     reportLevel = "medium"
