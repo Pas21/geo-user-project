@@ -1,4 +1,7 @@
 language: java
+
+before_install: cd ServerGeoUserGradle
+
 jdk: oraclejdk8
 
 notifications:
