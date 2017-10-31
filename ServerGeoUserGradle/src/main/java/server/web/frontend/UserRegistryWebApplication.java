@@ -27,7 +27,7 @@ import server.web.resources.json.UserRegSizeJSON;
 public class UserRegistryWebApplication extends Application{
 	
 	//Creo il Map Verifier
-	public static MapVerifier verifier=new MapVerifier();
+	public final static MapVerifier verifier=new MapVerifier();
 	
 	private class Settings{
 		public int port;

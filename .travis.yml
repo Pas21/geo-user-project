@@ -8,3 +8,6 @@ jdk: oraclejdk8
 
 notifications:
   email: false
+  
+after_script:
+-cat "$(ls $project.buildDir/findbugsReports -t | head -n1)"
