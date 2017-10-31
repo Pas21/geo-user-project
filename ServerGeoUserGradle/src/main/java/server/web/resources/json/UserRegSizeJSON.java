@@ -12,7 +12,7 @@ public class UserRegSizeJSON extends ServerResource{
 	public String getSize(){
 		Gson gson=new Gson();
 		UserRegistryAPI urapi=UserRegistryAPI.instance();
-		return gson.toJson(new Integer(urapi.size()),Integer.class);
+		return gson.toJson(Integer.valueOf(urapi.size()),Integer.class);
 	}
 	
 }

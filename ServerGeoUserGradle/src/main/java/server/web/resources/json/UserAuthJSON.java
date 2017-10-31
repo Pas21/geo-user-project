@@ -28,9 +28,9 @@ public class UserAuthJSON extends ServerResource{
 			String password=st.nextToken();
 			if(urapi.verifyUser(username, password)){
 				UserRegistryWebApplication.verifier.getLocalSecrets().put(username, password.toCharArray());
-				return gson.toJson(new String("authenticated"),String.class);
+				return gson.toJson("authenticated",String.class);
 			}
-			return gson.toJson(new String("notAuthenticated"),String.class);
+			return gson.toJson("notAuthenticated",String.class);
 		}catch(InvalidUsernameException e){
 			Status s=new Status(ErrorCodes.INVALID_USERNAME_CODE);
 			setStatus(s);
