@@ -10,4 +10,4 @@ notifications:
   email: false
   
 after_script:
-- cat $project.buildDir/findbugsReports/main.html
+- cat /home/travis/build/Pas21/geo-user-project/ServerGeoUserGradle/build/findbugsReports/main.html
