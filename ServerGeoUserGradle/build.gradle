@@ -45,8 +45,8 @@ dependencies {
 findbugs {
     ignoreFailures = true
     reportsDir = file("$project.buildDir/findbugsReports")
-    effort = "default"
-    reportLevel = "high"
+    effort = "max"
+    reportLevel = "low"
 }
 tasks.withType(FindBugs) {
     reports {
