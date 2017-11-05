@@ -44,8 +44,6 @@ dependencies {
  	
  	//Import hibernate library
 	compile 'org.hibernate:hibernate-core:5+'
-	//compile group: 'org.hibernate.orm.tooling', name: 'hibernate-enhance-maven-plugin', version: '5+'
-	
 	
 	//Import MySQL connector java driver
 	compile 'mysql:mysql-connector-java:5+'	//compile 'mysql:mysql-connector-java:5.1.44'
