@@ -5,6 +5,7 @@ import java.io.FileOutputStream;
 import java.io.IOException;
 import java.io.ObjectInputStream;
 import java.io.ObjectOutputStream;
+import java.sql.Timestamp;
 import java.text.ParseException;
 import java.text.SimpleDateFormat;
 import java.util.ArrayList;
@@ -12,14 +13,16 @@ import java.util.Date;
 import java.util.TreeMap;
 
 import commons.InvalidUsernameException;
-import commons.User;
+import commons.Utente;
 import server.web.frontend.UserRegistryWebApplication;
 import commons.Posizione;
 
 public class UserRegistry {
 	
+	//Eventualmente dovrà essere eliminata la variabile dict poichè le informazioni dovrenno essere caricate attraverso hibernate
+	
 	public UserRegistry(){
-		dict=new TreeMap<String,User>();
+		dict=new TreeMap<String,Utente>();
 	}
 
 
@@ -27,19 +30,19 @@ public class UserRegistry {
 		return dict.size();
 	}
 	
-	public void add(User u) throws InvalidUsernameException{
+	public void add(Utente u) throws InvalidUsernameException{
 		if(dict.containsKey(u.getUsername()))
 			throw new InvalidUsernameException("Duplicate username"+u.getUsername());
 		dict.put(u.getUsername(), u);
 	}
 	
-	public User get(String username) throws InvalidUsernameException{
+	public Utente get(String username) throws InvalidUsernameException{
 		if(!dict.containsKey(username))
 			throw new InvalidUsernameException("Invalid username "+username);
 		return dict.get(username);
 	}
 	
-	public void put(User u){
+	public void put(Utente u){
 		dict.put(u.getUsername(), u);
 	}
 	
@@ -71,10 +74,10 @@ public class UserRegistry {
 	public void addUserPosition(String username,Posizione pos) throws InvalidUsernameException{
 		if(!dict.containsKey(username))
 			throw new InvalidUsernameException("Invalid Username");
-		dict.get(username).addPosition(pos);
-		
+		//In questo punto deve essere usato hibernate per inserire una posizione nel database
 	}
 	
+/*	Classi non necessarie in quanto attraverso hibernate gli utenti  ele posizioni vengono prelevate dal database
 	public void save(String fileOutName) throws IOException{
 		FileOutputStream fileOut = new FileOutputStream(fileOutName);
 	    ObjectOutputStream out = new ObjectOutputStream(fileOut);
@@ -90,28 +93,19 @@ public class UserRegistry {
 	    in.close();
 	    fileIn.close();
 	}
+*/
 	
-	
-	public ArrayList<Posizione> getPositionarrayByTime(String username,String d1,String d2) throws InvalidUsernameException, ParseException{
+	public ArrayList<Posizione> getPositionarrayByTime(String username,Timestamp d1,Timestamp d2) throws InvalidUsernameException, ParseException{
 		if(!dict.containsKey(username))
 			throw new InvalidUsernameException("Invalid User: "+username);
 		ArrayList<Posizione> posizioniMatch=new ArrayList<Posizione>();
-		ArrayList<Posizione> posizioniUser=dict.get(username).getArray();
-		Date date1,date2,dateUser;
-		SimpleDateFormat format=new SimpleDateFormat("MM/dd/yyyy HH:mm:ss");		//cambiare formato data in quello italiano "dd/MM/yyyy HH:mm:ss"
-		date1=format.parse(d1);
-		date2=format.parse(d2);
-		System.out.println(date1.toString());
-		for(Posizione p: posizioniUser){
-			dateUser=format.parse(p.getTime().replaceAll("Time: ", ""));
-			if(dateUser.after(date1) && dateUser.before(date2))
-				posizioniMatch.add(p);
-		}
+		//In questo punto deve essere inserita la logica di selezione delle posizioni attraverso hibernate e query sul db
+		
 		return posizioniMatch;
 	}
 	
 	
 	
 	
-	private TreeMap<String,User> dict;
+	private TreeMap<String,Utente> dict;
 }

@@ -1,12 +1,11 @@
 package commons;
 import java.io.Serializable;
-import java.util.ArrayList;
 
 /**
  * Created by Antonio on 15/02/2017.
  */
 
-public class User implements Serializable{
+public class Utente implements Serializable{
     
 	private static final long serialVersionUID = 1L;
 	private String username;
@@ -14,29 +13,20 @@ public class User implements Serializable{
     private String email;
     private String name;
     private String surname;
-    private ArrayList<Posizione> posizioni;
+    
 
-    public User(String username,String password,String email,String name,String surname){
+    public Utente(String username,String password,String email,String name,String surname){
         this.username=username;
         this.password=password;
         this.email=email;
         this.name=name;
         this.surname=surname;
-        this.posizioni=new ArrayList<Posizione>();
     }
 
+    public Utente(){}
     
-    public void addPosition(Posizione p){
-    	posizioni.add(p);
-    }
     
-    public ArrayList<Posizione> getArray(){
-    	return posizioni;
-    }
     
-    public int getPositionNumber(){
-    	return posizioni.size();
-    }
     
     public void setUsername(String username){
         this.username=username;

@@ -11,7 +11,7 @@ import com.google.gson.Gson;
 
 import commons.ErrorCodes;
 import commons.InvalidUsernameException;
-import commons.User;
+import commons.Utente;
 import server.backend.wrapper.UserRegistryAPI;
 import server.web.frontend.UserRegistryWebApplication;
 
@@ -44,7 +44,7 @@ public class UserAuthJSON extends ServerResource{
 	public String addUser(String payload){
 		Gson gson=new Gson();
 		UserRegistryAPI urapi=UserRegistryAPI.instance();
-		User u=gson.fromJson(payload, User.class);
+		Utente u=gson.fromJson(payload, Utente.class);
 		try{
 			urapi.add(u);
 			UserRegistryWebApplication.verifier.getLocalSecrets().put(u.getUsername(), u.getPassword().toCharArray());

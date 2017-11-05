@@ -11,7 +11,7 @@ import com.google.gson.Gson;
 import commons.ErrorCodes;
 import commons.InvalidUsernameException;
 import commons.Posizione;
-import commons.User;
+import commons.Utente;
 import server.backend.wrapper.UserRegistryAPI;
 import server.web.frontend.UserRegistryWebApplication;
 
@@ -22,8 +22,8 @@ public class UserJSON extends ServerResource{
 		Gson gson=new Gson();
 		UserRegistryAPI urapi=UserRegistryAPI.instance();
 		try{
-			User u=urapi.get(getAttribute("username"));
-			return gson.toJson(u,User.class);
+			Utente u=urapi.get(getAttribute("username"));
+			return gson.toJson(u,Utente.class);
 		}catch(InvalidUsernameException e){
 			Status s=new Status(ErrorCodes.INVALID_USERNAME_CODE);
 			setStatus(s);

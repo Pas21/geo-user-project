@@ -2,12 +2,13 @@ package server.backend.wrapper;
 
 import java.io.File;
 import java.io.IOException;
+import java.sql.Timestamp;
 import java.text.ParseException;
 import java.util.ArrayList;
 
 import commons.InvalidUsernameException;
 import commons.Posizione;
-import commons.User;
+import commons.Utente;
 import server.backend.UserRegistry;
 
 public class UserRegistryAPI {
@@ -26,23 +27,20 @@ public class UserRegistryAPI {
 		return ur.size();
 	}
 	
-	public synchronized User get(String username) throws InvalidUsernameException{
+	public synchronized Utente get(String username) throws InvalidUsernameException{
 		return ur.get(username);
 	}
 	
-	public synchronized void add(User u) throws InvalidUsernameException{
+	public synchronized void add(Utente u) throws InvalidUsernameException{
 		ur.add(u);
-		commit();
 	}
 	
-	public synchronized void update(User u){
+	public synchronized void update(Utente u){
 		ur.put(u);
-		commit();
 	}
 	
 	public synchronized void remove(String username) throws InvalidUsernameException{
 		ur.remove(username);
-		commit();
 	}
 	
 	public synchronized boolean verifyUser(String username,String password) throws InvalidUsernameException{
@@ -55,10 +53,9 @@ public class UserRegistryAPI {
 	
 	public synchronized void addUserPosition(String username,Posizione pos) throws InvalidUsernameException{
 		ur.addUserPosition(username, pos);
-		commit();
 	}
 	
-	public synchronized ArrayList<Posizione> getPositionUser(String username,String d1,String d2) throws InvalidUsernameException, ParseException{
+	public synchronized ArrayList<Posizione> getPositionUser(String username,Timestamp d1,Timestamp d2) throws InvalidUsernameException, ParseException{
 		return ur.getPositionarrayByTime(username, d1, d2);
 	}
 	
@@ -66,6 +63,8 @@ public class UserRegistryAPI {
 		return ur.getUsers();
 	}
 	
+	
+	/* Classi non necessarie con hibernate
 	public void setStorageFiles(String rootDirForStorageFile, String baseStorageFile){
 		this.rootDirForStorageFile=rootDirForStorageFile;
 		this.baseStorageFile=baseStorageFile;
@@ -123,11 +122,10 @@ public class UserRegistryAPI {
 			}
 		}
 	}
-	
+	*/
 	
 	private static UserRegistryAPI instance;
 	private UserRegistry ur;
-	private String rootDirForStorageFile;
-	private String baseStorageFile;
+	
 
 }

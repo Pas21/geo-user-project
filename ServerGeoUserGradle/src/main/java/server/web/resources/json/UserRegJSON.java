@@ -8,7 +8,7 @@ import org.restlet.resource.ServerResource;
 import com.google.gson.Gson;
 
 import commons.InvalidUsernameException;
-import commons.User;
+import commons.Utente;
 import server.backend.wrapper.UserRegistryAPI;
 
 public class UserRegJSON extends ServerResource{
@@ -25,7 +25,7 @@ public class UserRegJSON extends ServerResource{
 	public String updateUser(String payload){
 		Gson gson=new Gson();
 		UserRegistryAPI urapi=UserRegistryAPI.instance();
-		User u=gson.fromJson(payload, User.class);
+		Utente u=gson.fromJson(payload, Utente.class);
 		urapi.update(u);
 		return gson.toJson("User updated:"+ u.getUsername(),String.class);	
 	}

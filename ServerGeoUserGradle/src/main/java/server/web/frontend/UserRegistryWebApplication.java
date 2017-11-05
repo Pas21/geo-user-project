@@ -74,7 +74,7 @@ public class UserRegistryWebApplication extends Application{
 		router.attach("/UserRegApplication/auth/size",guardiaSize);
 		router.attach("/UserRegApplication/auth/users",guardiaUserReg);
 		router.attach("/UserRegApplication/auth/users/{username}",guardiaUser);
-		router.attach("/UserRegApplication/auth/users/{username}/{data}",guardiaFilter);
+		router.attach("/UserRegApplication/auth/users/pos/{data}",guardiaFilter);
 		router.attach("/UserRegApplication/users",UserAuthJSON.class);
 		router.attach("/UserRegApplication/users/remove/{username}",guardiaRemove);
 		
@@ -99,8 +99,7 @@ public class UserRegistryWebApplication extends Application{
 		System.err.println("Web Directory: " + rootDirForWebStaticFiles);
 		
 		UserRegistryAPI urapi=UserRegistryAPI.instance();
-		urapi.setStorageFiles(System.getProperty("user.dir")+File.separator+settings.storage_base_dir+File.separator, settings.storage_base_file);
-		urapi.restore();
+		
 			
 		
 		try{

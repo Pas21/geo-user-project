@@ -1,5 +1,6 @@
 package server.web.resources.json;
 
+import java.sql.Timestamp;
 import java.text.ParseException;
 import java.text.SimpleDateFormat;
 import java.util.ArrayList;
@@ -32,12 +33,12 @@ public class UserFilteredJSON extends ServerResource{
 		String data2S=st.nextToken();
 		try{
 			SimpleDateFormat format=new SimpleDateFormat("MM/dd/yyyy HH:mm:ss");
-			Date d1,d2;
-			d1=format.parse(data1S);
-			d2=format.parse(data2S);
+			Timestamp d1,d2;
+			d1=new Timestamp(format.parse(data1S).getTime());
+			d2=new Timestamp(format.parse(data2S).getTime());
 			if(d2.before(d1) || (d2.equals(d1)))
 				throw new InvalidDataException("errore");
-			ArrayList<Posizione> posizioni=urapi.getPositionUser(getAttribute("username"), data1S,data2S);
+			ArrayList<Posizione> posizioni=urapi.getPositionUser(getAttribute("username"), d1,d2);
 			return gson.toJson(posizioni, ArrayList.class);
 		}catch(InvalidUsernameException e){
 			Status s=new Status(ErrorCodes.INVALID_USERNAME_CODE);
@@ -56,17 +57,21 @@ public class UserFilteredJSON extends ServerResource{
 	}
 	
 	@Post
-	public String addUserPosition(){
+	public String addUserPosition(String payload) throws ParseException{
 		Gson gson=new Gson();
 		UserRegistryAPI urapi=UserRegistryAPI.instance();
+		/*
 		StringTokenizer st=new StringTokenizer(getAttribute("data")," & ");
 		String accuracy=st.nextToken();
-		String time=st.nextToken();
+		String timeS=st.nextToken();
 		String latitude=st.nextToken();
 		String longitude=st.nextToken();
+		SimpleDateFormat format=new SimpleDateFormat("MM/dd/yyyy HH:mm:ss");
+		Timestamp time=new Timestamp(format.parse(timeS).getTime());
+		*/
+		Posizione pos=gson.fromJson(payload, Posizione.class);
 		try{
-			Posizione pos=new Posizione(accuracy,time,latitude,longitude);
-			urapi.addUserPosition(getAttribute("username"), pos);
+			urapi.addUserPosition(pos.getUtente().getUsername(), pos);
 			return gson.toJson("Position added to "+getAttribute("username"),String.class);
 		}catch(InvalidUsernameException e){
 			Status s=new Status(ErrorCodes.INVALID_USERNAME_CODE);
