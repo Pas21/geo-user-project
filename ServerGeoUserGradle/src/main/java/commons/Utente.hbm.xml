@@ -1,0 +1,20 @@
+<?xml version = "1.0" encoding = "UTF-8"?>
+<!DOCTYPE hibernate-mapping PUBLIC 
+"-//Hibernate/Hibernate Mapping DTD//EN"
+"http://www.hibernate.org/dtd/hibernate-mapping-3.0.dtd"> 
+
+<hibernate-mapping package="commons">
+   <class name = "Utente" table = "UTENTI">
+      
+      <meta attribute = "class-description">
+         This class contains the users details. 
+      </meta>
+      
+      <id 		name = "username" 	column = "username" 	type = "string"/>      
+      <property name = "password" 	column = "password" 	type = "string"/>
+      <property name = "email" 	  	column = "email" 		type = "string" 	unique="true"/>
+      <property name = "nome" 	  	column = "nome" 		type = "string"/>
+      <property name = "cognome" 	column = "cognome" 		type = "string"/>
+      
+   </class>
+</hibernate-mapping>
