@@ -1,0 +1,24 @@
+<?xml version = "1.0" encoding = "UTF-8"?>
+<!DOCTYPE hibernate-mapping PUBLIC 
+"-//Hibernate/Hibernate Mapping DTD//EN"
+"http://www.hibernate.org/dtd/hibernate-mapping-3.0.dtd"> 
+
+<hibernate-mapping package="commons">
+   <class name = "Posizione" table = "POSIZIONI">
+      
+      <meta attribute = "class-description">
+         This class contains the positions details. 
+      </meta>
+      
+      <composite-id>
+      <key-many-to-one 	name = "utente" 		column = "utente" 		class = "commons.Utente"/>
+ <!-- <key-property 	name = "utente" 		column = "utente" 		type = "string"/>   --> 
+      <key-property 	name = "latitudine" 	column = "latitudine" 	type = "double"/>
+      <key-property 	name = "longitudine" 	column = "longitudine" 	type = "double"/>
+      <key-property 	name = "timestamp" 		column = "timestamp" 	type = "timestamp"/> 
+      </composite-id>
+      
+      <property 		name = "accuratezza" 	column = "accuratezza" 	type = "float"/>
+      
+   </class>
+</hibernate-mapping>
