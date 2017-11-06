@@ -14,7 +14,7 @@ public class Posizione implements Serializable{
 	
 	public Posizione(float accuracy, Timestamp time,double latitude,double longitude){
 		this.accuracy=accuracy;
-		this.time=time;
+		this.time=(Timestamp) time.clone();
 		this.latitude=latitude;
 		this.longitude=longitude;
 		this.utente=null;
@@ -58,11 +58,13 @@ public class Posizione implements Serializable{
 	}
 
 	public Timestamp getTime() {
-		return time;
+		if(time==null)
+			return null;
+		return (Timestamp) time.clone();
 	}
-
+	
 	public void setTime(Timestamp time) {
-		this.time = time;
+		this.time = (Timestamp) time.clone();
 	}
 
 }

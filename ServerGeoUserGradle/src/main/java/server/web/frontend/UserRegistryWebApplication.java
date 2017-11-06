@@ -16,7 +16,6 @@ import org.restlet.security.MapVerifier;
 
 import com.google.gson.Gson;
 
-import server.backend.wrapper.UserRegistryAPI;
 import server.web.resources.json.UserAuthJSON;
 import server.web.resources.json.UserFilteredJSON;
 import server.web.resources.json.UserJSON;
@@ -32,8 +31,7 @@ public class UserRegistryWebApplication extends Application{
 	private class Settings{
 		public int port;
 	    public String web_base_dir;
-	    public String storage_base_dir;
-	    public String storage_base_file;
+	    
 	}
 	
 	private static String rootDirForWebStaticFiles;
@@ -98,7 +96,7 @@ public class UserRegistryWebApplication extends Application{
 		rootDirForWebStaticFiles="file:\\\\"+System.getProperty("user.dir")+"\\"+settings.web_base_dir;
 		System.err.println("Web Directory: " + rootDirForWebStaticFiles);
 		
-		UserRegistryAPI urapi=UserRegistryAPI.instance();
+		// UserRegistryAPI urapi=UserRegistryAPI.instance();
 		
 			
 		

@@ -1,9 +1,7 @@
 package server.backend.wrapper.test;
 
 import commons.InvalidUsernameException;
-import commons.Posizione;
-import commons.Utente;
-import server.backend.UserRegistry;
+
 
 public class Test1 {
 	public static void main(String[] args) throws InvalidUsernameException{
