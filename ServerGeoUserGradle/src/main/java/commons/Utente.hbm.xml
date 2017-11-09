@@ -16,5 +16,12 @@
       <property name = "nome" 	  	column = "nome" 		type = "string"/>
       <property name = "cognome" 	column = "cognome" 		type = "string"/>
       
+      <set name="posizioni" table="posizioni"  inverse="true" lazy="true" fetch="select">
+            <key>
+                <column name="utente" not-null="true" />
+            </key>
+            <one-to-many class="commons.Posizione" />
+      </set>
+      
    </class>
 </hibernate-mapping>
