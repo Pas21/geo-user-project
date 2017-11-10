@@ -1,0 +1,39 @@
+<resources>
+    <string name="app_name">GeoUser</string>
+    <string name="action_settings">Settings</string>
+    <string name="registrati">Sign in</string>
+    <string name="accedi">Login</string>
+    <string name="username">Please insert your Username</string>
+    <string name="password">Please insert password</string>
+    <string name="RePassword">Please reinsert password</string>
+    <string name="email">Please insert your e-mail address</string>
+    <string name="nome">Please insert your Name</string>
+    <string name="cognome">Please insert your Surname</string>
+    <string name="buttonTog">Send</string>
+    <string name="title_activity_login">Sign in</string>
+    <string name="utenteC">Insert the Username to find</string>
+    <string name="data1">Insert the first date in format MM/dd/yyyy HH:mm:ss</string>
+    <string name="data2">Insert the second date in format MM/dd/yyyy HH:mm:ss</string>
+    <string name="trova_utente">Find User</string>
+    <string name="update_gps">Update GPS</string>
+    <string name="find">Find</string>
+
+
+    -->
+
+
+    <!-- Strings related to login -->
+    <string name="prompt_email">Email</string>
+    <string name="prompt_password">Password (optional)</string>
+    <string name="action_sign_in">Sign in or register</string>
+    <string name="action_sign_in_short">Sign in</string>
+    <string name="error_invalid_email">This email address is invalid</string>
+    <string name="error_invalid_password">This password is too short</string>
+    <string name="error_incorrect_password">This password is incorrect</string>
+    <string name="error_field_required">This field is required</string>
+    <string name="permission_rationale">"Contacts permissions are needed for providing email
+        completions."
+    </string>
+    <string name="title_activity_maps">Map</string>
+
+</resources>
