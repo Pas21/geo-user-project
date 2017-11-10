@@ -29,7 +29,6 @@ dependencies {
     implementation files('libs/org.restlet.jar')
     compile 'com.android.support:design:27.0.0'
     compile 'com.google.android.gms:play-services-maps:10.2.0'
-    compile 'com.google.android.gms:play-services:10.2.0'
 
 
 
