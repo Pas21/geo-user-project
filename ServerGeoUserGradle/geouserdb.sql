@@ -27,8 +27,9 @@ CREATE TABLE `posizioni` (
   `latitudine` double NOT NULL,
   `longitudine` double NOT NULL,
   `timestamp` timestamp NOT NULL DEFAULT CURRENT_TIMESTAMP ON UPDATE CURRENT_TIMESTAMP,
-  `accuratezza` float NOT NULL,
-  PRIMARY KEY (`utente`,`latitudine`,`longitudine`,`timestamp`)
+  `accuratezza` float DEFAULT NULL,
+  PRIMARY KEY (`utente`,`latitudine`,`longitudine`,`timestamp`),
+  CONSTRAINT `posizioni_ibfk_1` FOREIGN KEY (`utente`) REFERENCES `utenti` (`username`) ON DELETE NO ACTION
 ) ENGINE=InnoDB DEFAULT CHARSET=utf8;
 /*!40101 SET character_set_client = @saved_cs_client */;
 
@@ -79,4 +80,4 @@ UNLOCK TABLES;
 /*!40101 SET COLLATION_CONNECTION=@OLD_COLLATION_CONNECTION */;
 /*!40111 SET SQL_NOTES=@OLD_SQL_NOTES */;
 
--- Dump completed on 2017-11-05 17:09:06
+-- Dump completed on 2017-11-09  9:45:32
