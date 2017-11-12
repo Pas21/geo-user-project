@@ -31,12 +31,6 @@ import org.restlet.resource.ResourceException;
 public class loginActivity extends AppCompatActivity  {
 
 
-
-    private static final String[] DUMMY_CREDENTIALS = new String[]{
-            "foo@example.com:hello", "bar@example.com:world"
-    };
-
-    // UI references.
     private EditText mUsernameView;
     private EditText mPasswordView;
     public final static String prefName="Preference";
@@ -76,7 +70,7 @@ public class loginActivity extends AppCompatActivity  {
             @Override
             public void onClick(View view) {
                 if(mUsernameView.getText().toString().equals("") || mPasswordView.getText().toString().equals("") ){
-                    View parent=(View) findViewById(R.id.activity_initial_page);
+                    View parent=(View) findViewById(R.id.activity_login_page);
                     sn.make(parent, "Inserisci i dati",Snackbar.LENGTH_SHORT).show();
                 } else
                     new loginRestTask().execute(String.valueOf(mUsernameView.getText()), String.valueOf(mPasswordView.getText()));
