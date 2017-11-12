@@ -30,6 +30,8 @@ public class initialPage extends AppCompatActivity {
 
     private ToggleButton toggle;
     private Button send;
+    private Button login;
+
     private static EditText username;
     private static EditText password;
     private static EditText rePassword;
@@ -57,6 +59,7 @@ public class initialPage extends AppCompatActivity {
         editor.putString("port","8182");
         editor.commit();
 
+        login=(Button)findViewById(R.id.login);
         toggle = (ToggleButton) findViewById(R.id.toggleButton);
         send = (Button) findViewById(R.id.button);
         username = (EditText) findViewById(R.id.username);
@@ -114,6 +117,15 @@ public class initialPage extends AppCompatActivity {
         });
 
 
+
+        login.setOnClickListener(new View.OnClickListener() {
+            @Override
+            public void onClick(View view) {
+                Intent myIntent=new Intent(initialPage.this,loginActivity.class);
+                startActivity(myIntent);
+            }
+        });
+
         send.setOnClickListener(new View.OnClickListener() {
             @Override
             public void onClick(View v) {
@@ -131,22 +143,7 @@ public class initialPage extends AppCompatActivity {
             @Override
             public void onCheckedChanged(CompoundButton buttonView, boolean isChecked) {
                 if (isChecked) {
-                    rePassword.setVisibility(View.INVISIBLE);
-                    email.setVisibility(View.INVISIBLE);
-                    name.setVisibility(View.INVISIBLE);
-                    surname.setVisibility(View.INVISIBLE);
-                    password.setInputType(InputType.TYPE_CLASS_TEXT | InputType.TYPE_TEXT_VARIATION_PASSWORD);
-                    rePassword.setInputType(InputType.TYPE_CLASS_TEXT | InputType.TYPE_TEXT_VARIATION_PASSWORD);
-                    send.setOnClickListener(new View.OnClickListener() {
-                        public void onClick(View v) {
-                            if(username.getText().toString().equals("") || password.getText().toString().equals("") ){
-                                View parent=(View) findViewById(R.id.activity_initial_page);
-                                sn.make(parent, "Inserisci i dati",Snackbar.LENGTH_SHORT).show();
-                            } else
-                                new loginRestTask().execute(String.valueOf(username.getText()), String.valueOf(password.getText()));
 
-                        }
-                    });
                 } else {
                     rePassword.setVisibility(View.VISIBLE);
                     email.setVisibility(View.VISIBLE);
@@ -173,68 +170,7 @@ public class initialPage extends AppCompatActivity {
 
     }
 
-    public loginRestTask createLoginRestTask() {
-        return new loginRestTask();
-    }
 
-
-    public class loginRestTask extends AsyncTask<String, Void, Integer> {
-
-
-        protected Integer doInBackground(String... params) {
-
-            SharedPreferences editor=getSharedPreferences(prefName,MODE_PRIVATE);
-            String URI = "http://"+editor.getString("IP","10.0.2.2")+":"+editor.getString("port","8182")+"/UserRegApplication/" + "users";
-            gson = new Gson();
-            ClientResource cr = new ClientResource(URI);
-            String gsonResponse = null;
-
-
-            try {
-                gsonResponse = cr.post(gson.toJson(params[0] + "&" + params[1], String.class)).getText();
-                if (!gsonResponse.contains("not") && cr.getStatus().getCode() == 200) {
-                    return 0;
-
-                } else if (cr.getStatus().getCode() == ErrorCodes.INVALID_USERNAME_CODE) {
-                    return 1;
-
-
-                } else {
-                    return 2;
-
-                }
-
-
-            } catch (ResourceException | IOException e1) {
-                String text = "Error: " + cr.getStatus().getCode() + " - " + cr.getStatus().getDescription() + " - " + cr.getStatus().getReasonPhrase();
-                Log.e(TAG, text);
-                return 3;
-            }
-        }
-
-
-        protected void onPostExecute(Integer c) {
-            View parent = (View) findViewById(R.id.activity_initial_page);
-            if (c == 0) {
-                Intent myIntent = new Intent(initialPage.this, mainPage.class);
-                myIntent.addFlags(Intent.FLAG_ACTIVITY_NEW_TASK);
-                myIntent.addFlags(Intent.FLAG_ACTIVITY_CLEAR_TASK);
-                myIntent.addFlags(Intent.FLAG_ACTIVITY_NO_ANIMATION);
-
-                editor.putString("username", username.getText().toString());
-                editor.putString("password", password.getText().toString());
-                editor.commit();
-                startActivity(myIntent);
-            } else if (c == 1) {
-                sn.make(parent, "Utente non registrato", Snackbar.LENGTH_LONG)
-                        .setAction("Action", null).show();
-            } else if (c == 2) {
-                sn.make(parent, "Password non corretta", Snackbar.LENGTH_LONG)
-                        .setAction("Action", null).show();
-            }
-
-        }
-    }
 
 
     public regRestTask createRegRestTask() {
@@ -289,7 +225,6 @@ public class initialPage extends AppCompatActivity {
             } else {
                 sn.make(parent, "Password non coincidenti", Snackbar.LENGTH_SHORT).show();
             }
-
         }
     }
 }
