@@ -134,6 +134,18 @@ public class Utente implements Serializable,Comparable<Object>{
 		this.posizioni = posizioni;
 	}
 	
+	public void addPosizione(Posizione newPosizione) {
+		this.posizioni.add(newPosizione);
+	}
+	
+	public boolean removePosizione(Posizione posizione) {
+		if(!this.posizioni.contains(posizione)) return false;
+		else {
+			this.posizioni.remove(posizione);
+			return true;
+		}
+	}
+	
 	
 
 }
