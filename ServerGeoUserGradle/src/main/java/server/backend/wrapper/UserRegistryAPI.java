@@ -4,7 +4,11 @@ package server.backend.wrapper;
 import java.sql.Timestamp;
 import java.text.ParseException;
 import java.util.ArrayList;
+import java.util.Set;
+import java.util.TreeMap;
 
+import commons.IdPosizione;
+import commons.InvalidPositionException;
 import commons.InvalidUsernameException;
 import commons.Posizione;
 import commons.Utente;
@@ -13,7 +17,7 @@ import server.backend.UserRegistry;
 public class UserRegistryAPI {
 	
 	protected UserRegistryAPI(){
-		ur=new UserRegistry();
+		this.userreg=new UserRegistry();
 	}
 	
 	public static synchronized UserRegistryAPI instance(){
@@ -22,109 +26,43 @@ public class UserRegistryAPI {
 		return instance;
 	}
 	
-	public synchronized int size(){
-		return ur.size();
+	//Metodo per l'aggiunta di un nuovo utente
+	public synchronized void addUtente(Utente newUtente) throws InvalidUsernameException{
+		this.userreg.addUtente(newUtente);
 	}
 	
-	public synchronized Utente get(String username) throws InvalidUsernameException{
-		return ur.get(username);
+	//Metodo per la rimozione di un utente
+	public synchronized void removeUtente(String username) throws InvalidUsernameException{
+		this.userreg.removeUtente(username);
 	}
-	
-	public synchronized void add(Utente u) throws InvalidUsernameException{
-		ur.add(u);
-	}
-	
-	public synchronized void update(Utente u){
-		ur.put(u);
-	}
-	
-	public synchronized void remove(String username) throws InvalidUsernameException{
-		ur.remove(username);
-	}
-	
-	public synchronized boolean verifyUser(String username,String password) throws InvalidUsernameException{
-		return ur.verifyUser(username, password);
-	}
-	
-	public synchronized void removeUser(String username){
-		ur.logoutUser(username);
-	}
-	
-	public synchronized void addUserPosition(String username,Posizione pos) throws InvalidUsernameException{
-		ur.addUserPosition(username, pos);
-	}
-	
-	public synchronized ArrayList<Posizione> getPositionUser(String username,Timestamp d1,Timestamp d2) throws InvalidUsernameException, ParseException{
-		return ur.getPositionarrayByTime(username, d1, d2);
-	}
-	
-	public synchronized String[] getAllUsers(){
-		return ur.getUsers();
-	}
-	
-	
-	/* Classi non necessarie con hibernate
-	public void setStorageFiles(String rootDirForStorageFile, String baseStorageFile){
-		this.rootDirForStorageFile=rootDirForStorageFile;
-		this.baseStorageFile=baseStorageFile;
-		System.err.println("Storage Directory: " + this.rootDirForStorageFile);
-		System.err.println("Storage Base File: " + this.baseStorageFile);	
-	}
-	
-	protected int buildStorageFileExtension() throws NullPointerException {
-		System.err.println(this.rootDirForStorageFile);
-		final File folder=new File(this.rootDirForStorageFile);
-		int c;
-		int max=-1;
 		
-		File[] listFilesStorage = folder.listFiles();
-		if(listFilesStorage==null)
-			return -1;
-		
-		for (File fileEntry : listFilesStorage) {
-			if (fileEntry.getName().substring(0, baseStorageFile.length()).equalsIgnoreCase(baseStorageFile)){
-	            try {
-	                c = Integer.parseInt(fileEntry.getName().substring(baseStorageFile.length()+1));
-	            } catch (NumberFormatException | StringIndexOutOfBoundsException e){
-	            	c=-1;
-	            }
-	            if (c>max) max=c;
-	        }	            	
-	    }
-		return max;
+	//Metodo per l'aggiunta di una posizione
+	public synchronized void addPosizione(Posizione newPosizione) throws InvalidUsernameException, InvalidPositionException{
+		this.userreg.addPosizione(newPosizione);
 	}
 	
-	public void commit(){
-		int extension=buildStorageFileExtension();
-		String fileName = rootDirForStorageFile+baseStorageFile+"."+(extension+1);
-		System.err.println("Commit storage to: "+fileName);
-		try {
-			ur.save(fileName);
-		} catch (IOException e) {
-			System.err.println("Commit failed");
-		}		
+	//Metodo per la rimozione di una posizione
+	public synchronized void removePosizione(IdPosizione idPosizione) throws InvalidPositionException {
+		this.userreg.removePosizione(idPosizione);
 	}
 	
-	
-	public void restore(){
-		int extension=buildStorageFileExtension();
-		if (extension==-1){
-			System.err.println("No data to load - starting a new registry");
-		} else {
-			String fileName = rootDirForStorageFile+baseStorageFile+"."+extension;
-			System.err.println("Restore storage from: " + fileName);			
-			try {
-				ur.load(fileName);
-			} catch (ClassNotFoundException | IOException e) {
-				System.err.println("Restore failed - starting a new registry");
-				ur=new UserRegistry();
-			}
-		}
+	//Metodo per la rimozione di tutte le posizioni di un determinato utente
+	public synchronized void removePosizioni(String username) throws InvalidUsernameException {
+		this.userreg.removePosizioni(username);
 	}
-	*/
+	
+	//Metodo per l'ottenimento di tutte le posizioni di un determinato utente
+	public synchronized Set<Posizione> getPosizioniByUtente(String username) throws InvalidUsernameException {
+		return this.userreg.getPosizioniByUtente(username);
+	}
+	
+	//Metodo per l'ottenimento di tutte gli utenti
+	public synchronized TreeMap<String, Utente> getUtenti() {
+		return this.userreg.getUtenti();
+	}
 	
 	private static UserRegistryAPI instance;
-	private UserRegistry ur;
+	private UserRegistry userreg;
 	
 
 }
