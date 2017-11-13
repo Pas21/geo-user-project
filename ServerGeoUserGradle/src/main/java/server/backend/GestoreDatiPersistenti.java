@@ -33,9 +33,9 @@ public class GestoreDatiPersistenti {
 	}
 	
 	
-	//Metodo per caricare tutti gli utenti
-	public TreeMap<String,Utente> listaUtenti(){
-	      Session session = factory.openSession();
+	//Metodo per ottenere dal database tutti gli utenti
+	public TreeMap<String,Utente> getUtenti(){
+	      Session session = this.factory.openSession();
 	      Transaction tx = null;
 	      TreeMap<String,Utente> utenti = new TreeMap<String,Utente>();
 	      
@@ -45,7 +45,7 @@ public class GestoreDatiPersistenti {
 	         for (Iterator<?> iterator = listaUtenti.iterator(); iterator.hasNext();){
 	            Utente utente = (Utente) iterator.next(); 
 	            utenti.put(utente.getUsername(), utente);
-	            System.out.println(utente.toString());
+	            //System.out.println(utente.toString());
 	         }
 	         tx.commit();
 	      } catch (HibernateException e) {
@@ -60,9 +60,9 @@ public class GestoreDatiPersistenti {
 	      return utenti;
 	   }
 
-	//Metodo per caricare tutte le posizioni degli utenti
-	public TreeMap<IdPosizione,Posizione> listaPosizioni(){
-		Session session = factory.openSession();
+	//Metodo per ottenere dal database tutte le posizioni degli utenti
+	public TreeMap<IdPosizione,Posizione> getPosizioni(){
+		Session session = this.factory.openSession();
 		Transaction tx = null;
 		TreeMap<IdPosizione,Posizione> posizioni = new TreeMap<IdPosizione,Posizione>();
 
@@ -73,7 +73,7 @@ public class GestoreDatiPersistenti {
 				Posizione posizione = (Posizione) iterator.next(); 
 				IdPosizione idPosizione = new IdPosizione(posizione.getIdPosizione().getTimestamp(), posizione.getIdPosizione().getLatitudine(), posizione.getIdPosizione().getLongitudine());
 				posizioni.put(idPosizione,posizione);
-	            System.out.println(posizione.toString());
+	            //System.out.println(posizione.toString());
 			}
 			tx.commit();
 		} catch (HibernateException e) {
@@ -89,11 +89,11 @@ public class GestoreDatiPersistenti {
 	}
 	
 	
-	/* Metodo per aggiungere un utente al database */
-	public boolean aggiuntaUtente(Utente utente){	//Fare controllo in backend se l'utente esiste già non deve invocare questo metodo(vale lo stesso per tutti i successivi metodi)
-		Session session = factory.openSession();
+	// Metodo per aggiungere un utente al database
+	public boolean addUtente(Utente utente){	//Fare controllo in backend se l'utente esiste già non deve invocare questo metodo(vale lo stesso per tutti i successivi metodi)
+		Session session = this.factory.openSession();
 	    Transaction tx = null;
-	    boolean aggiunta = true;
+	    boolean addok = true;
 	    try {
 	       tx = session.beginTransaction();
 	       session.save(utente); 
@@ -101,18 +101,18 @@ public class GestoreDatiPersistenti {
 	    } catch (HibernateException e) {
 	       if (tx!=null) tx.rollback();
 	       e.printStackTrace(); 
-	       aggiunta=false;
+	       addok=false;
 	    } finally {
 	       session.close(); 
 	    }
-	    return aggiunta;
+	    return addok;
 	}
 	
 	/* Metodo per cancellare un utente dal database */
-	public boolean cancellaUtente(Utente utente){
-		Session session = factory.openSession();
+	public boolean removeUtente(Utente utente){
+		Session session = this.factory.openSession();
 	    Transaction tx = null;
-	    boolean cancellato=true;
+	    boolean removeok=true;
 	    
 	    try {
 	       tx = session.beginTransaction();
@@ -121,18 +121,18 @@ public class GestoreDatiPersistenti {
 	    } catch (HibernateException e) {
 	       if (tx!=null) tx.rollback();
 	       e.printStackTrace(); 
-	       cancellato=false;
+	       removeok=false;
 	    } finally {
-	       session.close(); 
+	       session.close();	       
 	    }
-	    return cancellato;
+	    return removeok;
 	}
 	
-	/* Metodo per aggiungere una posizione di un utente al database */
-	public boolean aggiuntaPosizione(Posizione posizione){
-		Session session = factory.openSession();
+	// Metodo per aggiungere una posizione al database 
+	public boolean addPosizione(Posizione posizione){
+		Session session = this.factory.openSession();
 	    Transaction tx = null;
-	    boolean aggiunta = true;
+	    boolean addok = true;
 	    
 	    try {
 	       tx = session.beginTransaction();
@@ -141,18 +141,18 @@ public class GestoreDatiPersistenti {
 	    } catch (HibernateException e) {
 	       if (tx!=null) tx.rollback();
 	       e.printStackTrace(); 
-	       aggiunta=false;
+	       addok=false;
 	    } finally {
 	       session.close(); 
 	    }
-	    return aggiunta;
+	    return addok;
 	}
 	
-	/* Metodo per cancellare una posizione dal database */
-	public boolean cancellaPosizione(Posizione posizione){
-		Session session = factory.openSession();
+	// Metodo per cancellare una posizione dal database 
+	public boolean removePosizione(Posizione posizione){
+		Session session = this.factory.openSession();
 	    Transaction tx = null;
-	    boolean cancellato=true;
+	    boolean removeok=true;
 	    
 	    try {
 	       tx = session.beginTransaction();
@@ -161,11 +161,43 @@ public class GestoreDatiPersistenti {
 	    } catch (HibernateException e) {
 	       if (tx!=null) tx.rollback();
 	       e.printStackTrace(); 
-	       cancellato=false;
+	       removeok=false;
 	    } finally {
 	       session.close(); 
 	    }
-	    return cancellato;
+	    return removeok;
+	}
+	
+	//Metodo per rimuovere tutte le posizioni di un utente
+	public boolean removePosizioniUtente(Utente utente) {
+		TreeMap<IdPosizione, Posizione> posizioni = this.getPosizioni();
+		if(posizioni == null) return false;
+		
+		Session session = this.factory.openSession();
+		Transaction tx = null;
+		boolean removeok =  true;
+		Posizione posizione = null;
+		
+		try {
+			//Si può fare anche con createNativeQuery!
+			for(IdPosizione id : posizioni.keySet()) {
+				posizione = posizioni.get(id);
+				//Nell'if si deve usare il metodo equals della classe utente
+				if(posizione.getUtente().getUsername().equals(utente.getUsername())) {
+					tx = session.beginTransaction();
+					session.delete(posizione); 
+				    tx.commit();			
+				}
+			}
+			
+		} catch (HibernateException e) {
+			if (tx!=null) tx.rollback();
+		    e.printStackTrace(); 
+		    removeok=false;
+		} finally {
+			session.close(); 
+		}
+		return removeok;
 	}
 
 	
