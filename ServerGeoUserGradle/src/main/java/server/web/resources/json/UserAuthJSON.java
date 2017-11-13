@@ -20,8 +20,8 @@ public class UserAuthJSON extends ServerResource{
 	public String verifyUser(String payload){
 		Gson gson=new Gson();
 		UserRegistryAPI urapi=UserRegistryAPI.instance();
-		
-		try{
+		return null;
+		/*try{
 			String data=gson.fromJson(payload, String.class);
 			StringTokenizer st=new StringTokenizer(data,"&");
 			String username=st.nextToken();
@@ -36,7 +36,7 @@ public class UserAuthJSON extends ServerResource{
 			setStatus(s);
 			return gson.toJson(e,InvalidUsernameException.class);
 			
-		}	
+		}*/	
 	}
 	
 	
@@ -45,7 +45,8 @@ public class UserAuthJSON extends ServerResource{
 		Gson gson=new Gson();
 		UserRegistryAPI urapi=UserRegistryAPI.instance();
 		Utente u=gson.fromJson(payload, Utente.class);
-		try{
+		return null;
+		/*try{
 			urapi.add(u);
 			UserRegistryWebApplication.verifier.getLocalSecrets().put(u.getUsername(), u.getPassword().toCharArray());
 			return gson.toJson("user added: "+u.getUsername(),String.class);
@@ -53,7 +54,7 @@ public class UserAuthJSON extends ServerResource{
 			Status s=new Status(ErrorCodes.INVALID_USERNAME_CODE);
 			setStatus(s);
 			return gson.toJson(e, InvalidUsernameException.class);
-		}
+		}*/
 	}
 
 }

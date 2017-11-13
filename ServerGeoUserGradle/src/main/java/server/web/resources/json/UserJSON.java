@@ -21,14 +21,15 @@ public class UserJSON extends ServerResource{
 	public String getUser(){
 		Gson gson=new Gson();
 		UserRegistryAPI urapi=UserRegistryAPI.instance();
-		try{
+		return null;
+		/*try{
 			Utente u=urapi.get(getAttribute("username"));
 			return gson.toJson(u,Utente.class);
 		}catch(InvalidUsernameException e){
 			Status s=new Status(ErrorCodes.INVALID_USERNAME_CODE);
 			setStatus(s);
 			return gson.toJson(e, InvalidUsernameException.class);
-		}
+		}*/
 		
 	}
 	
@@ -38,7 +39,8 @@ public class UserJSON extends ServerResource{
 	public String addPosition(String payload){
 		Gson gson=new Gson();
 		UserRegistryAPI urapi=UserRegistryAPI.instance();
-		try{
+		return null;
+		/*try{
 			
 			Posizione p=gson.fromJson(payload, Posizione.class);
 			urapi.addUserPosition(getAttribute("username"), p);
@@ -47,7 +49,7 @@ public class UserJSON extends ServerResource{
 			Status s=new Status(ErrorCodes.INVALID_USERNAME_CODE);
 			setStatus(s);
 			return gson.toJson(e, InvalidUsernameException.class);
-		}
+		}*/
 		
 		
 	}
@@ -56,7 +58,8 @@ public class UserJSON extends ServerResource{
 	public String deleteUser(){
 		Gson gson=new Gson();
 		UserRegistryAPI urapi=UserRegistryAPI.instance();
-		try{
+		return null;
+		/*try{
 			urapi.remove(getAttribute("username"));
 			UserRegistryWebApplication.verifier.getLocalSecrets().remove(getAttribute("username"));
 			return gson.toJson("User eliminated: "+getAttribute("username"),String.class);
@@ -64,7 +67,7 @@ public class UserJSON extends ServerResource{
 			Status s=new Status(ErrorCodes.INVALID_USERNAME_CODE);
 			setStatus(s);
 			return gson.toJson(e, InvalidUsernameException.class);
-		}
+		}*/
 		
 	}
 

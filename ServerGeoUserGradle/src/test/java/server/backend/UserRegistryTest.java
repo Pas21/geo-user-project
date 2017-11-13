@@ -1,7 +1,6 @@
 package server.backend;
 
 import java.sql.Timestamp;
-import java.time.LocalDateTime;
 import java.util.TreeMap;
 
 import commons.IdPosizione;

@@ -30,7 +30,8 @@ public class UserFilteredJSON extends ServerResource{
 		StringTokenizer st=new StringTokenizer(data,"&");
 		String data1S=st.nextToken();
 		String data2S=st.nextToken();
-		try{
+		return null;
+		/*try{
 			SimpleDateFormat format=new SimpleDateFormat("MM/dd/yyyy HH:mm:ss");
 			Timestamp d1,d2;
 			d1=new Timestamp(format.parse(data1S).getTime());
@@ -51,7 +52,7 @@ public class UserFilteredJSON extends ServerResource{
 			Status s=new Status(ErrorCodes.INVALID_DATA_CODE);
 			setStatus(s);
 			return gson.toJson(e1, InvalidDataException.class);
-		}
+		}*/
 			
 	}
 	
@@ -59,6 +60,7 @@ public class UserFilteredJSON extends ServerResource{
 	public String addUserPosition(String payload) throws ParseException{
 		Gson gson=new Gson();
 		UserRegistryAPI urapi=UserRegistryAPI.instance();
+		return null;
 		/*
 		StringTokenizer st=new StringTokenizer(getAttribute("data")," & ");
 		String accuracy=st.nextToken();
@@ -68,7 +70,7 @@ public class UserFilteredJSON extends ServerResource{
 		SimpleDateFormat format=new SimpleDateFormat("MM/dd/yyyy HH:mm:ss");
 		Timestamp time=new Timestamp(format.parse(timeS).getTime());
 		*/
-		Posizione pos=gson.fromJson(payload, Posizione.class);
+		/*Posizione pos=gson.fromJson(payload, Posizione.class);
 		try{
 			urapi.addUserPosition(pos.getUtente().getUsername(), pos);
 			return gson.toJson("Position added to "+getAttribute("username"),String.class);
@@ -77,6 +79,7 @@ public class UserFilteredJSON extends ServerResource{
 			setStatus(s);
 			return gson.toJson(e, InvalidUsernameException.class);
 		}
+		*/
 	}
 	
 	

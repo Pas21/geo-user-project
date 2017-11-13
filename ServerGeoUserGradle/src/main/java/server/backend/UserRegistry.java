@@ -1,9 +1,6 @@
 package server.backend;
 
 
-import java.sql.Timestamp;
-import java.text.ParseException;
-import java.util.ArrayList;
 import java.util.HashSet;
 import java.util.Set;
 import java.util.TreeMap;
@@ -12,7 +9,6 @@ import commons.IdPosizione;
 import commons.InvalidPositionException;
 import commons.InvalidUsernameException;
 import commons.Utente;
-import server.web.frontend.UserRegistryWebApplication;
 import commons.Posizione;
 
 public class UserRegistry {

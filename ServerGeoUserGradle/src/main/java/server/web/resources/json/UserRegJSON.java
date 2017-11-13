@@ -16,7 +16,8 @@ public class UserRegJSON extends ServerResource{
 	public String getUsers(){
 		Gson gson=new Gson();
 		UserRegistryAPI urapi=UserRegistryAPI.instance();
-		return gson.toJson(urapi.getAllUsers(),String[].class);
+		return null;
+		//return gson.toJson(urapi.getAllUsers(),String[].class);
 	}
 	
 	
@@ -26,18 +27,19 @@ public class UserRegJSON extends ServerResource{
 		Gson gson=new Gson();
 		UserRegistryAPI urapi=UserRegistryAPI.instance();
 		Utente u=gson.fromJson(payload, Utente.class);
-		urapi.update(u);
-		return gson.toJson("User updated:"+ u.getUsername(),String.class);	
+		return null;
+		//urapi.update(u);
+		//return gson.toJson("User updated:"+ u.getUsername(),String.class);	
 	}
 	
 	@Delete
 	public String deleteAllUser() throws InvalidUsernameException{
 		Gson gson=new Gson();
 		UserRegistryAPI urapi=UserRegistryAPI.instance();
-		for(String username:urapi.getAllUsers())
-			urapi.remove(username);
-		return gson.toJson("All User are deleted ",String.class);
-		
+		//for(String username:urapi.getAllUsers())
+		//	urapi.remove(username);
+		//return gson.toJson("All User are deleted ",String.class);
+		return null;
 	}
 
 }
