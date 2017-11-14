@@ -2,7 +2,10 @@ package server.web.frontend;
 
 import java.io.File;
 import java.io.FileNotFoundException;
+import java.net.InetAddress;
+import java.util.Map;
 import java.util.Scanner;
+import java.util.TreeMap;
 
 import org.restlet.Application;
 import org.restlet.Component;
@@ -16,6 +19,8 @@ import org.restlet.security.MapVerifier;
 
 import com.google.gson.Gson;
 
+import commons.Utente;
+import server.backend.wrapper.UserRegistryAPI;
 import server.web.resources.json.UserAuthJSON;
 import server.web.resources.json.UserFilteredJSON;
 import server.web.resources.json.UserJSON;
@@ -25,8 +30,8 @@ import server.web.resources.json.UserRegSizeJSON;
 
 public class UserRegistryWebApplication extends Application{
 	
-	//Creo il Map Verifier
-	public final static MapVerifier verifier=new MapVerifier();
+	//Creo il Map Verifier (mappa degli utenti registrati)
+	public static MapVerifier verifier = new MapVerifier(); 		
 	
 	private class Settings{
 		public int port;
@@ -83,6 +88,8 @@ public class UserRegistryWebApplication extends Application{
 	public static void main(String[] args){
 		Gson gson=new Gson();
 		Settings settings=null;
+		UserRegistryAPI urapi=UserRegistryAPI.instance();
+
 		try{
 			Scanner scanner=new Scanner(new File("Settings.json"));
 			settings=gson.fromJson(scanner.nextLine(), Settings.class);
@@ -91,13 +98,24 @@ public class UserRegistryWebApplication extends Application{
 		} catch (FileNotFoundException e1) {
 		System.err.println("Settings file not found");
 		System.exit(-1);
-	}
+		}
 		
 		rootDirForWebStaticFiles="file:\\\\"+System.getProperty("user.dir")+"\\"+settings.web_base_dir;
 		System.err.println("Web Directory: " + rootDirForWebStaticFiles);
 		
-		// UserRegistryAPI urapi=UserRegistryAPI.instance();
+		//Caricamento utenti nel MapVerifier per il login
+		TreeMap<String,Utente> utenti = urapi.getUtenti();
+		System.err.println("Loading users in MapVerifier");
 		
+		for(Map.Entry<String, Utente> entry : utenti.entrySet()) {
+		    //String username = entry.getKey();
+		    //Utente utente = entry.getValue();
+			
+			String username = entry.getKey();
+		    String password= entry.getValue().getPassword();
+			verifier.getLocalSecrets().put(username, password.toCharArray());
+			System.err.println("username:"+entry.getKey()+" password:"+ entry.getValue().getPassword());
+		}
 			
 		
 		try{
@@ -107,6 +125,10 @@ public class UserRegistryWebApplication extends Application{
 			component.getServers().add(Protocol.HTTP, settings.port);
 			//Aggiungo un handler per i file statici
 			component.getClients().add(Protocol.FILE);
+
+	        //IP
+	        System.err.println("IP Server:"+InetAddress.getLocalHost().getHostAddress());
+	        
 			//Collego l'applicazione UserRegistryApplication
 			component.getDefaultHost().attach(new UserRegistryWebApplication());
 			//Avvio il component
