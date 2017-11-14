@@ -19,7 +19,7 @@
         android:roundIcon="@mipmap/ic_launcher_round"
         android:supportsRtl="true"
         android:theme="@style/AppTheme">
-        <activity android:name=".application.initialPage">
+        <activity android:name=".application.loginActivity">
             <intent-filter>
                 <action android:name="android.intent.action.MAIN" />
 
@@ -30,7 +30,7 @@
         <activity android:name=".application.mainPage" />
         <activity android:name=".application.settingsActivity" />
         <activity android:name=".application.showMapActivity" />
-        <activity android:name=".application.loginActivity" />
+        <activity android:name=".application.initialPage" />
         <activity android:name=".application.signInActivity"></activity>
 
 

@@ -38,6 +38,7 @@ public class loginActivity extends AppCompatActivity  {
     private SharedPreferences.Editor editor;
     private Snackbar sn;
     private Button mLoginInButton;
+    private Button mSignInButton;
 
 
 
@@ -77,6 +78,15 @@ public class loginActivity extends AppCompatActivity  {
             }
         });
 
+
+        mSignInButton=(Button) findViewById(R.id.login_signin);
+        mSignInButton.setOnClickListener(new OnClickListener() {
+            @Override
+            public void onClick(View view) {
+                Intent myIntent=new Intent(loginActivity.this, signInActivity.class);
+                startActivity(myIntent);
+            }
+        });
     }
 
 
