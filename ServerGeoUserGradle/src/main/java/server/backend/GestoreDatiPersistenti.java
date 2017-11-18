@@ -16,7 +16,7 @@ import commons.Utente;
 
 public class GestoreDatiPersistenti {
 	//Pattern Singleton
-	protected GestoreDatiPersistenti(){
+	private GestoreDatiPersistenti(){
 		try {
 	         this.factory = new Configuration().configure().buildSessionFactory();
 	      } catch (Throwable ex) { 
