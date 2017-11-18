@@ -1,6 +1,7 @@
 package server.backend;
 
 
+import java.sql.Timestamp;
 import java.util.HashSet;
 import java.util.Set;
 import java.util.TreeMap;
@@ -73,13 +74,16 @@ public class UserRegistry {
 		//della classe GestoreDatiPersistenti
 		Utente utente = this.utenti.get(username);
 		
-		//Eliminazione utente dal database
-		if(!this.gestoreDB.removeUtente(utente)) {
-			System.out.println("Errore rimozione utente dal database con username " + username + "!");
-		}
-		else {
-			//Eliminazione utente dalla lista degli utenti caricati in memoria
-			this.utenti.remove(username);
+		//Eliminazione di eventuali posizioni associate all'utente (politica CASCADE)
+		if(this.removePosizioni(username)) {
+			//Eliminazione utente dal database
+			if(!this.gestoreDB.removeUtente(utente)) {
+				System.out.println("Errore rimozione utente dal database con username " + username + "!");
+			}
+			else {
+				//Eliminazione utente dalla lista degli utenti caricati in memoria
+				this.utenti.remove(username);
+			}	
 		}
 	}
 	
@@ -162,7 +166,7 @@ public class UserRegistry {
 				
 	}
 	
-	//Metodo per ottenere tutte le posizioni di un determinato utente
+	//Metodo per l'ottenimento di tutte le posizioni di un determinato utente
 	public Set<Posizione> getPosizioniByUtente(String username) throws InvalidUsernameException {
 		//Si potrebbe anche scorrere la lista di posizioni!
 		//Verifica presenza utente
@@ -173,6 +177,16 @@ public class UserRegistry {
 		return utente.getPosizioni();
 	}
 	
+	//Metodo per l'ottenenimento di tutte le posizioni di un utente che ricadono entro un intervallo di tempo
+	public Set<Posizione> getPosizioniUtenteByData(String username, Timestamp from, Timestamp to) {
+		Set<Posizione> posizioniFiltrate = new HashSet<Posizione>(0);
+		for(IdPosizione idPosizione : this.posizioni.keySet()) {
+			if(this.posizioni.get(idPosizione).getUtente().getUsername().equals(username) && idPosizione.getTimestamp().after(from) && idPosizione.getTimestamp().before(to))
+				posizioniFiltrate.add(this.posizioni.get(idPosizione));
+		}
+		return posizioniFiltrate;
+	}
+	
 	//Metodi getter
 	public TreeMap<String, Utente> getUtenti(){
 		return this.utenti;
@@ -181,34 +195,6 @@ public class UserRegistry {
 	public TreeMap<IdPosizione, Posizione> getPosizioni() {
 		return this.posizioni;
 	}
-	
-	/*
-	public boolean verifyUser(String username,String password) throws InvalidUsernameException{
-		if(dict.containsKey(username))
-			if(dict.get(username).getPassword().equals(password))
-				return true;
-			else 
-				return false;
-		else throw new InvalidUsernameException("Invalid Username");
-	}
-	
-	public void logoutUser(String username){
-		if(dict.containsKey(username))
-			UserRegistryWebApplication.verifier.getLocalSecrets().remove(username);	//??
-	}
-	
-	public ArrayList<Posizione> getPositionarrayByTime(String username,Timestamp d1,Timestamp d2) throws InvalidUsernameException, ParseException{
-		if(!dict.containsKey(username))
-			throw new InvalidUsernameException("Invalid User: "+username);
-		ArrayList<Posizione> posizioniMatch=new ArrayList<Posizione>();
-		//In questo punto deve essere inserita la logica di selezione delle posizioni attraverso hibernate e query sul db
-		
-		return posizioniMatch;
-	}
-
-*/
-	
-	
 	
 	private TreeMap<String, Utente> utenti;
 	private TreeMap<IdPosizione, Posizione> posizioni;

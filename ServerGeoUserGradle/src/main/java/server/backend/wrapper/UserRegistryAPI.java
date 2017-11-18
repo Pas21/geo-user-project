@@ -1,5 +1,6 @@
 package server.backend.wrapper;
 
+import java.sql.Timestamp;
 import java.util.Set;
 import java.util.TreeMap;
 
@@ -12,7 +13,7 @@ import server.backend.UserRegistry;
 
 public class UserRegistryAPI {
 	
-	protected UserRegistryAPI(){
+	private UserRegistryAPI(){
 		this.userreg=new UserRegistry();
 	}
 	
@@ -52,7 +53,12 @@ public class UserRegistryAPI {
 		return this.userreg.getPosizioniByUtente(username);
 	}
 	
-	//Metodo per l'ottenimento di tutte gli utenti
+	//Metodo per l'ottenimento di tutte le posizioni di un utente che ricadono entro un certo intervallo di tempo
+	public synchronized Set<Posizione> getPosizioniUtenteByData(String username, Timestamp from, Timestamp to) {
+		return this.userreg.getPosizioniUtenteByData(username, from, to);
+	}
+	
+	//Metodo per l'ottenimento di tutti gli utenti
 	public synchronized TreeMap<String, Utente> getUtenti() {
 		return this.userreg.getUtenti();
 	}

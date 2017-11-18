@@ -1,6 +1,8 @@
 package server.backend;
 
 import java.sql.Timestamp;
+import java.time.LocalDateTime;
+import java.util.Set;
 import java.util.TreeMap;
 
 import commons.IdPosizione;
@@ -139,9 +141,18 @@ public class UserRegistryTest {
 		//Test ottenimento di tutte le posizioni di un utente
 		try {
 			for(Posizione posizione : userreg.getPosizioniByUtente("antonio.user"))
-				System.out.println("POSIZIONI DI antonio.user: " + posizione.toString());
+				System.out.println("Posizioni di antonio.user: " + posizione.toString());
 		} catch (InvalidUsernameException e) {
 			System.err.println(e.getMessage());
+		}
+		
+		//Test ottenimento di tutte le posizioni di un utente entro un certo intervallo di tempo
+		LocalDateTime localDateTime1 = LocalDateTime.of(2016, 02, 10, 00, 00, 00);
+		LocalDateTime localDateTime2 = LocalDateTime.of(2017, 11, 10, 00, 00, 00);
+		Set<Posizione> posizioniFiltrate = userreg.getPosizioniUtenteByData("antonio.user", Timestamp.valueOf(localDateTime1), Timestamp.valueOf(localDateTime2));
+		System.out.println("POSIZIONI DI antonio.user DAL " + localDateTime1.toString() + " AL " + localDateTime2.toString() + ":");
+		for(Posizione posizione : posizioniFiltrate) {
+			System.out.println(posizione.toString());
 		}
 	}
 
