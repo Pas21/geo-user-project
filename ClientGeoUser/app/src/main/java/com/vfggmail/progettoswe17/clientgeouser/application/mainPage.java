@@ -26,6 +26,12 @@ import android.widget.Button;
 import android.widget.TextView;
 import android.widget.Toast;
 
+import com.google.android.gms.maps.CameraUpdateFactory;
+import com.google.android.gms.maps.GoogleMap;
+import com.google.android.gms.maps.OnMapReadyCallback;
+import com.google.android.gms.maps.SupportMapFragment;
+import com.google.android.gms.maps.model.LatLng;
+import com.google.android.gms.maps.model.MarkerOptions;
 import com.google.gson.Gson;
 import com.vfggmail.progettoswe17.clientgeouser.R;
 import com.vfggmail.progettoswe17.clientgeouser.commons.ErrorCodes;
@@ -43,7 +49,7 @@ import java.util.Date;
 import java.util.List;
 import java.util.Locale;
 
-public class mainPage extends AppCompatActivity {
+public class mainPage extends AppCompatActivity implements OnMapReadyCallback{
 
     private static final long POLLING_FREQ = 1000 * 10;
     private static final float MIN_DISTANCE = 10.0f;
@@ -55,7 +61,7 @@ public class mainPage extends AppCompatActivity {
     private Boolean exit = false;
 
 
-
+    private GoogleMap mMap;
     private TextView mAccuracyView;
     private TextView mTimeView;
     private TextView mLatView;
@@ -117,10 +123,7 @@ public class mainPage extends AppCompatActivity {
 
 
 
-        mAccuracyView=(TextView) findViewById(R.id.mAccuracyView);
-        mTimeView=(TextView) findViewById(R.id.mTimeView);
-        mLatView=(TextView) findViewById(R.id.mLatView);
-        mLngView=(TextView) findViewById(R.id.mLngView);
+
         cerca=(Button) findViewById(R.id.Posizione);
         update=(Button) findViewById(R.id.update);
 
@@ -161,11 +164,11 @@ public class mainPage extends AppCompatActivity {
 
         //Visualizzo le ultime informazioni lette
 
-        if(mLastReading!=null)
+        if(mLastReading!=null) {
             updateDisplay(mLastReading);
+        }
         else
-            mAccuracyView.setText("Nessuna locazione iniziale disponibile");
-
+            Toast.makeText(this, "Nessuna locazione iniziale disponibile", Toast.LENGTH_SHORT).show();
         mLocationListener=new LocationListener() {
             @Override
             public void onLocationChanged(Location location) {
@@ -191,6 +194,12 @@ public class mainPage extends AppCompatActivity {
 
             }
         };
+
+
+
+
+        SupportMapFragment mapFragment = (SupportMapFragment) getSupportFragmentManager().findFragmentById(R.id.main_map);
+        mapFragment.getMapAsync(this);
 
 
     }
@@ -281,12 +290,21 @@ public class mainPage extends AppCompatActivity {
         return bestResult;
     }
 
+
     public void updateDisplay(Location location){
+        /*
         mAccuracyView.setText("Accuracy: "+location.getAccuracy());
         mTimeView.setText("Time: "+new SimpleDateFormat("MM/dd/yyyy HH:mm:ss", Locale.getDefault()).format(new Date(location.getTime())));
         mLatView.setText("Latitude: "+location.getLatitude());
         mLngView.setText("Longitude: "+location.getLongitude());
+        */
+        if(mMap!=null) {
+            LatLng place = new LatLng(location.getLatitude(), location.getLongitude());
+            mMap.addMarker(new MarkerOptions().position(place).title(""));
+            mMap.moveCamera(CameraUpdateFactory.newLatLng(place));
+        }
     }
+
 
 
 
@@ -344,10 +362,25 @@ public class mainPage extends AppCompatActivity {
         return super.onOptionsItemSelected(item);
     }
 
+    @Override
+    public void onMapReady(GoogleMap googleMap) {
 
+        mMap = googleMap;
+        LatLng place=null;
+
+        // Add a marker and move the camera
+
+        if(mLastReading!=null) {
+            place = new LatLng(mLastReading.getLatitude(), mLastReading.getLongitude());
+            mMap.addMarker(new MarkerOptions().position(place).title(""));
+            mMap.moveCamera(CameraUpdateFactory.newLatLng(place));
+        }
+    }
     public AddPositionRestTask createAddRestTask(){
         return new AddPositionRestTask();
     }
+
+
 
 
     public class AddPositionRestTask extends AsyncTask<String, Void, Integer> {

@@ -1,13 +1,19 @@
 package com.vfggmail.progettoswe17.clientgeouser.application;
 
+import android.app.DatePickerDialog;
+import android.app.Dialog;
+import android.app.DialogFragment;
+import android.app.TimePickerDialog;
 import android.content.Intent;
 import android.content.SharedPreferences;
 import android.content.pm.ActivityInfo;
 import android.os.AsyncTask;
 import android.support.v7.app.AppCompatActivity;
 import android.os.Bundle;
+import android.text.format.DateFormat;
 import android.view.View;
 import android.widget.Button;
+import android.widget.DatePicker;
 import android.widget.EditText;
 
 import com.google.gson.Gson;
@@ -25,22 +31,39 @@ import org.restlet.resource.ResourceException;
 
 import java.io.IOException;
 import java.util.ArrayList;
+import java.util.Calendar;
 import java.util.Date;
 import android.support.design.widget.Snackbar;
+import android.widget.TextClock;
+import android.widget.TextView;
+import android.widget.TimePicker;
 
 public class findUserActivity extends AppCompatActivity {
 
     private EditText userC;
-    private EditText data1;
-    private EditText data2;
-    private Button cerca;
-    private Intent intent;
     private String username,password;
     private Gson gson;
     private Snackbar sn;
     private ArrayList<Posizione> posizioni;
     SharedPreferences editor;
     public final static String prefName="Preference";
+    private static TextView clock1;
+    private static TextView clock2;
+    private Button find;
+    private Button time1,time2,date1,date2;
+    private static int usedset=0;
+
+    private static int myear1;
+    private static int mmonth1;
+    private static int mday1;
+    private static int mhour1;
+    private static int mminutes1;
+    private static int myear2;
+    private static int mmonth2;
+    private static int mday2;
+    private static int mhour2;
+    private static int mminutes2;
+    private static EditText find_username;
 
 
 
@@ -57,10 +80,83 @@ public class findUserActivity extends AppCompatActivity {
 
 
 
-        userC=(EditText) findViewById(R.id.utenteC);
-        data1=(EditText) findViewById(R.id.data1);
-        data2=(EditText) findViewById(R.id.data2);
-        cerca=(Button) findViewById(R.id.cerca);
+
+
+        find_username=(EditText) findViewById(R.id.find_username);
+        clock1=(TextView) findViewById(R.id.find_date1);
+        clock2=(TextView) findViewById(R.id.find_date2);
+        find=(Button) findViewById(R.id.find_find_button);
+        time1=(Button) findViewById(R.id.find_time1_buttonTime);
+        time2=(Button) findViewById(R.id.find_time2_buttonTime);
+        date1=(Button) findViewById(R.id.find_date1_buttonDate);
+        date2=(Button) findViewById(R.id.find_date2_buttonDate);
+        userC=(EditText) findViewById(R.id.find_username);
+
+
+        final Calendar c = Calendar.getInstance();
+
+
+        myear1 = c.get(Calendar.YEAR);
+        mmonth1 = c.get(Calendar.MONTH);
+        mday1 = c.get(Calendar.DAY_OF_MONTH);
+        mhour1 = c.get(Calendar.HOUR_OF_DAY);
+        mminutes1 = c.get(Calendar.MINUTE);
+        myear2 = c.get(Calendar.YEAR);
+        mmonth2 = c.get(Calendar.MONTH);
+        mday2 = c.get(Calendar.DAY_OF_MONTH);
+        mhour2 = c.get(Calendar.HOUR_OF_DAY);
+        mminutes2 = c.get(Calendar.MINUTE);
+
+        String text=mday1+"/"+mmonth1+"/"+myear1+" "+mhour1+":"+mminutes1;
+        clock1.setText(text);
+        clock2.setText(text);
+
+
+
+
+
+        time1.setOnClickListener(new View.OnClickListener() {
+            @Override
+            public void onClick(View view) {
+                DialogFragment newFragment = new TimePickerFragment();
+                usedset=1;
+                newFragment.show(getFragmentManager(), "timePicker");
+
+            }
+        });
+
+
+        date1.setOnClickListener(new View.OnClickListener() {
+            @Override
+            public void onClick(View view) {
+                DialogFragment newFragment = new DatePickerFragment();
+                usedset=1;
+                newFragment.show(getFragmentManager(), "timePicker");
+            }
+        });
+
+        time2.setOnClickListener(new View.OnClickListener() {
+            @Override
+            public void onClick(View view) {
+                DialogFragment newFragment = new TimePickerFragment();
+                usedset=2;
+                newFragment.show(getFragmentManager(), "timePicker");
+            }
+        });
+
+
+        date2.setOnClickListener(new View.OnClickListener() {
+            @Override
+            public void onClick(View view) {
+                DialogFragment newFragment = new DatePickerFragment();
+                usedset=2;
+                newFragment.show(getFragmentManager(), "timePicker");
+            }
+        });
+
+
+
+
 
         editor=getSharedPreferences(prefName,MODE_PRIVATE);
 
@@ -68,36 +164,19 @@ public class findUserActivity extends AppCompatActivity {
         password=editor.getString("password","");
 
 
-        userC.setOnClickListener(new View.OnClickListener() {
-            @Override
-            public void onClick(View v) {
-                userC.setText("");
-            }
-        });
 
-        data1.setOnClickListener(new View.OnClickListener() {
-            @Override
-            public void onClick(View v) {
-                data1.setText("");
-            }
-        });
 
-        data2.setOnClickListener(new View.OnClickListener() {
-            @Override
-            public void onClick(View v) {
-                data2.setText("");
-            }
-        });
-
-        cerca.setOnClickListener(new View.OnClickListener() {
+        find.setOnClickListener(new View.OnClickListener() {
             @Override
             public void onClick(View v) {
                 Date d1=null, d2=null;
-                if(userC.getText().equals("") || data1.getText().equals("") || data2.getText().equals(""))
-                    sn.make(v,"Inserisci i dati",Snackbar.LENGTH_SHORT).show();
+                View parent = (View) findViewById(R.id.activity_find_user);
+
+                if(userC.getText().equals("") || clock1.getText().equals("") || clock2.getText().equals(""))
+                    sn.make(parent,"Inserisci i dati",Snackbar.LENGTH_SHORT).show();
 
                 else
-                    new findRestTask().execute(String.valueOf(userC.getText()), String.valueOf(data1.getText()), String.valueOf(data2.getText()));
+                    new findRestTask().execute(String.valueOf(userC.getText()), String.valueOf(clock1.getText()), String.valueOf(clock2.getText()));
 
             }
 
@@ -175,6 +254,78 @@ public class findUserActivity extends AppCompatActivity {
 
         }
 
+    }
+
+
+
+    public static class DatePickerFragment extends DialogFragment
+            implements DatePickerDialog.OnDateSetListener {
+
+        @Override
+        public Dialog onCreateDialog(Bundle savedInstanceState) {
+            // Use the current date as the default date in the picker
+            final Calendar c = Calendar.getInstance();
+            int year = c.get(Calendar.YEAR);
+            int month = c.get(Calendar.MONTH);
+            int day = c.get(Calendar.DAY_OF_MONTH);
+
+            // Create a new instance of DatePickerDialog and return it
+            return new DatePickerDialog(getActivity(), this, year, month, day);
+        }
+
+        public void onDateSet(DatePicker view, int year, int month, int day) {
+            if(usedset==1) {
+                myear1 = year;
+                mmonth1 = month;
+                mday1 = day;
+                String text = mday1 + "/" + mmonth1 + "/" + myear1 + " " + mhour1 + ":" + mminutes1;
+                clock1.setText(text);
+            }
+            else{
+                myear2 = year;
+                mmonth2 = month;
+                mday2 = day;
+                String text = mday2 + "/" + mmonth2 + "/" + myear2 + " " + mhour2 + ":" + mminutes2;
+                clock2.setText(text);
+            }
+
+
+        }
+    }
+
+
+
+    public static class TimePickerFragment extends DialogFragment
+            implements TimePickerDialog.OnTimeSetListener {
+
+        @Override
+        public Dialog onCreateDialog(Bundle savedInstanceState) {
+            // Use the current time as the default values for the picker
+            final Calendar c = Calendar.getInstance();
+            int hour = c.get(Calendar.HOUR_OF_DAY);
+            int minute = c.get(Calendar.MINUTE);
+
+            // Create a new instance of TimePickerDialog and return it
+            return new TimePickerDialog(getActivity(), this, hour, minute,
+                    DateFormat.is24HourFormat(getActivity()));
+        }
+
+        public void onTimeSet(TimePicker view, int hourOfDay, int minute) {
+            if(usedset==1) {
+                mhour1 = hourOfDay;
+                mminutes1 = minute;
+                String text = mday1 + "/" + mmonth1 + "/" + myear1 + " " + mhour1 + ":" + mminutes1;
+                clock1.setText(text);
+            }else{
+                mhour2 = hourOfDay;
+                mminutes2 = minute;
+                String text = mday2 + "/" + mmonth2 + "/" + myear2 + " " + mhour2 + ":" + mminutes2;
+                clock2.setText(text);
+
+            }
+
+
+        }
     }
 
 }
