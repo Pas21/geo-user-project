@@ -352,10 +352,7 @@ public class mainPage extends AppCompatActivity implements OnMapReadyCallback{
         int id = item.getItemId();
 
         //noinspection SimplifiableIfStatement
-        if (id == R.id.action_settings) {
-            Intent myIntent=new Intent(mainPage.this,settingsActivity.class);
-            startActivity(myIntent);
-        }else if(id ==R.id.action_logout){
+        if(id ==R.id.action_logout){
             new logoutRestTask().execute();
         }
 

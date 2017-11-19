@@ -57,14 +57,15 @@ public class settingsActivity extends AppCompatActivity {
         change.setOnClickListener(new View.OnClickListener() {
             @Override
             public void onClick(View v) {
-                if(ip.getText().equals("") || port.getText().equals(""))
+                if(String.valueOf(ip.getText()).equals("") || String.valueOf(port.getText()).equals(""))
                     sn.make(v,"Inserisci i dati",Snackbar.LENGTH_SHORT);
-
-                editor.putString("IP",ip.getText().toString());
-                editor.putString("port",port.getText().toString());
-                editor.commit();
-                Intent myIntent=new Intent(settingsActivity.this,mainPage.class);
-                startActivity(myIntent);
+                else {
+                    editor.putString("IP", String.valueOf(ip.getText()));
+                    editor.putString("port", String.valueOf(port.getText()));
+                    editor.commit();
+                    Intent myIntent = new Intent(settingsActivity.this, loginActivity.class);
+                    startActivity(myIntent);
+                }
             }
         });
 

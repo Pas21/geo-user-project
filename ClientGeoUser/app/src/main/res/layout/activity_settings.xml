@@ -13,8 +13,8 @@
     <EditText
         android:layout_width="wrap_content"
         android:layout_height="wrap_content"
-        android:inputType="textPersonName"
-        android:text="Insert the IP"
+        android:inputType="text"
+        android:hint="@string/prompt_ip"
         android:ems="10"
         android:layout_alignParentTop="true"
         android:layout_centerHorizontal="true"
@@ -24,8 +24,8 @@
     <EditText
         android:layout_width="wrap_content"
         android:layout_height="wrap_content"
-        android:inputType="textPersonName"
-        android:text="Insert the port Number"
+        android:inputType="number"
+        android:hint="@string/prompt_port"
         android:ems="10"
         android:layout_below="@+id/settings_IP"
         android:layout_alignEnd="@+id/settings_IP"

@@ -12,6 +12,8 @@
     <string name="find">Find</string>
     <string name="find_time">Change time</string>
     <string name="find_date">Change date</string>
+    <string name="prompt_ip">Insert IP</string>
+    <string name="prompt_port">Insert port number</string>
 
 
     -->
