@@ -37,6 +37,8 @@ public class UserRegistry {
 		}
 		
 		//Aggiornamento utente delle posizioni
+		//Questo aggiornamento puo' essere incluso nel precedente(aggiornamento set di posizioni)
+		//E' stato separato solo per motivi di leggibilita' del codice e, inoltre, non inficia molto sulle performance visto che viene eseguito solo una volta all'avvio del server
 		for(String username : this.utenti.keySet()) {
 			for(IdPosizione idPosizione : this.posizioni.keySet()) {
 				Posizione posizione = this.posizioni.get(idPosizione);
@@ -52,7 +54,7 @@ public class UserRegistry {
 	public void addUtente(Utente newUtente) throws InvalidUsernameException{
 		//Verifica presenza utente
 		if(this.utenti.containsKey(newUtente.getUsername()))
-			throw new InvalidUsernameException("L'utente con username " + newUtente.getUsername() + " già esiste!");
+			throw new InvalidUsernameException("L'utente con username " + newUtente.getUsername() + " gia' esiste!");
 		
 		//Aggiunta utente al database
 		if(!this.gestoreDB.addUtente(newUtente)) {
@@ -96,7 +98,7 @@ public class UserRegistry {
 		
 		//Verifica esistenza posizione
 		if(this.posizioni.containsKey(newPosizione.getIdPosizione()))
-			throw new InvalidPositionException("La posizione con id " + newPosizione.getIdPosizione().toString() + " esiste gia!");
+			throw new InvalidPositionException("La posizione con id " + newPosizione.getIdPosizione().toString() + " esiste gia'!");
 		
 		//Aggiunta della posizione al database
 		if(!this.gestoreDB.addPosizione(newPosizione)) {
@@ -132,8 +134,8 @@ public class UserRegistry {
 			
 			//Rimozione posizione dal set di posizioni dell'utente
 			if(!this.utenti.get(posizione.getUtente().getUsername()).removePosizione(posizione))
-				System.out.println("La posizione con id " + idPosizione + "non è stata eliminata dall'oggetto utente!");
-			return true;
+				System.out.println("La posizione con id " + idPosizione + "non e' stata eliminata dall'oggetto utente!");
+			return true;			
 		}
 	}
 	
