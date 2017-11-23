@@ -1,43 +1,30 @@
 package server.web.resources.json;
 
-import org.restlet.resource.Delete;
+import java.util.Map;
+import java.util.TreeMap;
+
 import org.restlet.resource.Get;
-import org.restlet.resource.Put;
 import org.restlet.resource.ServerResource;
 
 import com.google.gson.Gson;
 
-import commons.InvalidUsernameException;
-import commons.User;
+import commons.Utente;
 import server.backend.wrapper.UserRegistryAPI;
 
 public class UserRegJSON extends ServerResource{
+	
+	//Metodo per l'ottenimento di tutti gli username degli utenti
 	@Get
 	public String getUsers(){
 		Gson gson=new Gson();
 		UserRegistryAPI urapi=UserRegistryAPI.instance();
-		return gson.toJson(urapi.getAllUsers(),String[].class);
+		TreeMap<String,Utente> utenti = urapi.getUtenti();
+		String[] usernameUtenti = new String[urapi.getUtenti().size()];
+		int i=0;	
+		for(Map.Entry<String, Utente> entry : utenti.entrySet()) {			
+			usernameUtenti[i] = entry.getKey();
+		}
+		return gson.toJson(usernameUtenti,String[].class);
 	}
 	
-	
-	
-	@Put
-	public String updateUser(String payload){
-		Gson gson=new Gson();
-		UserRegistryAPI urapi=UserRegistryAPI.instance();
-		User u=gson.fromJson(payload, User.class);
-		urapi.update(u);
-		return gson.toJson("User updated:"+ u.getUsername(),String.class);	
-	}
-	
-	@Delete
-	public String deleteAllUser() throws InvalidUsernameException{
-		Gson gson=new Gson();
-		UserRegistryAPI urapi=UserRegistryAPI.instance();
-		for(String username:urapi.getAllUsers())
-			urapi.remove(username);
-		return gson.toJson("All User are deleted ",String.class);
-		
-	}
-
 }

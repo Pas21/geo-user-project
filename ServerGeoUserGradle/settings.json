@@ -1,1 +1,1 @@
-{port:8182,web_base_dir:web,storage_base_dir:storage,storage_base_file:db.ser}
+{port:8182,web_base_dir:web}
