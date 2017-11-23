@@ -21,6 +21,9 @@ import com.google.gson.Gson;
 
 import commons.Utente;
 import server.backend.wrapper.UserRegistryAPI;
+import server.web.resources.json.PositionRegJSON;
+import server.web.resources.json.PositionsByUserAndDateJSON;
+import server.web.resources.json.PositionsByUserJSON;
 import server.web.resources.json.UserAuthJSON;
 import server.web.resources.json.UserFilteredJSON;
 import server.web.resources.json.UserJSON;
@@ -45,28 +48,22 @@ public class UserRegistryWebApplication extends Application{
 		//creiamo un router restlet che ha la funzioni di rispondere ad ogni chiamata con l'appropriata serverResource
 		Router router=new Router(getContext());
 
-		//Dopo aver creato il Map Verifier, lo associo a tutte le guardie 
-		ChallengeAuthenticator guardiaSize=new ChallengeAuthenticator(getContext(),ChallengeScheme.HTTP_BASIC,"guardiaSize");
-		guardiaSize.setVerifier(verifier);
-		guardiaSize.setNext(UserRegSizeJSON.class);
-		
-		ChallengeAuthenticator guardiaFilter=new ChallengeAuthenticator(getContext(), ChallengeScheme.HTTP_BASIC,"guardiaFilter");
-		guardiaFilter.setVerifier(verifier);
-		guardiaFilter.setNext(UserFilteredJSON.class);
-		
-		ChallengeAuthenticator guardiaUser=new ChallengeAuthenticator(getContext(),ChallengeScheme.HTTP_BASIC,"guardiaUser");
-		guardiaUser.setVerifier(verifier);
-		guardiaUser.setNext(UserJSON.class);
-		
+		//Dopo aver creato il Map Verifier, lo associo a tutte le guardie 		
 		ChallengeAuthenticator guardiaUserReg=new ChallengeAuthenticator(getContext(),ChallengeScheme.HTTP_BASIC,"guardiaUserReg");
 		guardiaUserReg.setVerifier(verifier);
 		guardiaUserReg.setNext(UserRegJSON.class);
 		
-		ChallengeAuthenticator guardiaRemove=new ChallengeAuthenticator(getContext(),ChallengeScheme.HTTP_BASIC,"guardiaRemove");
-		guardiaRemove.setVerifier(verifier);
-		guardiaRemove.setNext(UserLogOutJSON.class);
+		ChallengeAuthenticator guardStaticPositions=new ChallengeAuthenticator(getContext(),ChallengeScheme.HTTP_BASIC,"guardStaticPositions");
+		guardStaticPositions.setVerifier(verifier);
+		guardStaticPositions.setNext(PositionRegJSON.class);
 		
+		ChallengeAuthenticator guardStaticPositionsByUserAndDate=new ChallengeAuthenticator(getContext(),ChallengeScheme.HTTP_BASIC,"guardStaticPositionsByDate");
+		guardStaticPositionsByUserAndDate.setVerifier(verifier);
+		guardStaticPositionsByUserAndDate.setNext(PositionsByUserAndDateJSON.class);
 		
+		ChallengeAuthenticator guardStaticPositionsByUser=new ChallengeAuthenticator(getContext(),ChallengeScheme.HTTP_BASIC,"guardStaticPositionsByUser");
+		guardStaticPositionsByUser.setVerifier(verifier);
+		guardStaticPositionsByUser.setNext(PositionsByUserJSON.class);
 		
 		Directory directory= new Directory(getContext(),rootDirForWebStaticFiles);
 		directory.setListingAllowed(true);
@@ -74,12 +71,16 @@ public class UserRegistryWebApplication extends Application{
 		router.attach("/UserRegApplication/web/",directory);
 		router.attach("/UserRegApplication/web",directory);
 		
-		router.attach("/UserRegApplication/auth/size",guardiaSize);
-		router.attach("/UserRegApplication/auth/users",guardiaUserReg);
-		router.attach("/UserRegApplication/auth/users/{username}",guardiaUser);
-		router.attach("/UserRegApplication/auth/users/pos/{data}",guardiaFilter);
 		router.attach("/UserRegApplication/users",UserAuthJSON.class);
-		router.attach("/UserRegApplication/users/remove/{username}",guardiaRemove);
+		router.attach("/UserRegApplication/users/",UserAuthJSON.class);
+		router.attach("/UserRegApplication/auth/users",guardiaUserReg);
+		router.attach("/UserRegApplication/auth/users/",guardiaUserReg);
+		router.attach("/UserRegApplication/auth/positions",guardStaticPositions);
+		router.attach("/UserRegApplication/auth/positions/",guardStaticPositions);
+		router.attach("/UserRegApplication/auth/positions/{username}",guardStaticPositionsByUser);
+		router.attach("/UserRegApplication/auth/positions/{username}/",guardStaticPositionsByUser);
+		router.attach("/UserRegApplication/auth/positions/{username}/{fromdata}/{todata}",guardStaticPositionsByUserAndDate);
+		router.attach("/UserRegApplication/auth/positions/{username}/{fromdata}/{todata}/",guardStaticPositionsByUserAndDate);
 		
 		return router;
 		
