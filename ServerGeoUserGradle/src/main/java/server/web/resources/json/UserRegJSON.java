@@ -1,8 +1,12 @@
 package server.web.resources.json;
 
+import java.util.StringTokenizer;
+
 import org.restlet.data.Status;
 import org.restlet.resource.Post;
+import org.restlet.resource.Put;
 import org.restlet.resource.ServerResource;
+import org.restlet.security.Verifier;
 
 import com.google.gson.Gson;
 
@@ -32,4 +36,14 @@ public class UserRegJSON extends ServerResource{
 		}
 	}
 	
+	//Metodo per l'autenticazione dell'utente
+	@Put
+	public String checkUser(String payload){
+		Gson gson = new Gson();
+		StringTokenizer st = new StringTokenizer(payload,";");	    	
+		if(UserRegistryWebApplication.verifier.verify(st.nextToken(), st.nextToken().toCharArray())==Verifier.RESULT_VALID)
+			return gson.toJson(true, Boolean.class);
+		return gson.toJson(false, Boolean.class);
+	}
+
 }
