@@ -23,7 +23,7 @@ public class UserAuthJSON extends ServerResource{
 		String[] usernameUtenti = new String[urapi.getUtenti().size()];
 		int i=0;	
 		for(Map.Entry<String, Utente> entry : utenti.entrySet()) {			
-			usernameUtenti[i] = entry.getKey();
+			usernameUtenti[i++] = entry.getKey();
 		}
 		return gson.toJson(usernameUtenti,String[].class);
 	}

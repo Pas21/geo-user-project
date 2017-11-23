@@ -45,7 +45,7 @@ public class UserRegistryWebApplication extends Application{
 		Router router=new Router(getContext());
 
 		//Dopo aver creato il Map Verifier, lo associo a tutte le guardie 		
-		ChallengeAuthenticator guardiaUserAuth=new ChallengeAuthenticator(getContext(),ChallengeScheme.HTTP_BASIC,"guardiaUserAuth");
+		ChallengeAuthenticator guardiaUserAuth=new ChallengeAuthenticator(getContext(),ChallengeScheme.HTTP_BASIC,"guardStaticUserAuth");
 		guardiaUserAuth.setVerifier(verifier);
 		guardiaUserAuth.setNext(UserAuthJSON.class);
 		

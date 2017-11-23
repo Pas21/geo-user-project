@@ -29,8 +29,8 @@ public class UserRegistryAPI {
 	}
 	
 	//Metodo per la rimozione di un utente
-	public synchronized void removeUtente(String username) throws InvalidUsernameException{
-		this.userreg.removeUtente(username);
+	public synchronized boolean removeUtente(String username) throws InvalidUsernameException{
+		return this.userreg.removeUtente(username);
 	}
 		
 	//Metodo per l'aggiunta di una posizione

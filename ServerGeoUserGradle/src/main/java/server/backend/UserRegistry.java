@@ -67,7 +67,7 @@ public class UserRegistry {
 	}
 	
 	//Metodo per la rimozione di un utente esistente
-	public void removeUtente(String username) throws InvalidUsernameException {
+	public boolean removeUtente(String username) throws InvalidUsernameException {
 		//Verifica presenza utente
 		if(!this.utenti.containsKey(username))
 			throw new InvalidUsernameException("L'utente con username " + username + " non esiste!");
@@ -81,12 +81,10 @@ public class UserRegistry {
 			//Eliminazione utente dal database
 			if(!this.gestoreDB.removeUtente(utente)) {
 				System.out.println("Errore rimozione utente dal database con username " + username + "!");
+				return false;
 			}
-			else {
-				//Eliminazione utente dalla lista degli utenti caricati in memoria
-				this.utenti.remove(username);
-			}	
-		}
+			else return true;
+		}else return false;
 	}
 	
 	//Metodo per l'aggiunta di una posizione ad un utente esistente
