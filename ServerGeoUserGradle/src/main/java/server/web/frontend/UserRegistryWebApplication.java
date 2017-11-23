@@ -93,10 +93,10 @@ public class UserRegistryWebApplication extends Application{
 			scanner.close();
 			System.err.println("Loading settings from file");
 		} catch (FileNotFoundException e1) {
-		System.err.println("Settings file not found");
-		System.exit(-1);
+			System.err.println("Settings file not found");
+			System.exit(-1);
 		}
-		
+
 		rootDirForWebStaticFiles="file:\\\\"+System.getProperty("user.dir")+"\\"+settings.web_base_dir;
 		System.err.println("Web Directory: " + rootDirForWebStaticFiles);
 		
