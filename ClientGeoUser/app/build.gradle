@@ -25,9 +25,9 @@ dependencies {
     testImplementation 'junit:junit:4.12'
     androidTestImplementation 'com.android.support.test:runner:1.0.1'
     androidTestImplementation 'com.android.support.test.espresso:espresso-core:3.0.1'
-    implementation files('libs/gson-2.8.0.jar')
-    implementation files('libs/org.restlet.jar')
-    compile 'com.android.support:design:27.0.0'
+    compile 'com.google.code.gson:gson:2.8+'
+    compile 'org.restlet.jee:org.restlet:2.3+'
+    compile 'com.android.support:design:26.1.0'
     compile 'com.google.android.gms:play-services-maps:10.2.0'
 
 
