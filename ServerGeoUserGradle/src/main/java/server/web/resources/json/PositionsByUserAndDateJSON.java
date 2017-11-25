@@ -1,7 +1,6 @@
 package server.web.resources.json;
 
 import java.sql.Timestamp;
-import java.util.HashSet;
 import java.util.Set;
 
 import org.restlet.resource.Get;

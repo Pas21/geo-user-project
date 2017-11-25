@@ -3,10 +3,12 @@ package server.backend;
 
 import java.sql.Timestamp;
 import java.util.HashSet;
+import java.util.Map;
 import java.util.Set;
 import java.util.TreeMap;
 
 import commons.IdPosizione;
+import commons.InvalidEmailException;
 import commons.InvalidPositionException;
 import commons.InvalidUsernameException;
 import commons.Utente;
@@ -51,10 +53,17 @@ public class UserRegistry {
 	}
 
 	//Metodo per l'aggiunta di un nuovo utente
-	public void addUtente(Utente newUtente) throws InvalidUsernameException{
+	public void addUtente(Utente newUtente) throws InvalidUsernameException, InvalidEmailException{
 		//Verifica presenza utente
 		if(this.utenti.containsKey(newUtente.getUsername()))
 			throw new InvalidUsernameException("L'utente con username " + newUtente.getUsername() + " gia' esiste!");
+		
+		//Verifica duplicati email
+		for(Map.Entry<String, Utente> entry : utenti.entrySet()) {
+			if(entry.getValue().getEmail().equals(newUtente.getEmail()))
+				throw new InvalidEmailException("L'email '" + newUtente.getUsername() + "' gia' esiste!");
+		}
+		    
 		
 		//Aggiunta utente al database
 		if(!this.gestoreDB.addUtente(newUtente)) {

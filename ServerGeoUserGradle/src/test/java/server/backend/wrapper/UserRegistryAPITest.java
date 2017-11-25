@@ -7,6 +7,7 @@ import java.util.Set;
 import java.util.TreeMap;
 
 import commons.IdPosizione;
+import commons.InvalidEmailException;
 import commons.InvalidPositionException;
 import commons.InvalidUsernameException;
 import commons.Posizione;
@@ -48,8 +49,26 @@ public class UserRegistryAPITest {
 			}
 		} catch (InvalidUsernameException e) {
 			System.err.println(e.getMessage());
+		}catch (InvalidEmailException e) {
+			System.err.println(e.getMessage());
 		}
 		
+		//Test aggiunta di un nuovo utente
+		Utente newUtente2 = new Utente("a.user","a.pass","pietro.email","a","a");
+		try {
+			userregAPI.addUtente(newUtente2);
+			utenti = userregAPI.getUtenti();
+
+			System.out.println("UTENTI CARICATI NEL DATABASE DOPO L'AGGIUNTA DELL'UTENTE CON USERNAME " + newUtente2.getUsername() + ":");
+			for(String str : utenti.keySet()) {
+				System.out.println(utenti.get(str).toString());
+			}
+		} catch (InvalidUsernameException e) {
+			System.err.println(e.getMessage());
+		}catch (InvalidEmailException e) {
+			System.err.println(e.getMessage());
+		}
+
 		//Test rimozione di un utente esistente
 		try {
 			userregAPI.removeUtente(newUtente.getUsername());

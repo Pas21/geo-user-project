@@ -11,6 +11,7 @@ import org.restlet.security.Verifier;
 import com.google.gson.Gson;
 
 import commons.ErrorCodes;
+import commons.InvalidEmailException;
 import commons.InvalidUsernameException;
 import commons.Utente;
 import server.backend.wrapper.UserRegistryAPI;
@@ -33,6 +34,10 @@ public class UserRegJSON extends ServerResource{
 			Status s=new Status(ErrorCodes.INVALID_USERNAME_CODE);
 			setStatus(s);
 			return gson.toJson(e, InvalidUsernameException.class);
+		}catch(InvalidEmailException e){
+			Status s=new Status(ErrorCodes.INVALID_USERNAME_CODE);
+			setStatus(s);
+		return gson.toJson(e, InvalidEmailException.class);
 		}
 	}
 	

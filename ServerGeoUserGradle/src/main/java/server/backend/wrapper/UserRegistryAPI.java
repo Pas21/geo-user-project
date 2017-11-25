@@ -5,6 +5,7 @@ import java.util.Set;
 import java.util.TreeMap;
 
 import commons.IdPosizione;
+import commons.InvalidEmailException;
 import commons.InvalidPositionException;
 import commons.InvalidUsernameException;
 import commons.Posizione;
@@ -24,7 +25,7 @@ public class UserRegistryAPI {
 	}
 	
 	//Metodo per l'aggiunta di un nuovo utente
-	public synchronized void addUtente(Utente newUtente) throws InvalidUsernameException{
+	public synchronized void addUtente(Utente newUtente) throws InvalidUsernameException, InvalidEmailException{
 		this.userreg.addUtente(newUtente);
 	}
 	

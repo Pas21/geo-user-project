@@ -6,6 +6,7 @@ import java.util.Set;
 import java.util.TreeMap;
 
 import commons.IdPosizione;
+import commons.InvalidEmailException;
 import commons.InvalidPositionException;
 import commons.InvalidUsernameException;
 import commons.Posizione;
@@ -55,6 +56,8 @@ public class UserRegistryTest {
 				System.out.println(utenti.get(str).toString());
 			}
 		} catch (InvalidUsernameException e) {
+			System.err.println(e.getMessage());
+		} catch (InvalidEmailException e) {
 			System.err.println(e.getMessage());
 		}
 		
