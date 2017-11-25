@@ -21,7 +21,6 @@ import com.google.gson.Gson;
 
 import commons.Utente;
 import server.backend.wrapper.UserRegistryAPI;
-import server.web.resources.json.PositionRegJSON;
 import server.web.resources.json.PositionsByUserAndDateJSON;
 import server.web.resources.json.PositionsByUserJSON;
 import server.web.resources.json.UserAuthJSON;
@@ -49,10 +48,6 @@ public class UserRegistryWebApplication extends Application{
 		guardiaUserAuth.setVerifier(verifier);
 		guardiaUserAuth.setNext(UserAuthJSON.class);
 		
-		ChallengeAuthenticator guardStaticPositions=new ChallengeAuthenticator(getContext(),ChallengeScheme.HTTP_BASIC,"guardStaticPositions");
-		guardStaticPositions.setVerifier(verifier);
-		guardStaticPositions.setNext(PositionRegJSON.class);
-		
 		ChallengeAuthenticator guardStaticPositionsByUserAndDate=new ChallengeAuthenticator(getContext(),ChallengeScheme.HTTP_BASIC,"guardStaticPositionsByDate");
 		guardStaticPositionsByUserAndDate.setVerifier(verifier);
 		guardStaticPositionsByUserAndDate.setNext(PositionsByUserAndDateJSON.class);
@@ -71,8 +66,6 @@ public class UserRegistryWebApplication extends Application{
 		router.attach("/UserRegApplication/users/",UserRegJSON.class);
 		router.attach("/UserRegApplication/auth/users",guardiaUserAuth);
 		router.attach("/UserRegApplication/auth/users/",guardiaUserAuth);
-		router.attach("/UserRegApplication/auth/positions",guardStaticPositions);
-		router.attach("/UserRegApplication/auth/positions/",guardStaticPositions);
 		router.attach("/UserRegApplication/auth/positions/{username}",guardStaticPositionsByUser);
 		router.attach("/UserRegApplication/auth/positions/{username}/",guardStaticPositionsByUser);
 		router.attach("/UserRegApplication/auth/positions/{username}/{fromdata}/{todata}",guardStaticPositionsByUserAndDate);

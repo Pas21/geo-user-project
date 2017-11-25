@@ -3,11 +3,13 @@ package commons;
 import java.io.Serializable;
 import java.sql.Timestamp;
 
+import com.google.gson.annotations.Expose;
+
 public class IdPosizione implements Serializable,Comparable<Object>{
 	
-	private static final long serialVersionUID = 7753776522879468559L;
-	private double latitudine,longitudine;
-	private Timestamp timestamp;
+	@Expose private static final long serialVersionUID = 7753776522879468559L;
+	@Expose private double latitudine,longitudine;
+	@Expose private Timestamp timestamp;
 	
 	public IdPosizione(Timestamp timestamp, double latitudine, double longitudine){
 		this.timestamp=(Timestamp) timestamp.clone();

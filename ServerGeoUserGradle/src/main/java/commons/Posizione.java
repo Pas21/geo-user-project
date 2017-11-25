@@ -2,11 +2,13 @@ package commons;
 
 import java.io.Serializable;
 
+import com.google.gson.annotations.Expose;
+
 public class Posizione implements Serializable{
 
-	private static final long serialVersionUID = 7753776522879468559L;
-	private IdPosizione idPosizione;
-	private float accuratezza;
+	@Expose private static final long serialVersionUID = 7753776522879468559L;
+	@Expose private IdPosizione idPosizione;
+	@Expose private float accuratezza;
 	private Utente utente;
 
 	

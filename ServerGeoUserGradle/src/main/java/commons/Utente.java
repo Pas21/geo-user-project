@@ -3,14 +3,16 @@ import java.io.Serializable;
 import java.util.HashSet;
 import java.util.Set;
 
+import com.google.gson.annotations.Expose;
+
 public class Utente implements Serializable,Comparable<Object>{
     
-	private static final long serialVersionUID = 1L;
-	private String username;
-    private String password;
-    private String email;
-    private String nome;
-    private String cognome;
+	@Expose private static final long serialVersionUID = 1L;
+	@Expose private String username;
+	@Expose private String password;
+	@Expose private String email;
+	@Expose private String nome;
+	@Expose private String cognome;
     private Set<Posizione> posizioni = new HashSet<Posizione>(0);
     
 
