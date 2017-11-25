@@ -35,8 +35,10 @@ import com.google.android.gms.maps.model.MarkerOptions;
 import com.google.gson.Gson;
 import com.vfggmail.progettoswe17.clientgeouser.R;
 import com.vfggmail.progettoswe17.clientgeouser.commons.ErrorCodes;
+import com.vfggmail.progettoswe17.clientgeouser.commons.IdPosizione;
 import com.vfggmail.progettoswe17.clientgeouser.commons.InvalidUsernameException;
 import com.vfggmail.progettoswe17.clientgeouser.commons.Posizione;
+import com.vfggmail.progettoswe17.clientgeouser.commons.Utente;
 
 import org.restlet.data.ChallengeResponse;
 import org.restlet.data.ChallengeScheme;
@@ -44,6 +46,7 @@ import org.restlet.resource.ClientResource;
 import org.restlet.resource.ResourceException;
 
 import java.io.IOException;
+import java.sql.Timestamp;
 import java.text.SimpleDateFormat;
 import java.util.Date;
 import java.util.List;
@@ -61,11 +64,9 @@ public class mainPage extends AppCompatActivity implements OnMapReadyCallback{
     private Boolean exit = false;
 
 
+    private Utente utente;
     private GoogleMap mMap;
-    private TextView mAccuracyView;
-    private TextView mTimeView;
-    private TextView mLatView;
-    private TextView mLngView;
+
     private Button cerca;
     private Button update;
     private Snackbar sn;
@@ -93,6 +94,7 @@ public class mainPage extends AppCompatActivity implements OnMapReadyCallback{
         //setSupportActionBar(toolbar);
 
 
+        utente=(Utente) getIntent().getSerializableExtra("utente");
         setRequestedOrientation(ActivityInfo.SCREEN_ORIENTATION_PORTRAIT);
 
         editor=getSharedPreferences(prefName,MODE_PRIVATE);
@@ -112,10 +114,10 @@ public class mainPage extends AppCompatActivity implements OnMapReadyCallback{
         fab.setOnClickListener(new View.OnClickListener() {
             @Override
             public void onClick(View view) {
-                if(mAccuracyView.getText().toString().equals("Nessuna locazione iniziale disponibile"))
+                if(mLastReading==null)
                     sn.make(view,"Impossibile aggiungere posizione inesistente",Snackbar.LENGTH_SHORT).show();
                 else
-                    new AddPositionRestTask().execute(String.valueOf(mAccuracyView.getText()), String.valueOf(mTimeView.getText()), String.valueOf(mLatView.getText()), String.valueOf(mLngView.getText()));
+                    new AddPositionRestTask().execute(String.valueOf(mLastReading.getAccuracy()), String.valueOf(mLastReading.getLatitude()), String.valueOf(mLastReading.getLongitude()));
 
 
             }
@@ -382,6 +384,7 @@ public class mainPage extends AppCompatActivity implements OnMapReadyCallback{
 
     public class AddPositionRestTask extends AsyncTask<String, Void, Integer> {
 
+        private IdPosizione idpos;
         private Posizione pos;
 
 
@@ -401,7 +404,8 @@ public class mainPage extends AppCompatActivity implements OnMapReadyCallback{
 
 
             try {
-                pos=new Posizione(params[0],params[1],params[2],params[3]);
+                idpos=new IdPosizione(new Timestamp(new Date().getTime()),Double.parseDouble(params[1]),Double.parseDouble(params[2]));
+                pos=new Posizione(idpos,utente,Float.parseFloat(params[0]));
                 jsonResponse = cr.post(gson.toJson(pos,Posizione.class)).getText();
                 if (cr.getStatus().getCode()== ErrorCodes.INVALID_USERNAME_CODE)
                     throw gson.fromJson(jsonResponse, InvalidUsernameException.class);

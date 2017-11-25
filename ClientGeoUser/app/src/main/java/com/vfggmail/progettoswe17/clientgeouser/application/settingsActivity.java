@@ -39,6 +39,7 @@ public class settingsActivity extends AppCompatActivity {
         port=(EditText) findViewById(R.id.settings_port);
         change=(Button)findViewById(R.id.settings_change);
 
+
         ip.setOnClickListener(new View.OnClickListener() {
             @Override
             public void onClick(View v) {

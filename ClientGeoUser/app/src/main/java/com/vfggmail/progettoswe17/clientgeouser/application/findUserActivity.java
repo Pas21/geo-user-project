@@ -33,6 +33,8 @@ import java.io.IOException;
 import java.util.ArrayList;
 import java.util.Calendar;
 import java.util.Date;
+import java.util.HashSet;
+
 import android.support.design.widget.Snackbar;
 import android.widget.TextClock;
 import android.widget.TextView;
@@ -44,7 +46,7 @@ public class findUserActivity extends AppCompatActivity {
     private String username,password;
     private Gson gson;
     private Snackbar sn;
-    private ArrayList<Posizione> posizioni;
+    private HashSet<Posizione> posizioni;
     SharedPreferences editor;
     public final static String prefName="Preference";
     private static TextView clock1;
@@ -107,7 +109,7 @@ public class findUserActivity extends AppCompatActivity {
         mhour2 = c.get(Calendar.HOUR_OF_DAY);
         mminutes2 = c.get(Calendar.MINUTE);
 
-        String text=mday1+"/"+mmonth1+"/"+myear1+" "+mhour1+":"+mminutes1;
+        String text=mday1+"/"+(mmonth1+1)+"/"+myear1+" "+mhour1+":"+mminutes1;
         clock1.setText(text);
         clock2.setText(text);
 
@@ -194,15 +196,14 @@ public class findUserActivity extends AppCompatActivity {
         protected Integer doInBackground(String... params) {
 
             String data1S=params[1],data2S=params[2];
-            data1S=data1S.replaceAll("/", "%69");
-            data2S=data2S.replaceAll("/", "%69");
-            data1S=data1S.replaceAll(" ", "%20");
-            data2S=data2S.replaceAll(" ", "%20");
-            System.out.println(data1S+" "+data2S);
-            String URI=mainPage.baseURI+"auth/users/"+params[0]+"/"+data1S+"&"+data2S;
+            data1S=data1S.replaceAll("/", "-");
+            data2S=data2S.replaceAll("/", "-");
+            data1S=data1S.replaceAll(" ", "_");
+            data2S=data2S.replaceAll(" ", "_");
+            String URI=mainPage.baseURI+"auth/positions/"+params[0]+"/"+data1S+"/"+data2S;
             ClientResource cr=new ClientResource(URI);
             String gsonResponse=null;
-            posizioni=new ArrayList<Posizione>();
+            posizioni=new HashSet<Posizione>();
             gson=new Gson();
 
             ChallengeScheme scheme = ChallengeScheme.HTTP_BASIC;
@@ -219,7 +220,7 @@ public class findUserActivity extends AppCompatActivity {
                     throw gson.fromJson(gsonResponse, InvalidUsernameException.class);
                 else if(cr.getStatus().getCode()==ErrorCodes.INVALID_DATA_CODE)
                     throw gson.fromJson(gsonResponse, InvalidDataException.class);
-                posizioni = gson.fromJson(gsonResponse, new TypeToken<ArrayList<Posizione>>() {}.getType());
+                posizioni = gson.fromJson(gsonResponse, new TypeToken<HashSet<Posizione>>() {}.getType());
 
                 return 0;
 
@@ -278,14 +279,14 @@ public class findUserActivity extends AppCompatActivity {
                 myear1 = year;
                 mmonth1 = month;
                 mday1 = day;
-                String text = mday1 + "/" + mmonth1 + "/" + myear1 + " " + mhour1 + ":" + mminutes1;
+                String text = mday1 + "/" + (mmonth1+1) + "/" + myear1 + " " + mhour1 + ":" + mminutes1;
                 clock1.setText(text);
             }
             else{
                 myear2 = year;
                 mmonth2 = month;
                 mday2 = day;
-                String text = mday2 + "/" + mmonth2 + "/" + myear2 + " " + mhour2 + ":" + mminutes2;
+                String text = mday2 + "/" + (mmonth2+1) + "/" + myear2 + " " + mhour2 + ":" + mminutes2;
                 clock2.setText(text);
             }
 

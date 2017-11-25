@@ -16,11 +16,12 @@ import com.google.android.gms.maps.model.MarkerOptions;
 
 
 import java.util.ArrayList;
+import java.util.HashSet;
 
 public class showMapActivity extends AppCompatActivity implements OnMapReadyCallback {
 
     private GoogleMap mMap;
-    private ArrayList<Posizione> posizioni;
+    private HashSet<Posizione> posizioni;
     Intent intent;
 
     @Override
@@ -32,7 +33,7 @@ public class showMapActivity extends AppCompatActivity implements OnMapReadyCall
 
 
         intent=getIntent();
-        posizioni=(ArrayList<Posizione>)intent.getSerializableExtra("array");
+        posizioni=(HashSet<Posizione>)intent.getSerializableExtra("array");
 
         SupportMapFragment mapFragment = (SupportMapFragment) getSupportFragmentManager().findFragmentById(R.id.map);
         mapFragment.getMapAsync(this);
@@ -47,7 +48,7 @@ public class showMapActivity extends AppCompatActivity implements OnMapReadyCall
         // Add a marker and move the camera
         if(!posizioni.isEmpty()) {
             for (Posizione pos : posizioni) {
-                place = new LatLng(Double.parseDouble(pos.getLatitude().replaceAll("Latitude: ", "")), Double.parseDouble(pos.getLongitude().replaceAll("Longitude: ", "")));
+                place = new LatLng(pos.getIdPosizione().getLatitudine(),pos.getIdPosizione().getLongitudine());
                 mMap.addMarker(new MarkerOptions().position(place).title(""));
             }
 

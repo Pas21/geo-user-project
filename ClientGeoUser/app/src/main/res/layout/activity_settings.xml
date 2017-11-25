@@ -13,7 +13,7 @@
     <EditText
         android:layout_width="wrap_content"
         android:layout_height="wrap_content"
-        android:inputType="text"
+        android:inputType="number"
         android:hint="@string/prompt_ip"
         android:ems="10"
         android:layout_alignParentTop="true"

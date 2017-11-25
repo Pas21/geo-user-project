@@ -8,6 +8,7 @@ import android.os.Bundle;
 import android.support.design.widget.Snackbar;
 import android.support.v7.app.AppCompatActivity;
 import android.text.InputType;
+import android.util.Log;
 import android.view.View;
 import android.widget.Button;
 import android.widget.EditText;
@@ -16,15 +17,12 @@ import com.google.gson.Gson;
 import com.vfggmail.progettoswe17.clientgeouser.R;
 import com.vfggmail.progettoswe17.clientgeouser.commons.ErrorCodes;
 import com.vfggmail.progettoswe17.clientgeouser.commons.InvalidUsernameException;
-import com.vfggmail.progettoswe17.clientgeouser.commons.User;
+import com.vfggmail.progettoswe17.clientgeouser.commons.Utente;
 
 import org.restlet.resource.ClientResource;
 
 import java.io.IOException;
 
-/**
- * Created by Antonio on 12/11/2017.
- */
 
 public class signInActivity extends AppCompatActivity {
 
@@ -35,6 +33,7 @@ public class signInActivity extends AppCompatActivity {
     private static EditText email;
     private static EditText name;
     private static EditText surname;
+    private static Utente utente;
     private Snackbar sn;
     private Button signIn;
     private SharedPreferences.Editor editor;
@@ -62,8 +61,8 @@ public class signInActivity extends AppCompatActivity {
         setRequestedOrientation(ActivityInfo.SCREEN_ORIENTATION_PORTRAIT);
         editor.remove("username");
         editor.remove("password");
-        editor.putString("IP", "192.168.43.67");
-        editor.putString("port", "8182");
+        //editor.putString("IP", "192.168.1.60");
+        //editor.putString("port", "8182");
         editor.commit();
 
 
@@ -97,16 +96,17 @@ public class signInActivity extends AppCompatActivity {
 
 
             if (params[1].equals(params[2])) {
-                User u = new User(params[0], params[1], params[3], params[4], params[5]);
+                utente = new Utente(params[0], params[1], params[3], params[4], params[5]);
                 gson = new Gson();
                 SharedPreferences editor=getSharedPreferences(prefName,MODE_PRIVATE);
                 String URI = "http://"+editor.getString("IP","10.0.2.2")+":"+editor.getString("port","8182")+"/UserRegApplication/" + "users";
                 ClientResource cr = new ClientResource(URI);
                 String gsonResponse = null;
                 try {
-                    gsonResponse = cr.put(gson.toJson(u, User.class)).getText();
+                    gsonResponse = cr.post(gson.toJson(utente, Utente.class)).getText();
                     if (cr.getStatus().getCode() == ErrorCodes.INVALID_USERNAME_CODE)
                         throw gson.fromJson(gsonResponse, InvalidUsernameException.class);
+
                     return 0;
                 } catch (IOException e) {
                     return 1;
@@ -126,6 +126,7 @@ public class signInActivity extends AppCompatActivity {
                 myIntent.addFlags(Intent.FLAG_ACTIVITY_NEW_TASK);
                 myIntent.addFlags(Intent.FLAG_ACTIVITY_CLEAR_TASK);
                 myIntent.addFlags(Intent.FLAG_ACTIVITY_NO_ANIMATION);
+                myIntent.putExtra("utente",utente);
                 editor.putString("username", username.getText().toString());
                 editor.putString("password", password.getText().toString());
                 editor.commit();

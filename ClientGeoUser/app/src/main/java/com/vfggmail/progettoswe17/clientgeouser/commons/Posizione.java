@@ -1,56 +1,80 @@
 package com.vfggmail.progettoswe17.clientgeouser.commons;
 
-
 import java.io.Serializable;
 
-public class Posizione implements Serializable {
-	
+public class Posizione implements Serializable{
+
 	private static final long serialVersionUID = 7753776522879468559L;
-	private String accuracy,latitude,longitude,time;
-	
-	public Posizione(String accuracy, String time, String latitude, String longitude){
-		this.accuracy=accuracy;
-		this.time=time;
-		this.latitude=latitude;
-		this.longitude=longitude;
+	private IdPosizione idPosizione;
+	private float accuratezza;
+	private Utente utente;
+
+
+	public Posizione(IdPosizione idPosizione, Utente utente, float accuratezza){
+		this.idPosizione=idPosizione;
+		this.accuratezza=accuratezza;
+		this.utente=utente;
 	}
-	
-	
-	public String getAccuracy(){
-		return accuracy;
+
+	public Posizione(){}
+
+
+	public IdPosizione getIdPosizione() {
+		return idPosizione;
 	}
-	
-	public String getTime(){
-		return time;
+
+	public void setIdPosizione(IdPosizione idPosizione) {
+		this.idPosizione = idPosizione;
 	}
-	
-	
-	public String getLatitude(){
-		return latitude;
+
+	public float getAccuratezza() {
+		return accuratezza;
 	}
-	
-	public String getLongitude(){
-		return longitude;
+
+	public void setAccuratezza(float accuratezza) {
+		this.accuratezza = accuratezza;
 	}
-	
-	public void setAccuracy(String newAccuracy){
-		this.accuracy=newAccuracy;
+
+	@Override
+	public int hashCode() {
+		final int prime = 31;
+		int result = 1;
+		result = prime * result + Float.floatToIntBits(accuratezza);
+		result = prime * result + ((idPosizione == null) ? 0 : idPosizione.hashCode());
+		return result;
 	}
-	
-	public void setTime(String newTime){
-		time=newTime;
+
+	@Override
+	public boolean equals(Object obj) {
+		if (this == obj)
+			return true;
+		if (obj == null)
+			return false;
+		if (getClass() != obj.getClass())
+			return false;
+		Posizione other = (Posizione) obj;
+		if (Float.floatToIntBits(accuratezza) != Float.floatToIntBits(other.accuratezza))
+			return false;
+		if (idPosizione == null) {
+			if (other.idPosizione != null)
+				return false;
+		} else if (!idPosizione.equals(other.idPosizione))
+			return false;
+		return true;
 	}
-	
-	
-	public void setLatitude(String newLatitude){
-		latitude=newLatitude;
+
+	@Override
+	public String toString() {
+		return "Posizione ["+this.idPosizione.toString()+", accuratezza=" + accuratezza + "]";
 	}
-	
-	public void setLongitude(String newLongitude){
-		longitude=newLongitude;
+
+	public Utente getUtente() {
+		return utente;
 	}
-	
-	public String toString(){
-		return "Accuracy: "+this.accuracy+" Time: "+this.time+" Latitude: "+this.latitude+" Longitude: "+this.longitude;
+
+	public void setUtente(Utente utente) {
+		this.utente = utente;
 	}
+
+
 }
