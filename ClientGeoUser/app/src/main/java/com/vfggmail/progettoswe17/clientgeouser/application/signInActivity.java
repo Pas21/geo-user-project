@@ -16,6 +16,7 @@ import android.widget.EditText;
 import com.google.gson.Gson;
 import com.vfggmail.progettoswe17.clientgeouser.R;
 import com.vfggmail.progettoswe17.clientgeouser.commons.ErrorCodes;
+import com.vfggmail.progettoswe17.clientgeouser.commons.InvalidEmailException;
 import com.vfggmail.progettoswe17.clientgeouser.commons.InvalidUsernameException;
 import com.vfggmail.progettoswe17.clientgeouser.commons.Utente;
 
@@ -33,7 +34,6 @@ public class signInActivity extends AppCompatActivity {
     private static EditText email;
     private static EditText name;
     private static EditText surname;
-    private static Utente utente;
     private Snackbar sn;
     private Button signIn;
     private SharedPreferences.Editor editor;
@@ -96,7 +96,7 @@ public class signInActivity extends AppCompatActivity {
 
 
             if (params[1].equals(params[2])) {
-                utente = new Utente(params[0], params[1], params[3], params[4], params[5]);
+                Utente utente = new Utente(params[0], params[1], params[3], params[4], params[5]);
                 gson = new Gson();
                 SharedPreferences editor=getSharedPreferences(prefName,MODE_PRIVATE);
                 String URI = "http://"+editor.getString("IP","10.0.2.2")+":"+editor.getString("port","8182")+"/UserRegApplication/" + "users";
@@ -106,15 +106,19 @@ public class signInActivity extends AppCompatActivity {
                     gsonResponse = cr.post(gson.toJson(utente, Utente.class)).getText();
                     if (cr.getStatus().getCode() == ErrorCodes.INVALID_USERNAME_CODE)
                         throw gson.fromJson(gsonResponse, InvalidUsernameException.class);
+                    else if (cr.getStatus().getCode() == ErrorCodes.INVALID_EMAIL_CODE)
+                        throw gson.fromJson(gsonResponse, InvalidEmailException.class);
 
                     return 0;
                 } catch (IOException e) {
                     return 1;
                 } catch (InvalidUsernameException e2) {
                     return 2;
+                } catch(InvalidEmailException e3){
+                    return 3;
                 }
             } else {
-                return 3;
+                return 4;
             }
         }
 
@@ -126,7 +130,6 @@ public class signInActivity extends AppCompatActivity {
                 myIntent.addFlags(Intent.FLAG_ACTIVITY_NEW_TASK);
                 myIntent.addFlags(Intent.FLAG_ACTIVITY_CLEAR_TASK);
                 myIntent.addFlags(Intent.FLAG_ACTIVITY_NO_ANIMATION);
-                myIntent.putExtra("utente",utente);
                 editor.putString("username", username.getText().toString());
                 editor.putString("password", password.getText().toString());
                 editor.commit();
@@ -135,6 +138,8 @@ public class signInActivity extends AppCompatActivity {
                 sn.make(parent, "Errore", Snackbar.LENGTH_SHORT).show();
             } else if (c == 2) {
                 sn.make(parent, "Username utilizzato da un altro utente", Snackbar.LENGTH_SHORT).show();
+            } else if(c==3){
+                sn.make(parent,"Email utilizzata da un'altro utente",Snackbar.LENGTH_SHORT).show();
             } else {
                 sn.make(parent, "Password non coincidenti", Snackbar.LENGTH_SHORT).show();
             }

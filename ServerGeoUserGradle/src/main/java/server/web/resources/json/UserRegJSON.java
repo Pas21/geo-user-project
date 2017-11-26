@@ -1,11 +1,13 @@
 package server.web.resources.json;
 
+import java.util.NoSuchElementException;
 import java.util.StringTokenizer;
 
 import org.restlet.data.Status;
 import org.restlet.resource.Post;
 import org.restlet.resource.Put;
 import org.restlet.resource.ServerResource;
+import org.restlet.security.MapVerifier;
 import org.restlet.security.Verifier;
 
 import com.google.gson.Gson;
@@ -35,7 +37,7 @@ public class UserRegJSON extends ServerResource{
 			setStatus(s);
 			return gson.toJson(e, InvalidUsernameException.class);
 		}catch(InvalidEmailException e){
-			Status s=new Status(ErrorCodes.INVALID_USERNAME_CODE);
+			Status s=new Status(ErrorCodes.INVALID_EMAIL_CODE);
 			setStatus(s);
 		return gson.toJson(e, InvalidEmailException.class);
 		}
@@ -45,10 +47,14 @@ public class UserRegJSON extends ServerResource{
 	@Put
 	public String checkUser(String payload){
 		Gson gson = new Gson();
-		StringTokenizer st = new StringTokenizer(payload,";");	    	
-		if(UserRegistryWebApplication.verifier.verify(st.nextToken(), st.nextToken().toCharArray())==Verifier.RESULT_VALID)
-			return gson.toJson(true, Boolean.class);
+		String response=gson.fromJson(payload, String.class);
+		StringTokenizer st = new StringTokenizer(response,";");	
+		String username = st.nextToken();
+		String password = st.nextToken();
+		if(UserRegistryWebApplication.verifier.verify(username, password.toCharArray())==MapVerifier.RESULT_VALID) 
+			return gson.toJson(true,Boolean.class);
 		return gson.toJson(false, Boolean.class);
+		
 	}
 
 }

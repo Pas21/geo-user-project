@@ -40,6 +40,10 @@ public class settingsActivity extends AppCompatActivity {
         change=(Button)findViewById(R.id.settings_change);
 
 
+        ip.setText(getSharedPreferences(prefName,MODE_PRIVATE).getString("IP","10.0.2.2"));
+        port.setText(getSharedPreferences(prefName,MODE_PRIVATE).getString("port","8182"));
+
+
         ip.setOnClickListener(new View.OnClickListener() {
             @Override
             public void onClick(View v) {

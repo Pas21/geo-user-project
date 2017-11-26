@@ -108,16 +108,20 @@ public class loginActivity extends AppCompatActivity  {
         protected Integer doInBackground(String... params) {
 
             SharedPreferences editor=getSharedPreferences(prefName,MODE_PRIVATE);
-            String URI = "http://"+editor.getString("IP","10.0.2.2")+":"+editor.getString("port","8182")+"/UserRegApplication/" + "users";
+            String URI = "http://"+editor.getString("IP","10.0.2.2")+":"+editor.getString("port","8182")+"/UserRegApplication/" + "users/";
             gson = new Gson();
             ClientResource cr = new ClientResource(URI);
             String gsonResponse = null;
+            Boolean response;
 
 
             try {
-                gsonResponse = cr.post(gson.toJson(params[0] + "&" + params[1], String.class)).getText();
-                if (!gsonResponse.contains("not") && cr.getStatus().getCode() == 200) {
-                    return 0;
+                gsonResponse = cr.put(gson.toJson(params[0] + ";" + params[1], String.class)).getText();
+                if (cr.getStatus().getCode() == 200) {
+                    response=gson.fromJson(gsonResponse,Boolean.class);
+                    if(response)
+                        return 0;
+                    return 2;
 
                 } else if (cr.getStatus().getCode() == ErrorCodes.INVALID_USERNAME_CODE) {
                     return 1;
@@ -153,7 +157,7 @@ public class loginActivity extends AppCompatActivity  {
                 sn.make(parent, "Utente non registrato", Snackbar.LENGTH_LONG)
                         .setAction("Action", null).show();
             } else if (c == 2) {
-                sn.make(parent, "Password non corretta", Snackbar.LENGTH_LONG)
+                sn.make(parent, "Credenziali non corrette", Snackbar.LENGTH_LONG)
                         .setAction("Action", null).show();
             }
 

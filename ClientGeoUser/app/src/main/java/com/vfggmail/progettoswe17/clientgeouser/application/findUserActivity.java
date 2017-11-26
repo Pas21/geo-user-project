@@ -30,6 +30,8 @@ import org.restlet.resource.ClientResource;
 import org.restlet.resource.ResourceException;
 
 import java.io.IOException;
+import java.text.ParseException;
+import java.text.SimpleDateFormat;
 import java.util.ArrayList;
 import java.util.Calendar;
 import java.util.Date;
@@ -39,6 +41,7 @@ import android.support.design.widget.Snackbar;
 import android.widget.TextClock;
 import android.widget.TextView;
 import android.widget.TimePicker;
+import android.widget.Toast;
 
 public class findUserActivity extends AppCompatActivity {
 
@@ -109,7 +112,7 @@ public class findUserActivity extends AppCompatActivity {
         mhour2 = c.get(Calendar.HOUR_OF_DAY);
         mminutes2 = c.get(Calendar.MINUTE);
 
-        String text=mday1+"/"+(mmonth1+1)+"/"+myear1+" "+mhour1+":"+mminutes1;
+        String text=myear1+"/"+(mmonth1+1)+"/"+mday1+" "+mhour1+":"+mminutes1+":00";
         clock1.setText(text);
         clock2.setText(text);
 
@@ -173,9 +176,24 @@ public class findUserActivity extends AppCompatActivity {
             public void onClick(View v) {
                 Date d1=null, d2=null;
                 View parent = (View) findViewById(R.id.activity_find_user);
+                SimpleDateFormat format=new SimpleDateFormat("dd/MM/yyyy HH:mm");
+                try {
+                    d1=format.parse(clock1.getText().toString());
+                    d2=format.parse(clock2.getText().toString());
+                } catch (ParseException e) {
+                    sn.make(parent,"Formato data non valido",Snackbar.LENGTH_SHORT).show();
+                }
+
+
 
                 if(userC.getText().equals("") || clock1.getText().equals("") || clock2.getText().equals(""))
                     sn.make(parent,"Inserisci i dati",Snackbar.LENGTH_SHORT).show();
+
+                else if(d2.before(d1)){
+                    sn.make(parent,"Date non valide",Snackbar.LENGTH_SHORT).show();
+
+                }
+
 
                 else
                     new findRestTask().execute(String.valueOf(userC.getText()), String.valueOf(clock1.getText()), String.valueOf(clock2.getText()));
@@ -279,14 +297,14 @@ public class findUserActivity extends AppCompatActivity {
                 myear1 = year;
                 mmonth1 = month;
                 mday1 = day;
-                String text = mday1 + "/" + (mmonth1+1) + "/" + myear1 + " " + mhour1 + ":" + mminutes1;
+                String text = myear1+"/"+(mmonth1+1)+"/"+mday1+" "+mhour1+":"+mminutes1+":00";
                 clock1.setText(text);
             }
             else{
                 myear2 = year;
                 mmonth2 = month;
                 mday2 = day;
-                String text = mday2 + "/" + (mmonth2+1) + "/" + myear2 + " " + mhour2 + ":" + mminutes2;
+                String text = myear2+"/"+(mmonth2+1)+"/"+mday2+" "+mhour2+":"+mminutes2+":00";
                 clock2.setText(text);
             }
 
