@@ -1,9 +1,9 @@
 package server.backend;
 
-
 import java.sql.Timestamp;
 import java.util.HashSet;
 import java.util.Map;
+import java.util.Map.Entry;
 import java.util.Set;
 import java.util.TreeMap;
 
@@ -27,26 +27,28 @@ public class UserRegistry {
 		
 		//Aggiornamento set di posizioni degli utenti
 		Set<Posizione> posizioniUtente = new HashSet<Posizione>(0);
-		for(String username : this.utenti.keySet()) {
-			for(IdPosizione idPosizione : this.posizioni.keySet()) {
-				Posizione posizione = this.posizioni.get(idPosizione);
-				if(posizione.getUtente().getUsername().equals(username)) {
+		String usernameUtente=null;
+		for(Entry<String, Utente> utente : this.utenti.entrySet()) {
+			usernameUtente=utente.getValue().getUsername();
+			for(Entry<IdPosizione, Posizione> idPos : this.posizioni.entrySet()) {
+				Posizione posizione = idPos.getValue();
+				if(posizione.getUtente().getUsername().equals(usernameUtente)) {
 					posizioniUtente.add(posizione);
 				}
 			}
-			this.utenti.get(username).setPosizioni(posizioniUtente);
+			this.utenti.get(usernameUtente).setPosizioni(posizioniUtente);
 			posizioniUtente = new HashSet<Posizione>(0);
 		}
 		
 		//Aggiornamento utente delle posizioni
 		//Questo aggiornamento puo' essere incluso nel precedente(aggiornamento set di posizioni)
 		//E' stato separato solo per motivi di leggibilita' del codice e, inoltre, non inficia molto sulle performance visto che viene eseguito solo una volta all'avvio del server
-		for(String username : this.utenti.keySet()) {
-			for(IdPosizione idPosizione : this.posizioni.keySet()) {
-				Posizione posizione = this.posizioni.get(idPosizione);
-				if(posizione.getUtente().getUsername().equals(username)) {
-					posizione.setUtente(this.utenti.get(username));
-					this.posizioni.put(idPosizione, posizione);
+		for(Entry<String, Utente> utente : this.utenti.entrySet()) {
+			for(Entry<IdPosizione, Posizione> idPos : this.posizioni.entrySet()) {
+				Posizione posizione = idPos.getValue();
+				if(posizione.getUtente().getUsername().equals(utente.getValue().getUsername())) {
+					posizione.setUtente(utente.getValue());
+					this.posizioni.put(idPos.getKey(), posizione);
 				}
 			}
 		}
@@ -61,7 +63,7 @@ public class UserRegistry {
 		//Verifica duplicati email
 		for(Map.Entry<String, Utente> entry : utenti.entrySet()) {
 			if(entry.getValue().getEmail().equals(newUtente.getEmail()))
-				throw new InvalidEmailException("L'email '" + newUtente.getUsername() + "' gia' esiste!");
+				throw new InvalidEmailException("L'email '" + newUtente.getEmail() + "' gia' esiste!");
 		}
 		    
 		
@@ -189,9 +191,9 @@ public class UserRegistry {
 	//Metodo per l'ottenenimento di tutte le posizioni di un utente che ricadono entro un intervallo di tempo
 	public Set<Posizione> getPosizioniUtenteByData(String username, Timestamp from, Timestamp to) {
 		Set<Posizione> posizioniFiltrate = new HashSet<Posizione>(0);
-		for(IdPosizione idPosizione : this.posizioni.keySet()) {
-			if(this.posizioni.get(idPosizione).getUtente().getUsername().equals(username) && idPosizione.getTimestamp().after(from) && idPosizione.getTimestamp().before(to))
-				posizioniFiltrate.add(this.posizioni.get(idPosizione));
+		for(Entry<IdPosizione, Posizione> idPos : this.posizioni.entrySet()) {
+			if(idPos.getValue().getUtente().getUsername().equals(username) && idPos.getKey().getTimestamp().after(from) && idPos.getKey().getTimestamp().before(to))
+				posizioniFiltrate.add(idPos.getValue());
 		}
 		return posizioniFiltrate;
 	}

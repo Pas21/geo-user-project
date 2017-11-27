@@ -3,6 +3,7 @@ package server.backend.wrapper;
 import java.sql.Timestamp;
 import java.time.LocalDateTime;
 import java.util.HashSet;
+import java.util.Map.Entry;
 import java.util.Set;
 import java.util.TreeMap;
 
@@ -22,8 +23,8 @@ public class UserRegistryAPITest {
 		TreeMap<String, Utente> utenti = userregAPI.getUtenti();
 		
 		System.out.println("UTENTI CARICATI NEL DATABASE: ");
-		for(String str : utenti.keySet()) {
-			System.out.println(utenti.get(str).toString());
+		for(Entry<String, Utente> str : utenti.entrySet()) {
+			System.out.println(str.getValue().toString());
 		}
 		
 		//Test ottenimento di tutte le posizioni
@@ -56,10 +57,11 @@ public class UserRegistryAPITest {
 		//Test aggiunta di un nuovo utente
 		Utente newUtente2 = new Utente("a.user","a.pass","pietro.email","a","a");
 		try {
+			System.out.println("AGGIUNTA DELL'UTENTE CON EMAIL ESISTENTE " + newUtente2.getEmail() + ":");
 			userregAPI.addUtente(newUtente2);
 			utenti = userregAPI.getUtenti();
 
-			System.out.println("UTENTI CARICATI NEL DATABASE DOPO L'AGGIUNTA DELL'UTENTE CON USERNAME " + newUtente2.getUsername() + ":");
+			System.out.println("UTENTI CARICATI NEL DATABASE DOPO L'AGGIUNTA DELL'UTENTE CON EMAIL ESISTENTE " + newUtente2.getEmail() + ":");
 			for(String str : utenti.keySet()) {
 				System.out.println(utenti.get(str).toString());
 			}

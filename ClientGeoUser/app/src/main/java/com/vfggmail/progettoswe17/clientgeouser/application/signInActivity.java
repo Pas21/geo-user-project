@@ -139,7 +139,7 @@ public class signInActivity extends AppCompatActivity {
             } else if (c == 2) {
                 sn.make(parent, "Username utilizzato da un altro utente", Snackbar.LENGTH_SHORT).show();
             } else if(c==3){
-                sn.make(parent,"Email utilizzata da un'altro utente",Snackbar.LENGTH_SHORT).show();
+                sn.make(parent,"Email utilizzata da un altro utente",Snackbar.LENGTH_SHORT).show();
             } else {
                 sn.make(parent, "Password non coincidenti", Snackbar.LENGTH_SHORT).show();
             }

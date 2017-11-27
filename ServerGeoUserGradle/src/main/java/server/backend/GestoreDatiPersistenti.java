@@ -2,6 +2,7 @@ package server.backend;
 
 import java.util.Iterator;
 import java.util.List;
+import java.util.Map.Entry;
 import java.util.TreeMap;
 
 import org.hibernate.HibernateException;
@@ -170,9 +171,7 @@ public class GestoreDatiPersistenti {
 	
 	//Metodo per rimuovere tutte le posizioni di un utente
 	public boolean removePosizioniUtente(Utente utente) {
-		TreeMap<IdPosizione, Posizione> posizioni = this.getPosizioni();
-		if(posizioni == null) return false;
-		
+		TreeMap<IdPosizione, Posizione> posizioni = this.getPosizioni();		
 		Session session = this.factory.openSession();
 		Transaction tx = null;
 		boolean removeok =  true;
@@ -180,8 +179,8 @@ public class GestoreDatiPersistenti {
 		
 		try {
 			//Si può fare anche con createNativeQuery!
-			for(IdPosizione id : posizioni.keySet()) {
-				posizione = posizioni.get(id);
+			for(Entry<IdPosizione, Posizione> id : posizioni.entrySet()) {
+				posizione = id.getValue();
 				//Nell'if si deve usare il metodo equals della classe utente
 				if(posizione.getUtente().getUsername().equals(utente.getUsername())) {
 					tx = session.beginTransaction();

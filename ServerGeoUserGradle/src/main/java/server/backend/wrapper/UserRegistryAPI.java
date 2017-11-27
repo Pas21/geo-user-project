@@ -4,8 +4,6 @@ import java.sql.Timestamp;
 import java.util.Set;
 import java.util.TreeMap;
 
-import org.restlet.security.MapVerifier;
-
 import commons.IdPosizione;
 import commons.InvalidEmailException;
 import commons.InvalidPositionException;
@@ -13,7 +11,6 @@ import commons.InvalidUsernameException;
 import commons.Posizione;
 import commons.Utente;
 import server.backend.UserRegistry;
-import server.web.frontend.UserRegistryWebApplication;
 
 public class UserRegistryAPI {
 	

@@ -7,4 +7,7 @@ public class ErrorCodes {
 	public static final int INVALID_EMAIL_CODE=802;
 
 	public static final String INVALID_USERNAME_DESCRIPTION="Invalid username"; 
+	public static final String INVALID_POSITION_DESCRIPTION="Invalid position"; 
+	public static final String INVALID_EMAIL_DESCRIPTION="Invalid email"; 
+
 }

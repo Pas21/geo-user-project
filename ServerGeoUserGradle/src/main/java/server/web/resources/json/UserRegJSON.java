@@ -1,6 +1,5 @@
 package server.web.resources.json;
 
-import java.util.NoSuchElementException;
 import java.util.StringTokenizer;
 
 import org.restlet.data.Status;
@@ -8,7 +7,6 @@ import org.restlet.resource.Post;
 import org.restlet.resource.Put;
 import org.restlet.resource.ServerResource;
 import org.restlet.security.MapVerifier;
-import org.restlet.security.Verifier;
 
 import com.google.gson.Gson;
 

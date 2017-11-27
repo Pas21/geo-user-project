@@ -1,10 +1,12 @@
 package server.web.frontend;
 
-import java.io.File;
-import java.io.FileNotFoundException;
+import java.io.BufferedReader;
+import java.io.FileInputStream;
+import java.io.IOException;
+import java.io.InputStreamReader;
 import java.net.InetAddress;
+import java.nio.charset.Charset;
 import java.util.Map;
-import java.util.Scanner;
 import java.util.TreeMap;
 
 import org.restlet.Application;
@@ -29,7 +31,7 @@ import server.web.resources.json.UserRegJSON;
 public class UserRegistryWebApplication extends Application{
 	
 	//Creo il Map Verifier (mappa degli utenti registrati)
-	public static MapVerifier verifier = new MapVerifier(); 		
+	public final static MapVerifier verifier = new MapVerifier(); 		
 	
 	private class Settings{
 		public int port;
@@ -81,11 +83,11 @@ public class UserRegistryWebApplication extends Application{
 		UserRegistryAPI urapi=UserRegistryAPI.instance();
 
 		try{
-			Scanner scanner=new Scanner(new File("Settings.json"));
-			settings=gson.fromJson(scanner.nextLine(), Settings.class);
-			scanner.close();
+			BufferedReader br = new BufferedReader(new InputStreamReader(new FileInputStream("Settings.json"), Charset.defaultCharset()));
+			settings=gson.fromJson(br.readLine(), Settings.class);
+			br.close();
 			System.err.println("Loading settings from file");
-		} catch (FileNotFoundException e1) {
+		} catch (IOException e1) {
 			System.err.println("Settings file not found");
 			System.exit(-1);
 		}
@@ -118,6 +120,7 @@ public class UserRegistryWebApplication extends Application{
 
 	        //IP
 	        System.err.println("IP Server:"+InetAddress.getLocalHost().getHostAddress());
+	        System.err.println("Port Server:"+settings.port);
 	        
 			//Collego l'applicazione UserRegistryApplication
 			component.getDefaultHost().attach(new UserRegistryWebApplication());
