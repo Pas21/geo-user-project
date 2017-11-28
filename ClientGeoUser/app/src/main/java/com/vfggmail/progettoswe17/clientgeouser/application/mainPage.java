@@ -2,6 +2,7 @@ package com.vfggmail.progettoswe17.clientgeouser.application;
 
 import android.Manifest;
 import android.content.Context;
+import android.content.DialogInterface;
 import android.content.Intent;
 import android.content.SharedPreferences;
 import android.content.pm.ActivityInfo;
@@ -16,6 +17,7 @@ import android.support.design.widget.FloatingActionButton;
 import android.support.design.widget.Snackbar;
 import android.support.v4.app.ActivityCompat;
 import android.support.v4.content.ContextCompat;
+import android.support.v7.app.AlertDialog;
 import android.support.v7.app.AppCompatActivity;
 import android.os.Bundle;
 import android.util.Log;
@@ -64,7 +66,6 @@ public class mainPage extends AppCompatActivity implements OnMapReadyCallback{
     private Boolean exit = false;
 
 
-    private Utente utente;
     private GoogleMap mMap;
 
     private Button cerca;
@@ -94,7 +95,8 @@ public class mainPage extends AppCompatActivity implements OnMapReadyCallback{
         //setSupportActionBar(toolbar);
 
 
-        utente=(Utente) getIntent().getSerializableExtra("utente");
+
+
         setRequestedOrientation(ActivityInfo.SCREEN_ORIENTATION_PORTRAIT);
 
         editor=getSharedPreferences(prefName,MODE_PRIVATE);
@@ -302,6 +304,7 @@ public class mainPage extends AppCompatActivity implements OnMapReadyCallback{
         */
         if(mMap!=null) {
             LatLng place = new LatLng(location.getLatitude(), location.getLongitude());
+            mMap.clear();
             mMap.addMarker(new MarkerOptions().position(place).title(""));
             mMap.moveCamera(CameraUpdateFactory.newLatLng(place));
         }
@@ -311,32 +314,7 @@ public class mainPage extends AppCompatActivity implements OnMapReadyCallback{
 
 
 
-    public void onRequestPermissionsResult(int requestCode,
-                                           String permissions[], int[] grantResults) {
-        Log.i("Entered onPermission()","onPermissionResult()");
 
-        switch (requestCode) {
-            case MY_PERMISSIONS_REQUEST_FINE_LOCATION: {
-                // If request is cancelled, the result arrays are empty.
-                if (grantResults.length > 0
-                        && grantResults[0] == PackageManager.PERMISSION_GRANTED) {
-
-
-
-                } else {
-
-                    Toast toast = Toast.makeText(getApplicationContext(), "L'applicazione è stata arrestata poichè sono stati negati i permessi", Toast.LENGTH_SHORT);
-                    toast.show();
-                    finish();
-
-                }
-                return;
-            }
-
-            // other 'case' lines to check for other
-            // permissions this app might request
-        }
-    }
 
 
     @Override
@@ -390,7 +368,7 @@ public class mainPage extends AppCompatActivity implements OnMapReadyCallback{
 
         protected Integer doInBackground(String... params) {
 
-            String URI=baseURI+"auth/users/"+username;
+            String URI=baseURI+"auth/positions/"+username;
 
             gson=new Gson();
             ClientResource cr=new ClientResource(URI);
@@ -405,6 +383,7 @@ public class mainPage extends AppCompatActivity implements OnMapReadyCallback{
 
             try {
                 idpos=new IdPosizione(new Timestamp(new Date().getTime()),Double.parseDouble(params[1]),Double.parseDouble(params[2]));
+                Utente utente=new Utente(username,password,null,null,null);
                 pos=new Posizione(idpos,utente,Float.parseFloat(params[0]));
                 jsonResponse = cr.post(gson.toJson(pos,Posizione.class)).getText();
                 if (cr.getStatus().getCode()== ErrorCodes.INVALID_USERNAME_CODE)
@@ -515,5 +494,8 @@ public class mainPage extends AppCompatActivity implements OnMapReadyCallback{
         }
 
     }
+
+
+
 
 }

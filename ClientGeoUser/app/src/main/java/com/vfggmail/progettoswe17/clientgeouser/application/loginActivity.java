@@ -1,9 +1,16 @@
 package com.vfggmail.progettoswe17.clientgeouser.application;
 
 
+import android.Manifest;
+import android.content.Context;
+import android.content.DialogInterface;
 import android.content.Intent;
 import android.content.SharedPreferences;
+import android.content.pm.PackageManager;
+import android.location.LocationManager;
 import android.support.design.widget.Snackbar;
+import android.support.v4.app.ActivityCompat;
+import android.support.v7.app.AlertDialog;
 import android.support.v7.app.AppCompatActivity;
 import android.os.AsyncTask;
 import android.os.Bundle;
@@ -18,6 +25,7 @@ import android.view.inputmethod.EditorInfo;
 import android.widget.Button;
 import android.widget.EditText;
 import android.widget.TextView;
+import android.widget.Toast;
 
 import java.io.IOException;
 
@@ -41,6 +49,8 @@ public class loginActivity extends AppCompatActivity  {
     private Snackbar sn;
     private Button mLoginInButton;
     private Button mSignInButton;
+    private final int MY_PERMISSIONS_REQUEST=123;
+
 
 
 
@@ -52,6 +62,8 @@ public class loginActivity extends AppCompatActivity  {
         // Set up the login form.
         mUsernameView = (EditText) findViewById(R.id.username);
         editor=getSharedPreferences(prefName,MODE_PRIVATE).edit();
+
+
 
 
         mPasswordView = (EditText) findViewById(R.id.password);
@@ -89,6 +101,67 @@ public class loginActivity extends AppCompatActivity  {
                 startActivity(myIntent);
             }
         });
+
+
+
+
+        //Verifico i permessi e nel caso li richiedo
+        if (ActivityCompat.checkSelfPermission(this, Manifest.permission.ACCESS_COARSE_LOCATION) != PackageManager.PERMISSION_GRANTED) {
+            if (!ActivityCompat.shouldShowRequestPermissionRationale(this,Manifest.permission.ACCESS_COARSE_LOCATION)) {
+                showMessageOKCancel("You need to allow access to position",
+                        new DialogInterface.OnClickListener() {
+                            @Override
+                            public void onClick(DialogInterface dialog, int which) {
+                                ActivityCompat.requestPermissions(loginActivity.this, new String[] {Manifest.permission.ACCESS_COARSE_LOCATION,Manifest.permission.ACCESS_FINE_LOCATION},
+                                        MY_PERMISSIONS_REQUEST);
+                            }
+                        });
+                return;
+            }
+
+            ActivityCompat.requestPermissions(this, new String[] {Manifest.permission.ACCESS_COARSE_LOCATION},
+                    MY_PERMISSIONS_REQUEST);
+            return;
+        }else{
+            statusCheck();
+        }
+
+
+
+
+
+
+
+    }
+
+
+
+
+    public void statusCheck() {
+        final LocationManager manager = (LocationManager) getSystemService(Context.LOCATION_SERVICE);
+
+        if (!manager.isProviderEnabled(LocationManager.GPS_PROVIDER)) {
+            buildAlertMessageNoGps();
+
+        }
+    }
+
+    private void buildAlertMessageNoGps() {
+        final AlertDialog.Builder builder = new AlertDialog.Builder(this);
+        builder.setMessage("Set your gps on")
+                .setCancelable(false)
+                .setPositiveButton("Yes", new DialogInterface.OnClickListener() {
+                    public void onClick(final DialogInterface dialog, final int id) {
+                        startActivity(new Intent(android.provider.Settings.ACTION_LOCATION_SOURCE_SETTINGS));
+                    }
+                })
+                .setNegativeButton("No", new DialogInterface.OnClickListener() {
+                    public void onClick(final DialogInterface dialog, final int id) {
+                        dialog.cancel();
+                    }
+                });
+        final AlertDialog alert = builder.create();
+        alert.show();
     }
 
 
@@ -189,6 +262,45 @@ public class loginActivity extends AppCompatActivity  {
 
         return super.onOptionsItemSelected(item);
     }
+
+
+
+    //Gestico la risposta dell'utente alla richiesta dei permessi
+    public void onRequestPermissionsResult(int requestCode,
+                                           String permissions[], int[] grantResults) {
+        switch (requestCode) {
+            case MY_PERMISSIONS_REQUEST: {
+                // If request is cancelled, the result arrays are empty.
+                if (grantResults.length > 0
+                        && grantResults[0] == PackageManager.PERMISSION_GRANTED) {
+                    statusCheck();
+                } else {
+                    Toast.makeText(getApplicationContext(), "Check the permission", Toast.LENGTH_SHORT).show();
+                    finish();
+                    // permission denied, boo! Disable the
+                    // functionality that depends on this permission.
+                }
+                return;
+            }
+
+            // other 'case' lines to check for other
+            // permissions this app might request
+        }
+    }
+
+
+
+
+    //Visualizzo un messaggio di conferma
+    private void showMessageOKCancel(String message, DialogInterface.OnClickListener okListener) {
+        new AlertDialog.Builder(loginActivity.this)
+                .setMessage(message)
+                .setPositiveButton("OK", okListener)
+                .setNegativeButton("Cancel", null)
+                .create()
+                .show();
+    }
+
 
 }
 
