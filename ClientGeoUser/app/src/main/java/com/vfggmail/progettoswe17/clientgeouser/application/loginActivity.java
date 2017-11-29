@@ -50,6 +50,7 @@ public class loginActivity extends AppCompatActivity  {
     private Button mLoginInButton;
     private Button mSignInButton;
     private final int MY_PERMISSIONS_REQUEST=123;
+    private SharedPreferences preferences;
 
 
 
@@ -63,6 +64,13 @@ public class loginActivity extends AppCompatActivity  {
         mUsernameView = (EditText) findViewById(R.id.username);
         editor=getSharedPreferences(prefName,MODE_PRIVATE).edit();
 
+        preferences=getSharedPreferences(prefName,MODE_PRIVATE);
+        if(preferences!=null && preferences.contains("username") && preferences.contains("password")){
+            Intent myIntent=new Intent(loginActivity.this, mainPage.class);
+            myIntent.setFlags(Intent.FLAG_ACTIVITY_NO_HISTORY);
+            startActivity(myIntent);
+
+        }
 
 
 
