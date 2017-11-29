@@ -8,6 +8,7 @@ import java.util.Set;
 import java.util.TreeMap;
 
 import commons.IdPosizione;
+import commons.InvalidDateException;
 import commons.InvalidEmailException;
 import commons.InvalidPositionException;
 import commons.InvalidUsernameException;
@@ -189,12 +190,41 @@ public class UserRegistry {
 	}
 	
 	//Metodo per l'ottenenimento di tutte le posizioni di un utente che ricadono entro un intervallo di tempo
-	public Set<Posizione> getPosizioniUtenteByData(String username, Timestamp from, Timestamp to) {
+	public Set<Posizione> getPosizioniUtenteByData(String username, Timestamp from, Timestamp to) throws InvalidUsernameException, InvalidDateException {
+		//verifico se esiste l'utente con l'username passato come argomento
+		if(!this.utenti.containsKey(username))
+			throw new InvalidUsernameException("L'utente con username " + username + " non esiste!");
+		
 		Set<Posizione> posizioniFiltrate = new HashSet<Posizione>(0);
-		for(Entry<IdPosizione, Posizione> idPos : this.posizioni.entrySet()) {
-			if(idPos.getValue().getUtente().getUsername().equals(username) && idPos.getKey().getTimestamp().after(from) && idPos.getKey().getTimestamp().before(to))
-				posizioniFiltrate.add(idPos.getValue());
+		//entrambi i timestamp sono definiti quindi ritorna tutte le posizione tra le due date
+		if(from!=null && to!=null){
+			if(from.after(to))
+				throw new InvalidDateException("La data iniziale '"+String.valueOf(from)+"' e' cronologicamente successiva alla data finale '"+String.valueOf(to)+"' !");
+			for(Entry<IdPosizione, Posizione> idPos : this.posizioni.entrySet()) {
+				if(idPos.getValue().getUtente().getUsername().equals(username) && idPos.getKey().getTimestamp().after(from) && idPos.getKey().getTimestamp().before(to))
+					posizioniFiltrate.add(idPos.getValue());
+			}
 		}
+		
+		//to e' null perciò ritorna le posizioni da una certa data
+		else if(to==null && from!=null){
+			for(Entry<IdPosizione, Posizione> idPos : this.posizioni.entrySet()) {
+				if(idPos.getValue().getUtente().getUsername().equals(username) && idPos.getKey().getTimestamp().after(from))
+					posizioniFiltrate.add(idPos.getValue());
+			}
+		}
+
+		//from e' null perciò ritorna le posizioni fino ad una certa data
+		else if(from==null && to!=null){
+			for(Entry<IdPosizione, Posizione> idPos : this.posizioni.entrySet()) {
+				if(idPos.getValue().getUtente().getUsername().equals(username) && idPos.getKey().getTimestamp().before(to))
+					posizioniFiltrate.add(idPos.getValue());
+			}
+		}
+		else{
+			throw new InvalidDateException("Sia la data iniziale che quella finale sono 'null'!");
+		}
+		
 		return posizioniFiltrate;
 	}
 	

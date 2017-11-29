@@ -29,7 +29,6 @@ public class PositionsByUserJSON extends ServerResource{
 			try {
 				Set<Posizione> posizioniFiltrate = userregAPI.getPosizioniByUtente(username);
 				return gson.toJson(posizioniFiltrate, MyTypeToken.<Posizione>listType().getType());
-				//return gson.toJson(posizioniFiltrate, new TypeToken<Set<Posizione>>() {}.getType());
 			} catch (InvalidUsernameException e) {
 				Status s = new Status(ErrorCodes.INVALID_USERNAME_CODE);
 				setStatus(s);

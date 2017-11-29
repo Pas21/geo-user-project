@@ -62,7 +62,7 @@ public class mainPage extends AppCompatActivity implements OnMapReadyCallback{
     static String baseURI;
     private String username;
     private String password;
-    private final String TAG = "ANTONIO_APPLICATION";
+    private final String TAG = "SWENG_APPLICATION";
     private Boolean exit = false;
 
 

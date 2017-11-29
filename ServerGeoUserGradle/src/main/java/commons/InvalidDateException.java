@@ -1,9 +1,9 @@
 package commons;
 
-public class InvalidDataException extends Exception{
+public class InvalidDateException extends Exception{
 
 	private static final long serialVersionUID = -2161808073357292179L;
-	public InvalidDataException(String msg){
+	public InvalidDateException(String msg){
 		super(msg);
 	}
 }

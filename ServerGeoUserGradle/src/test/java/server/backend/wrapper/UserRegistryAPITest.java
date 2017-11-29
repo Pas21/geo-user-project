@@ -8,6 +8,7 @@ import java.util.Set;
 import java.util.TreeMap;
 
 import commons.IdPosizione;
+import commons.InvalidDateException;
 import commons.InvalidEmailException;
 import commons.InvalidPositionException;
 import commons.InvalidUsernameException;
@@ -16,7 +17,7 @@ import commons.Utente;
 
 public class UserRegistryAPITest {
 
-	public static void main(String[] args) {
+	public static void main(String[] args) throws InvalidUsernameException, InvalidDateException {
 		UserRegistryAPI userregAPI = UserRegistryAPI.instance();
 		
 		//Test ottenimento di tutti gli utenti
@@ -139,6 +140,14 @@ public class UserRegistryAPITest {
 		} catch (InvalidUsernameException e) {
 			System.err.println(e.getMessage());
 		}*/
+
+		//Test ottenimento di tutte le posizioni di un utente
+		try {
+			for(Posizione posizione : userregAPI.getPosizioniByUtente("antonio.user"))
+				System.out.println("Posizioni di antonio.user: " + posizione.toString());
+		} catch (InvalidUsernameException e) {
+			System.err.println(e.getMessage());
+		}
 		
 		//Test ottenimento di tutte le posizioni di un utente entro un certo intervallo di tempo
 		LocalDateTime localDateTime1 = LocalDateTime.of(2016, 02, 10, 00, 00, 00);
@@ -149,12 +158,39 @@ public class UserRegistryAPITest {
 			System.out.println(posizione.toString());
 		}
 		
-		//Test ottenimento di tutte le posizioni di un utente
-		try {
-			for(Posizione posizione : userregAPI.getPosizioniByUtente("antonio.user")) {
-				System.out.println("Posizioni di antonio.user: " + posizione.toString());
-			}
-		} catch (InvalidUsernameException e) {
+		//Test ottenimento di tutte le posizioni di un utente fino ad una certa data
+		localDateTime2 = LocalDateTime.of(2017, 10, 21, 00, 00, 00);
+		posizioniFiltrate = userregAPI.getPosizioniUtenteByData("antonio.user", null, Timestamp.valueOf(localDateTime2));
+		System.out.println("POSIZIONI DI antonio.user FINO AL " + localDateTime2.toString() + ":");
+		for(Posizione posizione : posizioniFiltrate) {
+			System.out.println(posizione.toString());
+		}
+
+		//Test ottenimento di tutte le posizioni di un utente dopo una certa data
+		localDateTime1 = LocalDateTime.of(2017, 10, 21, 00, 00, 00);
+		posizioniFiltrate = userregAPI.getPosizioniUtenteByData("antonio.user", Timestamp.valueOf(localDateTime1), null);
+		System.out.println("POSIZIONI DI antonio.user DAL " + localDateTime1.toString() + ":");
+		for(Posizione posizione : posizioniFiltrate) {
+			System.out.println(posizione.toString());
+		}
+
+		//Test ottenimento di tutte le posizioni con entrambe le date nulle
+		localDateTime1 = LocalDateTime.of(2017, 10, 21, 00, 00, 00);
+		System.out.println("INSERIMENTO DATA NULLE:");
+		try{
+			posizioniFiltrate = userregAPI.getPosizioniUtenteByData("antonio.user",null, null);
+		}catch(InvalidDateException e){
+			System.err.println(e.getMessage());
+		}
+
+		//Test ottenimento di tutte le posizioni con entrambe le date nulle
+		localDateTime1 = LocalDateTime.of(2017, 10, 21, 00, 00, 00);
+		System.out.println("INSERIMENTO UTENTE SBAGLIATO:");
+		try{
+			posizioniFiltrate = userregAPI.getPosizioniUtenteByData("dfshdgsdfg",null, null);
+		}catch(InvalidUsernameException e){
+			System.err.println(e.getMessage());
+		}catch(InvalidDateException e){
 			System.err.println(e.getMessage());
 		}
 	}

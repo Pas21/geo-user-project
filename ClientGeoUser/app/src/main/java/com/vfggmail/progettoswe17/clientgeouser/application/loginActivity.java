@@ -148,7 +148,7 @@ public class loginActivity extends AppCompatActivity  {
 
     private void buildAlertMessageNoGps() {
         final AlertDialog.Builder builder = new AlertDialog.Builder(this);
-        builder.setMessage("Set your gps on")
+        builder.setMessage("Enable your GPS")
                 .setCancelable(false)
                 .setPositiveButton("Yes", new DialogInterface.OnClickListener() {
                     public void onClick(final DialogInterface dialog, final int id) {
