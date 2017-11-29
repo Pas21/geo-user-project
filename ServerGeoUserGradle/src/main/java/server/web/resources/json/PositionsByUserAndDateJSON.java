@@ -25,6 +25,13 @@ public class PositionsByUserAndDateJSON extends ServerResource{
 		Timestamp to = Timestamp.valueOf(getAttribute("todata").replace('_', ' '));
 		
 		Set<Posizione> posizioniFiltrate = userregAPI.getPosizioniUtenteByData(username, from, to);
-		return gson.toJson(posizioniFiltrate, new TypeToken<Set<Posizione>>() {}.getType());
+		return gson.toJson(posizioniFiltrate, MyTypeToken.<Posizione>listType().getType());
+	}
+	
+	//Inner class per la gestione della serializzazione degli oggetti in JSON
+	static class MyTypeToken {
+		static <T> TypeToken<Set<T>> listType() {
+			return new TypeToken<Set<T>>() {};
+		}
 	}
 }
