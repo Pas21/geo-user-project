@@ -236,7 +236,7 @@ public class findUserActivity extends AppCompatActivity {
                 gsonResponse=cr.get().getText();
                 if(cr.getStatus().getCode()== ErrorCodes.INVALID_USERNAME_CODE)
                     throw gson.fromJson(gsonResponse, InvalidUsernameException.class);
-                else if(cr.getStatus().getCode()==ErrorCodes.INVALID_DATA_CODE)
+                else if(cr.getStatus().getCode()==ErrorCodes.INVALID_DATE_CODE)
                     throw gson.fromJson(gsonResponse, InvalidDataException.class);
                 posizioni = gson.fromJson(gsonResponse, new TypeToken<HashSet<Posizione>>() {}.getType());
 

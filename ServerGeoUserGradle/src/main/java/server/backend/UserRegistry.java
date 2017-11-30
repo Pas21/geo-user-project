@@ -95,7 +95,11 @@ public class UserRegistry {
 				System.out.println("Errore rimozione utente dal database con username " + username + "!");
 				return false;
 			}
-			else return true;
+			else{
+				//Eliminazione utente dalla lista degli utenti caricati in memoria
+				this.utenti.remove(username);
+				return true;
+			}
 		}else return false;
 	}
 	
@@ -200,25 +204,25 @@ public class UserRegistry {
 		if(from!=null && to!=null){
 			if(from.after(to))
 				throw new InvalidDateException("La data iniziale '"+String.valueOf(from)+"' e' cronologicamente successiva alla data finale '"+String.valueOf(to)+"' !");
-			for(Entry<IdPosizione, Posizione> idPos : this.posizioni.entrySet()) {
-				if(idPos.getValue().getUtente().getUsername().equals(username) && idPos.getKey().getTimestamp().after(from) && idPos.getKey().getTimestamp().before(to))
-					posizioniFiltrate.add(idPos.getValue());
+			for(Posizione idPos : this.utenti.get(username).getPosizioni()) {
+				if(idPos.getIdPosizione().getTimestamp().after(from) && idPos.getIdPosizione().getTimestamp().before(to))
+					posizioniFiltrate.add(idPos);
 			}
 		}
 		
-		//to e' null perciò ritorna le posizioni da una certa data
+		//to e' null percio' ritorna le posizioni da una certa data
 		else if(to==null && from!=null){
-			for(Entry<IdPosizione, Posizione> idPos : this.posizioni.entrySet()) {
-				if(idPos.getValue().getUtente().getUsername().equals(username) && idPos.getKey().getTimestamp().after(from))
-					posizioniFiltrate.add(idPos.getValue());
+			for(Posizione idPos : this.utenti.get(username).getPosizioni()) {
+				if(idPos.getIdPosizione().getTimestamp().after(from))
+					posizioniFiltrate.add(idPos);
 			}
 		}
 
-		//from e' null perciò ritorna le posizioni fino ad una certa data
+		//from e' null percio' ritorna le posizioni fino ad una certa data
 		else if(from==null && to!=null){
-			for(Entry<IdPosizione, Posizione> idPos : this.posizioni.entrySet()) {
-				if(idPos.getValue().getUtente().getUsername().equals(username) && idPos.getKey().getTimestamp().before(to))
-					posizioniFiltrate.add(idPos.getValue());
+			for(Posizione idPos : this.utenti.get(username).getPosizioni()) {
+				if(idPos.getIdPosizione().getTimestamp().before(to))
+					posizioniFiltrate.add(idPos);
 			}
 		}
 		else{
