@@ -60,56 +60,6 @@ public class loginActivity extends AppCompatActivity  {
     protected void onCreate(Bundle savedInstanceState) {
         super.onCreate(savedInstanceState);
         setContentView(R.layout.activity_login);
-        // Set up the login form.
-        mUsernameView = (EditText) findViewById(R.id.username);
-        editor=getSharedPreferences(prefName,MODE_PRIVATE).edit();
-
-        preferences=getSharedPreferences(prefName,MODE_PRIVATE);
-        if(preferences!=null && preferences.contains("username") && preferences.contains("password")){
-            Intent myIntent=new Intent(loginActivity.this, mainPage.class);
-            myIntent.setFlags(Intent.FLAG_ACTIVITY_NO_HISTORY);
-            startActivity(myIntent);
-
-        }
-
-
-
-        mPasswordView = (EditText) findViewById(R.id.password);
-        mPasswordView.setInputType(InputType.TYPE_CLASS_TEXT | InputType.TYPE_TEXT_VARIATION_PASSWORD);
-
-        mPasswordView.setOnEditorActionListener(new TextView.OnEditorActionListener() {
-            @Override
-            public boolean onEditorAction(TextView textView, int id, KeyEvent keyEvent) {
-                if (id == EditorInfo.IME_ACTION_DONE || id == EditorInfo.IME_NULL) {
-
-                    return true;
-                }
-                return false;
-            }
-        });
-
-        mLoginInButton = (Button) findViewById(R.id.login_button);
-        mLoginInButton.setOnClickListener(new OnClickListener() {
-            @Override
-            public void onClick(View view) {
-                if(mUsernameView.getText().toString().equals("") || mPasswordView.getText().toString().equals("") ){
-                    View parent=(View) findViewById(R.id.activity_login_page);
-                    sn.make(parent, "Inserisci i dati",Snackbar.LENGTH_SHORT).show();
-                } else
-                    new loginRestTask().execute(String.valueOf(mUsernameView.getText()), String.valueOf(mPasswordView.getText()));
-            }
-        });
-
-
-        mSignInButton=(Button) findViewById(R.id.login_signin);
-        mSignInButton.setOnClickListener(new OnClickListener() {
-            @Override
-            public void onClick(View view) {
-                Intent myIntent=new Intent(loginActivity.this, signInActivity.class);
-                startActivity(myIntent);
-            }
-        });
-
 
 
 
@@ -132,6 +82,58 @@ public class loginActivity extends AppCompatActivity  {
             return;
         }else{
             statusCheck();
+            mUsernameView = (EditText) findViewById(R.id.username);
+            editor=getSharedPreferences(prefName,MODE_PRIVATE).edit();
+
+
+            mPasswordView = (EditText) findViewById(R.id.password);
+            mPasswordView.setInputType(InputType.TYPE_CLASS_TEXT | InputType.TYPE_TEXT_VARIATION_PASSWORD);
+
+            mPasswordView.setOnEditorActionListener(new TextView.OnEditorActionListener() {
+                @Override
+                public boolean onEditorAction(TextView textView, int id, KeyEvent keyEvent) {
+                    if (id == EditorInfo.IME_ACTION_DONE || id == EditorInfo.IME_NULL) {
+
+                        return true;
+                    }
+                    return false;
+                }
+            });
+
+            mLoginInButton = (Button) findViewById(R.id.login_button);
+
+            preferences=getSharedPreferences(prefName,MODE_PRIVATE);
+            if(preferences!=null && preferences.contains("username") && preferences.contains("password")){
+                mPasswordView.setText(preferences.getString("password",null));
+                mUsernameView.setText(preferences.getString("username",null));
+                new loginRestTask().execute(preferences.getString("username",null),preferences.getString("password",null));
+
+            }
+
+
+
+
+            mLoginInButton.setOnClickListener(new OnClickListener() {
+                @Override
+                public void onClick(View view) {
+                    if(mUsernameView.getText().toString().equals("") || mPasswordView.getText().toString().equals("") ){
+                        View parent=(View) findViewById(R.id.activity_login_page);
+                        sn.make(parent, "Inserisci i dati",Snackbar.LENGTH_SHORT).show();
+                    } else
+                        new loginRestTask().execute(String.valueOf(mUsernameView.getText()), String.valueOf(mPasswordView.getText()));
+                }
+            });
+
+
+            mSignInButton=(Button) findViewById(R.id.login_signin);
+            mSignInButton.setOnClickListener(new OnClickListener() {
+                @Override
+                public void onClick(View view) {
+                    Intent myIntent=new Intent(loginActivity.this, signInActivity.class);
+                    startActivity(myIntent);
+                }
+            });
+
         }
 
 
@@ -229,10 +231,10 @@ public class loginActivity extends AppCompatActivity  {
                 myIntent.addFlags(Intent.FLAG_ACTIVITY_NEW_TASK);
                 myIntent.addFlags(Intent.FLAG_ACTIVITY_CLEAR_TASK);
                 myIntent.addFlags(Intent.FLAG_ACTIVITY_NO_ANIMATION);
-
-                editor.putString("username", mUsernameView.getText().toString());
-                editor.putString("password", mPasswordView.getText().toString());
+                editor.putString("username", String.valueOf(mUsernameView.getText()));
+                editor.putString("password", String.valueOf(mPasswordView.getText()));
                 editor.commit();
+
                 startActivity(myIntent);
             } else if (c == 1) {
                 sn.make(parent, "Utente non registrato", Snackbar.LENGTH_LONG)
@@ -281,6 +283,61 @@ public class loginActivity extends AppCompatActivity  {
                 // If request is cancelled, the result arrays are empty.
                 if (grantResults.length > 0
                         && grantResults[0] == PackageManager.PERMISSION_GRANTED) {
+
+                    mUsernameView = (EditText) findViewById(R.id.username);
+                    editor=getSharedPreferences(prefName,MODE_PRIVATE).edit();
+
+                    mPasswordView = (EditText) findViewById(R.id.password);
+                    mPasswordView.setInputType(InputType.TYPE_CLASS_TEXT | InputType.TYPE_TEXT_VARIATION_PASSWORD);
+
+                    mPasswordView.setOnEditorActionListener(new TextView.OnEditorActionListener() {
+                        @Override
+                        public boolean onEditorAction(TextView textView, int id, KeyEvent keyEvent) {
+                            if (id == EditorInfo.IME_ACTION_DONE || id == EditorInfo.IME_NULL) {
+
+                                return true;
+                            }
+                            return false;
+                        }
+                    });
+
+                    mLoginInButton = (Button) findViewById(R.id.login_button);
+
+                    preferences=getSharedPreferences(prefName,MODE_PRIVATE);
+                    if(preferences!=null && preferences.contains("username") && preferences.contains("password")){
+                        mPasswordView.setText(preferences.getString("password",null));
+                        mUsernameView.setText(preferences.getString("username",null));
+                        new loginRestTask().execute(preferences.getString("username",null),preferences.getString("password",null));
+
+                    }
+
+
+
+
+
+
+
+                    mLoginInButton.setOnClickListener(new OnClickListener() {
+                        @Override
+                        public void onClick(View view) {
+                            if(mUsernameView.getText().toString().equals("") || mPasswordView.getText().toString().equals("") ){
+                                View parent=(View) findViewById(R.id.activity_login_page);
+                                sn.make(parent, "Inserisci i dati",Snackbar.LENGTH_SHORT).show();
+                            } else
+                                new loginRestTask().execute(String.valueOf(mUsernameView.getText()), String.valueOf(mPasswordView.getText()));
+                        }
+                    });
+
+
+                    mSignInButton=(Button) findViewById(R.id.login_signin);
+                    mSignInButton.setOnClickListener(new OnClickListener() {
+                        @Override
+                        public void onClick(View view) {
+                            Intent myIntent=new Intent(loginActivity.this, signInActivity.class);
+                            startActivity(myIntent);
+                        }
+                    });
+
                     statusCheck();
                 } else {
                     Toast.makeText(getApplicationContext(), "Check the permission", Toast.LENGTH_SHORT).show();

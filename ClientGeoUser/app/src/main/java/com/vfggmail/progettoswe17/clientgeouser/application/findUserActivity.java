@@ -19,6 +19,9 @@ import android.widget.DatePicker;
 import android.widget.EditText;
 
 import com.google.gson.Gson;
+import com.google.gson.JsonArray;
+import com.google.gson.JsonElement;
+import com.google.gson.JsonParser;
 import com.google.gson.reflect.TypeToken;
 import com.vfggmail.progettoswe17.clientgeouser.R;
 import com.vfggmail.progettoswe17.clientgeouser.commons.ErrorCodes;
@@ -26,6 +29,7 @@ import com.vfggmail.progettoswe17.clientgeouser.commons.InvalidDateException;
 import com.vfggmail.progettoswe17.clientgeouser.commons.InvalidUsernameException;
 import com.vfggmail.progettoswe17.clientgeouser.commons.Posizione;
 
+import org.json.JSONArray;
 import org.restlet.data.ChallengeResponse;
 import org.restlet.data.ChallengeScheme;
 import org.restlet.resource.ClientResource;
@@ -37,6 +41,7 @@ import java.text.SimpleDateFormat;
 import java.util.Calendar;
 import java.util.Date;
 import java.util.HashSet;
+import java.util.Set;
 
 import android.support.design.widget.Snackbar;
 import android.widget.Spinner;
@@ -183,6 +188,9 @@ public class findUserActivity extends AppCompatActivity implements AdapterView.O
                 Date d1=null, d2=null;
                 View parent = (View) findViewById(R.id.activity_find_user);
                 SimpleDateFormat format=new SimpleDateFormat("dd/MM/yyyy HH:mm");
+                if(String.valueOf(userC.getText()).equals("")){
+                    sn.make(parent,"inserire un utente da ricercare",Snackbar.LENGTH_SHORT);
+                }
                 try {
                     d1=format.parse(clock1.getText().toString());
                     d2=format.parse(clock2.getText().toString());
@@ -260,7 +268,7 @@ public class findUserActivity extends AppCompatActivity implements AdapterView.O
             String URI=mainPage.baseURI+"auth/positions/"+params[0]+"/"+data1S+"/"+data2S;
             ClientResource cr=new ClientResource(URI);
             String gsonResponse=null;
-            posizioni=new HashSet<Posizione>();
+            posizioni=new HashSet<Posizione>(0);
             gson=new Gson();
 
             ChallengeScheme scheme = ChallengeScheme.HTTP_BASIC;
@@ -273,9 +281,14 @@ public class findUserActivity extends AppCompatActivity implements AdapterView.O
 
             try{
                 gsonResponse=cr.get().getText();
+                JsonArray arrayJSON=new JsonParser().parse(gsonResponse).getAsJsonArray();
+
+                for (JsonElement elemJSON: arrayJSON){
+                    posizioni.add(gson.fromJson(elemJSON,Posizione.class));
+                }
                 if(cr.getStatus().getCode()== ErrorCodes.INVALID_USERNAME_CODE)
                     throw gson.fromJson(gsonResponse, InvalidUsernameException.class);
-                else if(cr.getStatus().getCode()==ErrorCodes.INVALID_DATE_CODE)
+                else if(cr.getStatus().getCode()==ErrorCodes.INVALID_DATA_CODE)
                     throw gson.fromJson(gsonResponse, InvalidDateException.class);
                 posizioni = gson.fromJson(gsonResponse, new TypeToken<HashSet<Posizione>>() {}.getType());
 
@@ -298,9 +311,13 @@ public class findUserActivity extends AppCompatActivity implements AdapterView.O
         protected void onPostExecute(Integer c) {
             View parent = (View) findViewById(R.id.activity_find_user);
             if (c == 0) {
-                Intent myIntent = new Intent(findUserActivity.this, showMapActivity.class);
-                myIntent.putExtra("array",posizioni);
-                startActivity(myIntent);
+                if(posizioni.isEmpty()){
+                    sn.make(parent,"Nessuna posizione registrata dall'utente",Snackbar.LENGTH_SHORT);
+                }else {
+                    Intent myIntent = new Intent(findUserActivity.this, showMapActivity.class);
+                    myIntent.putExtra("array", posizioni);
+                    startActivity(myIntent);
+                }
             } else if (c == 1) {
                 sn.make(parent, "Utente non registrato", Snackbar.LENGTH_SHORT).show();
             } else if (c == 2) {
@@ -372,12 +389,12 @@ public class findUserActivity extends AppCompatActivity implements AdapterView.O
             if(usedset==1) {
                 mhour1 = hourOfDay;
                 mminutes1 = minute;
-                String text = mday1 + "/" + mmonth1 + "/" + myear1 + " " + mhour1 + ":" + mminutes1;
+                String text = myear1+"/"+(mmonth1+1)+"/"+mday1+" "+mhour1+":"+mminutes1+":00";
                 clock1.setText(text);
             }else{
                 mhour2 = hourOfDay;
                 mminutes2 = minute;
-                String text = mday2 + "/" + mmonth2 + "/" + myear2 + " " + mhour2 + ":" + mminutes2;
+                String text = myear2+"/"+(mmonth2+1)+"/"+mday2+" "+mhour2+":"+mminutes2+":00";
                 clock2.setText(text);
 
             }

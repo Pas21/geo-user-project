@@ -28,10 +28,13 @@ import android.widget.ArrayAdapter;
 import android.widget.Button;
 import android.widget.Spinner;
 import android.widget.Toast;
+
+import com.google.android.gms.maps.CameraUpdate;
 import com.google.android.gms.maps.CameraUpdateFactory;
 import com.google.android.gms.maps.GoogleMap;
 import com.google.android.gms.maps.OnMapReadyCallback;
 import com.google.android.gms.maps.SupportMapFragment;
+import com.google.android.gms.maps.model.CameraPosition;
 import com.google.android.gms.maps.model.LatLng;
 import com.google.android.gms.maps.model.MarkerOptions;
 import com.google.gson.Gson;
@@ -315,7 +318,9 @@ public class mainPage extends AppCompatActivity implements OnMapReadyCallback{
             LatLng place = new LatLng(location.getLatitude(), location.getLongitude());
             mMap.clear();
             mMap.addMarker(new MarkerOptions().position(place).title(""));
-            mMap.moveCamera(CameraUpdateFactory.newLatLng(place));
+            CameraPosition cameraPosition = new CameraPosition.Builder().target(place).zoom(14.0f).build();
+            CameraUpdate cameraUpdate = CameraUpdateFactory.newCameraPosition(cameraPosition);
+            mMap.moveCamera(cameraUpdate);
         }
     }
 
@@ -370,7 +375,9 @@ public class mainPage extends AppCompatActivity implements OnMapReadyCallback{
         if(mLastReading!=null) {
             place = new LatLng(mLastReading.getLatitude(), mLastReading.getLongitude());
             mMap.addMarker(new MarkerOptions().position(place).title(""));
-            mMap.moveCamera(CameraUpdateFactory.newLatLng(place));
+            CameraPosition cameraPosition = new CameraPosition.Builder().target(place).zoom(14.0f).build();
+            CameraUpdate cameraUpdate = CameraUpdateFactory.newCameraPosition(cameraPosition);
+            mMap.moveCamera(cameraUpdate);
         }
     }
     public AddPositionRestTask createAddRestTask(){

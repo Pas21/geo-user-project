@@ -4,6 +4,8 @@ import android.content.Intent;
 import android.support.v7.app.AppCompatActivity;
 import android.os.Bundle;
 
+import com.google.android.gms.maps.CameraUpdate;
+import com.google.android.gms.maps.model.CameraPosition;
 import com.vfggmail.progettoswe17.clientgeouser.R;
 import com.vfggmail.progettoswe17.clientgeouser.commons.Posizione;
 
@@ -38,10 +40,13 @@ public class showMapActivity extends AppCompatActivity implements OnMapReadyCall
         SupportMapFragment mapFragment = (SupportMapFragment) getSupportFragmentManager().findFragmentById(R.id.map);
         mapFragment.getMapAsync(this);
 
+
     }
 
     public void onMapReady(GoogleMap googleMap) {
         mMap = googleMap;
+        mMap.setMapType(GoogleMap.MAP_TYPE_HYBRID);
+
 
         LatLng place=null;
 
@@ -52,7 +57,10 @@ public class showMapActivity extends AppCompatActivity implements OnMapReadyCall
                 mMap.addMarker(new MarkerOptions().position(place).title(""));
             }
 
-            mMap.moveCamera(CameraUpdateFactory.newLatLng(place));
+            CameraPosition cameraPosition = new CameraPosition.Builder().target(place).zoom(14.0f).build();
+            CameraUpdate cameraUpdate = CameraUpdateFactory.newCameraPosition(cameraPosition);
+            mMap.moveCamera(cameraUpdate);
+
         }
     }
 }
