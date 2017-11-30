@@ -5,6 +5,7 @@ import java.util.Set;
 import java.util.TreeMap;
 
 import commons.IdPosizione;
+import commons.InvalidDateException;
 import commons.InvalidEmailException;
 import commons.InvalidPositionException;
 import commons.InvalidUsernameException;
@@ -55,7 +56,7 @@ public class UserRegistryAPI {
 	}
 	
 	//Metodo per l'ottenimento di tutte le posizioni di un utente che ricadono entro un certo intervallo di tempo
-	public synchronized Set<Posizione> getPosizioniUtenteByData(String username, Timestamp from, Timestamp to) {
+	public synchronized Set<Posizione> getPosizioniUtenteByData(String username, Timestamp from, Timestamp to) throws InvalidUsernameException, InvalidDateException {
 		return this.userreg.getPosizioniUtenteByData(username, from, to);
 	}
 	

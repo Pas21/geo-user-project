@@ -41,12 +41,4 @@
     <string name="cognome">Please insert your Surname</string>
     <string name="init_message">Please select an Operation</string>
 
-
-
-    <string-array name="find_spinner_strings">
-        <item>BETWEEN</item>
-        <item>FROM</item>
-        <item>UNTIL</item>
-    </string-array>
-
 </resources>

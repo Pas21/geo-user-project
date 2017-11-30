@@ -1,14 +1,12 @@
 package com.vfggmail.progettoswe17.clientgeouser.commons;
 
-import com.google.gson.annotations.Expose;
-
 import java.io.Serializable;
 
 public class Posizione implements Serializable{
 
-	@Expose private static final long serialVersionUID = 7753776522879468559L;
-	@Expose private IdPosizione idPosizione;
-	@Expose private float accuratezza;
+	private static final long serialVersionUID = 7753776522879468559L;
+	private IdPosizione idPosizione;
+	private float accuratezza;
 	private Utente utente;
 
 

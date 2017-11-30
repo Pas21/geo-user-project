@@ -22,13 +22,6 @@
             android:orientation="vertical">
 
 
-            <Spinner
-                android:layout_width="match_parent"
-                android:layout_height="wrap_content"
-                android:id="@+id/find_spinner"/>
-
-
-
             <EditText
                 android:id="@+id/find_username"
                 android:layout_width="match_parent"
@@ -37,8 +30,6 @@
                 android:inputType="text"
                 android:maxLines="1"
                 android:singleLine="true" />
-
-
 
             <TextView
                 android:id="@+id/find_date1"

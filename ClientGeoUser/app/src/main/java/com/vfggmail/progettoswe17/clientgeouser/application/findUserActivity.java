@@ -12,8 +12,6 @@ import android.support.v7.app.AppCompatActivity;
 import android.os.Bundle;
 import android.text.format.DateFormat;
 import android.view.View;
-import android.widget.AdapterView;
-import android.widget.ArrayAdapter;
 import android.widget.Button;
 import android.widget.DatePicker;
 import android.widget.EditText;
@@ -25,7 +23,7 @@ import com.google.gson.JsonParser;
 import com.google.gson.reflect.TypeToken;
 import com.vfggmail.progettoswe17.clientgeouser.R;
 import com.vfggmail.progettoswe17.clientgeouser.commons.ErrorCodes;
-import com.vfggmail.progettoswe17.clientgeouser.commons.InvalidDateException;
+import com.vfggmail.progettoswe17.clientgeouser.commons.InvalidDataException;
 import com.vfggmail.progettoswe17.clientgeouser.commons.InvalidUsernameException;
 import com.vfggmail.progettoswe17.clientgeouser.commons.Posizione;
 
@@ -38,17 +36,19 @@ import org.restlet.resource.ResourceException;
 import java.io.IOException;
 import java.text.ParseException;
 import java.text.SimpleDateFormat;
+import java.util.ArrayList;
 import java.util.Calendar;
 import java.util.Date;
 import java.util.HashSet;
 import java.util.Set;
 
 import android.support.design.widget.Snackbar;
-import android.widget.Spinner;
+import android.widget.TextClock;
 import android.widget.TextView;
 import android.widget.TimePicker;
+import android.widget.Toast;
 
-public class findUserActivity extends AppCompatActivity implements AdapterView.OnItemSelectedListener {
+public class findUserActivity extends AppCompatActivity {
 
     private EditText userC;
     private String username,password;
@@ -73,8 +73,7 @@ public class findUserActivity extends AppCompatActivity implements AdapterView.O
     private static int mday2;
     private static int mhour2;
     private static int mminutes2;
-    private static Spinner spinner;
-    private static int item=0;
+    private static EditText find_username;
 
 
 
@@ -93,6 +92,7 @@ public class findUserActivity extends AppCompatActivity implements AdapterView.O
 
 
 
+        find_username=(EditText) findViewById(R.id.find_username);
         clock1=(TextView) findViewById(R.id.find_date1);
         clock2=(TextView) findViewById(R.id.find_date2);
         find=(Button) findViewById(R.id.find_find_button);
@@ -121,12 +121,6 @@ public class findUserActivity extends AppCompatActivity implements AdapterView.O
         clock1.setText(text);
         clock2.setText(text);
 
-
-        spinner= (Spinner) findViewById(R.id.find_spinner);
-        ArrayAdapter<CharSequence> adapter = ArrayAdapter.createFromResource(this, R.array.find_spinner_strings, android.R.layout.simple_spinner_item);
-        adapter.setDropDownViewResource(android.R.layout.simple_spinner_dropdown_item);
-        spinner.setAdapter(adapter);
-        spinner.setOnItemSelectedListener(this);
 
 
 
@@ -209,16 +203,8 @@ public class findUserActivity extends AppCompatActivity implements AdapterView.O
                 }
 
 
-                else{
-                    switch(item){
-                        case 0: new findRestTask().execute(String.valueOf(userC.getText()), String.valueOf(clock1.getText()), String.valueOf(clock2.getText()));break;
-                        case 1: new findRestTask().execute(String.valueOf(userC.getText()), String.valueOf(clock1.getText()), "null");break;
-                        case 2: new findRestTask().execute(String.valueOf(userC.getText()), "null", String.valueOf(clock1.getText()));break;
-                        default: break;
-
-                    }
-
-                }
+                else
+                    new findRestTask().execute(String.valueOf(userC.getText()), String.valueOf(clock1.getText()), String.valueOf(clock2.getText()));
 
             }
 
@@ -228,31 +214,6 @@ public class findUserActivity extends AppCompatActivity implements AdapterView.O
     }
 
     public findRestTask createFindRestTask() {return new findRestTask();}
-
-    @Override
-    public void onItemSelected(AdapterView<?> adapterView, View view, int i, long l) {
-        if(i==0){
-            clock2.setVisibility(View.VISIBLE);
-            date2.setVisibility(View.VISIBLE);
-            time2.setVisibility(View.VISIBLE);
-            item=i;
-        }else if (i==1){
-            clock2.setVisibility(View.INVISIBLE);
-            date2.setVisibility(View.INVISIBLE);
-            time2.setVisibility(View.INVISIBLE);
-            item=i;
-        }else{
-            clock2.setVisibility(View.INVISIBLE);
-            date2.setVisibility(View.INVISIBLE);
-            time2.setVisibility(View.INVISIBLE);
-            item=i;
-        }
-    }
-
-    @Override
-    public void onNothingSelected(AdapterView<?> adapterView) {
-
-    }
 
 
     public class findRestTask extends AsyncTask<String, Void, Integer> {
@@ -288,8 +249,10 @@ public class findUserActivity extends AppCompatActivity implements AdapterView.O
                 }
                 if(cr.getStatus().getCode()== ErrorCodes.INVALID_USERNAME_CODE)
                     throw gson.fromJson(gsonResponse, InvalidUsernameException.class);
-                else if(cr.getStatus().getCode()==ErrorCodes.INVALID_DATA_CODE)
-                    throw gson.fromJson(gsonResponse, InvalidDateException.class);
+
+                else if(cr.getStatus().getCode()==ErrorCodes.INVALID_DATE_CODE)
+                    throw gson.fromJson(gsonResponse, InvalidDataException.class);
+
                 posizioni = gson.fromJson(gsonResponse, new TypeToken<HashSet<Posizione>>() {}.getType());
 
                 return 0;
@@ -300,7 +263,7 @@ public class findUserActivity extends AppCompatActivity implements AdapterView.O
                 return 2;
             } catch (IOException e1) {
                 return 2;
-            } catch (InvalidDateException e) {
+            } catch (InvalidDataException e) {
                 return 3;
             }
 
