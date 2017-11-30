@@ -1,4 +1,4 @@
-﻿package com.vfggmail.progettoswe17.clientgeouser.application;
+package com.vfggmail.progettoswe17.clientgeouser.application;
 
 import android.Manifest;
 import android.content.Context;
@@ -24,10 +24,10 @@ import android.util.Log;
 import android.view.Menu;
 import android.view.MenuItem;
 import android.view.View;
+import android.widget.ArrayAdapter;
 import android.widget.Button;
-import android.widget.TextView;
+import android.widget.Spinner;
 import android.widget.Toast;
-
 
 import com.google.android.gms.maps.CameraUpdate;
 import com.google.android.gms.maps.CameraUpdateFactory;
@@ -44,18 +44,13 @@ import com.vfggmail.progettoswe17.clientgeouser.commons.IdPosizione;
 import com.vfggmail.progettoswe17.clientgeouser.commons.InvalidUsernameException;
 import com.vfggmail.progettoswe17.clientgeouser.commons.Posizione;
 import com.vfggmail.progettoswe17.clientgeouser.commons.Utente;
-
 import org.restlet.data.ChallengeResponse;
 import org.restlet.data.ChallengeScheme;
 import org.restlet.resource.ClientResource;
 import org.restlet.resource.ResourceException;
-
 import java.io.IOException;
 import java.sql.Timestamp;
-import java.text.SimpleDateFormat;
-import java.util.Date;
 import java.util.List;
-import java.util.Locale;
 
 public class mainPage extends AppCompatActivity implements OnMapReadyCallback{
 
@@ -65,7 +60,7 @@ public class mainPage extends AppCompatActivity implements OnMapReadyCallback{
     static String baseURI;
     private String username;
     private String password;
-    private final String TAG = "SWENG_APPLICATION";
+    private final String TAG = "ANTONIO_APPLICATION";
     private Boolean exit = false;
 
 
@@ -75,6 +70,8 @@ public class mainPage extends AppCompatActivity implements OnMapReadyCallback{
     private Button update;
     private Snackbar sn;
     private Gson gson;
+    private final int MY_PERMISSIONS_REQUEST=123;
+
 
     // Miglior posizione corrente stimata
     private Location mLastReading;
@@ -85,7 +82,7 @@ public class mainPage extends AppCompatActivity implements OnMapReadyCallback{
     public final static String prefName="Preference";
 
 
-    SharedPreferences editor;
+    private SharedPreferences editor;
 
 
 
@@ -97,116 +94,128 @@ public class mainPage extends AppCompatActivity implements OnMapReadyCallback{
         setContentView(R.layout.activity_main_page);
         //setSupportActionBar(toolbar);
 
-
-
-
-        setRequestedOrientation(ActivityInfo.SCREEN_ORIENTATION_PORTRAIT);
-
-        editor=getSharedPreferences(prefName,MODE_PRIVATE);
-
-        baseURI= "http://"+editor.getString("IP","10.0.2.2")+":"+editor.getString("port","8182")+"/UserRegApplication/";
-
-        username=editor.getString("username","");
-        password=editor.getString("password","");
-
-        FloatingActionButton fab = (FloatingActionButton) findViewById(R.id.fab);
-        final Drawable d = getDrawable(R.drawable.position);
-        fab.setImageDrawable(d);
-
-
-
-
-        fab.setOnClickListener(new View.OnClickListener() {
-            @Override
-            public void onClick(View view) {
-                if(mLastReading==null)
-                    sn.make(view,"Impossibile aggiungere posizione inesistente",Snackbar.LENGTH_SHORT).show();
-                else
-                    new AddPositionRestTask().execute(String.valueOf(mLastReading.getAccuracy()), String.valueOf(mLastReading.getLatitude()), String.valueOf(mLastReading.getLongitude()));
-
-
+        if (ActivityCompat.checkSelfPermission(this, Manifest.permission.ACCESS_COARSE_LOCATION) != PackageManager.PERMISSION_GRANTED) {
+            if (!ActivityCompat.shouldShowRequestPermissionRationale(this,Manifest.permission.ACCESS_COARSE_LOCATION)) {
+                showMessageOKCancel("You need to allow access to position",
+                        new DialogInterface.OnClickListener() {
+                            @Override
+                            public void onClick(DialogInterface dialog, int which) {
+                                ActivityCompat.requestPermissions(mainPage.this, new String[] {Manifest.permission.ACCESS_COARSE_LOCATION,Manifest.permission.ACCESS_FINE_LOCATION},
+                                        MY_PERMISSIONS_REQUEST);
+                            }
+                        });
+                return;
             }
-        });
+
+            ActivityCompat.requestPermissions(this, new String[] {Manifest.permission.ACCESS_COARSE_LOCATION},
+                    MY_PERMISSIONS_REQUEST);
+            return;
+        }else {
+
+            setRequestedOrientation(ActivityInfo.SCREEN_ORIENTATION_PORTRAIT);
+
+            editor = getSharedPreferences(prefName, MODE_PRIVATE);
+
+            baseURI = "http://" + editor.getString("IP", "10.0.2.2") + ":" + editor.getString("port", "8182") + "/UserRegApplication/";
+
+            username = editor.getString("username", "");
+            password = editor.getString("password", "");
 
 
 
-
-        cerca=(Button) findViewById(R.id.Posizione);
-        update=(Button) findViewById(R.id.update);
-
-
-        //ottengo una referenza al LocationManager
-
-        if(null==(mLocationManager = (LocationManager)getSystemService(Context.LOCATION_SERVICE)))
-            finish();
+            FloatingActionButton fab = (FloatingActionButton) findViewById(R.id.fab);
+            final Drawable d = getDrawable(R.drawable.position);
+            fab.setImageDrawable(d);
 
 
-        update.setOnClickListener(new View.OnClickListener() {
-            @Override
-            public void onClick(View v) {
-                try {
-                    if (null == (mLocationManager = (LocationManager) getSystemService(Context.LOCATION_SERVICE)))
-                        finish();
+            fab.setOnClickListener(new View.OnClickListener() {
+                @Override
+                public void onClick(View view) {
+                    if (mLastReading == null)
+                        sn.make(view, "Impossibile aggiungere posizione inesistente", Snackbar.LENGTH_SHORT).show();
+                    else
+                        new AddPositionRestTask().execute(String.valueOf(mLastReading.getAccuracy()), String.valueOf(mLastReading.getLatitude()), String.valueOf(mLastReading.getLongitude()));
 
-                    mLastReading = lastKnownLocation();
-                    updateDisplay(mLastReading);
-                }catch(Exception e){
-                    sn.make(v,"Non disponibile al momento",Snackbar.LENGTH_SHORT).show();
+
                 }
-            }
-        });
+            });
 
 
-        cerca.setOnClickListener(new View.OnClickListener() {
-            @Override
-            public void onClick(View v) {
-                Intent myIntent = new Intent(mainPage.this, findUserActivity.class);
+            cerca = (Button) findViewById(R.id.Posizione);
+            update = (Button) findViewById(R.id.update);
 
-                startActivity(myIntent);
-            }
-        });
 
-        // Get best last location measurement
-        mLastReading = lastKnownLocation();
+            //ottengo una referenza al LocationManager
 
-        //Visualizzo le ultime informazioni lette
+            if (null == (mLocationManager = (LocationManager) getSystemService(Context.LOCATION_SERVICE)))
+                finish();
 
-        if(mLastReading!=null) {
-            updateDisplay(mLastReading);
+
+            update.setOnClickListener(new View.OnClickListener() {
+                @Override
+                public void onClick(View v) {
+                    try {
+                        if (null == (mLocationManager = (LocationManager) getSystemService(Context.LOCATION_SERVICE)))
+                            finish();
+
+                        mLastReading = lastKnownLocation();
+                        updateDisplay(mLastReading);
+                    } catch (Exception e) {
+                        sn.make(v, "Non disponibile al momento", Snackbar.LENGTH_SHORT).show();
+                    }
+                }
+            });
+
+
+            cerca.setOnClickListener(new View.OnClickListener() {
+                @Override
+                public void onClick(View v) {
+                    Intent myIntent = new Intent(mainPage.this, findUserActivity.class);
+
+                    startActivity(myIntent);
+                }
+            });
+
+            // Get best last location measurement
+            mLastReading = lastKnownLocation();
+
+            //Visualizzo le ultime informazioni lette
+
+            if (mLastReading != null) {
+                updateDisplay(mLastReading);
+            } else
+                Toast.makeText(this, "Nessuna locazione iniziale disponibile", Toast.LENGTH_SHORT).show();
+            mLocationListener = new LocationListener() {
+                @Override
+                public void onLocationChanged(Location location) {
+                    mLastReading = location;
+
+                    updateDisplay(location);
+                }
+
+
+                @Override
+                public void onStatusChanged(String provider, int status, Bundle extras) {
+
+                }
+
+                @Override
+                public void onProviderEnabled(String provider) {
+
+                }
+
+                @Override
+                public void onProviderDisabled(String provider) {
+
+                }
+            };
+
+
+            SupportMapFragment mapFragment = (SupportMapFragment) getSupportFragmentManager().findFragmentById(R.id.main_map);
+            mapFragment.getMapAsync(this);
+
+
         }
-        else
-            Toast.makeText(this, "Nessuna locazione iniziale disponibile", Toast.LENGTH_SHORT).show();
-        mLocationListener=new LocationListener() {
-            @Override
-            public void onLocationChanged(Location location) {
-                mLastReading=location;
-
-                updateDisplay(location);
-            }
-
-
-
-            @Override
-            public void onStatusChanged(String provider, int status, Bundle extras) {
-
-            }
-
-            @Override
-            public void onProviderEnabled(String provider) {
-
-            }
-
-            @Override
-            public void onProviderDisabled(String provider) {
-
-            }
-        };
-
-
-
-
-        SupportMapFragment mapFragment = (SupportMapFragment) getSupportFragmentManager().findFragmentById(R.id.main_map);
-        mapFragment.getMapAsync(this);
 
 
     }
@@ -338,7 +347,15 @@ public class mainPage extends AppCompatActivity implements OnMapReadyCallback{
 
         //noinspection SimplifiableIfStatement
         if(id ==R.id.action_logout){
-            new logoutRestTask().execute();
+            SharedPreferences.Editor editor=getSharedPreferences(prefName,MODE_PRIVATE).edit();
+            editor.remove("username");
+            editor.remove("password");
+            editor.commit();
+            Intent myIntent=new Intent(mainPage.this,loginActivity.class);
+            myIntent.addFlags(Intent.FLAG_ACTIVITY_NEW_TASK);
+            myIntent.addFlags(Intent.FLAG_ACTIVITY_CLEAR_TASK);
+            myIntent.addFlags(Intent.FLAG_ACTIVITY_NO_ANIMATION);
+            startActivity(myIntent);
         }
 
         return super.onOptionsItemSelected(item);
@@ -348,6 +365,9 @@ public class mainPage extends AppCompatActivity implements OnMapReadyCallback{
     public void onMapReady(GoogleMap googleMap) {
 
         mMap = googleMap;
+        mMap.setMapType(GoogleMap.MAP_TYPE_HYBRID);
+        mMap.getUiSettings().setAllGesturesEnabled(false);
+
         LatLng place=null;
 
         // Add a marker and move the camera
@@ -389,7 +409,7 @@ public class mainPage extends AppCompatActivity implements OnMapReadyCallback{
 
 
             try {
-                idpos=new IdPosizione(new Timestamp(new Date().getTime()),Double.parseDouble(params[1]),Double.parseDouble(params[2]));
+                idpos=new IdPosizione(new Timestamp((System.currentTimeMillis()/1000)*1000),Double.parseDouble(params[1]),Double.parseDouble(params[2]));
                 Utente utente=new Utente(username,password,null,null,null);
                 pos=new Posizione(idpos,utente,Float.parseFloat(params[0]));
                 jsonResponse = cr.post(gson.toJson(pos,Posizione.class)).getText();
@@ -411,78 +431,22 @@ public class mainPage extends AppCompatActivity implements OnMapReadyCallback{
 
 
         protected void onPostExecute(Integer c) {
-            View parent=(View) findViewById(R.id.content_main);
-            if (c==1){
-                sn.make(parent, "Inserimento avvenuto con successo", Snackbar.LENGTH_LONG)
-                        .setAction("Action", null).show();
+            
+            if (c==1) {
+                Toast.makeText(mainPage.this, "Inserimento avvenuto con successo", Toast.LENGTH_SHORT).show();
+
             }
 
-            else {
-                sn.make(parent, "Inserimento fallito", Snackbar.LENGTH_LONG)
-                        .setAction("Action", null).show();
-            }
+            else
+                Toast.makeText(mainPage.this, "inserimento fallito", Toast.LENGTH_SHORT).show();
 
         }
     }
 
 
-    public logoutRestTask createlogoutRestTask(){
-        return new logoutRestTask();
-    }
 
 
-    public class logoutRestTask extends AsyncTask<String, Void, Integer> {
 
-
-        protected Integer doInBackground(String... params) {
-
-            String URI=baseURI+"users/remove/"+username;
-            Gson gson=new Gson();
-            ClientResource cr=new ClientResource(URI);
-            String gsonResponse=null;
-
-            ChallengeScheme scheme = ChallengeScheme.HTTP_BASIC;
-            ChallengeResponse authentication = new ChallengeResponse(scheme,username,password);
-            cr.setChallengeResponse(authentication);
-
-            try{
-                gsonResponse=cr.delete().getText();
-                if(cr.getStatus().getCode()==ErrorCodes.INVALID_USERNAME_CODE)
-                    throw gson.fromJson(gsonResponse, InvalidUsernameException.class);
-                return 0;
-            }catch(IOException e){
-                return 2;
-            }catch(InvalidUsernameException e1){
-                return 1;
-            }
-
-        }
-
-
-        protected void onPostExecute(Integer c) {
-
-            View parent=(View) findViewById(R.id.content_main);
-            if (c==0){
-                sn.make(parent, "Eliminato", Snackbar.LENGTH_LONG)
-                        .setAction("Action", null).show();
-                Intent myIntent=new Intent(mainPage.this,initialPage.class);
-                myIntent.addFlags(Intent.FLAG_ACTIVITY_NEW_TASK);
-                myIntent.addFlags(Intent.FLAG_ACTIVITY_CLEAR_TASK);
-                myIntent.addFlags(Intent.FLAG_ACTIVITY_NO_ANIMATION);
-                startActivity(myIntent);
-            }
-
-            else if(c==1) {
-                sn.make(parent, "Credenziali non esistenti", Snackbar.LENGTH_LONG)
-                        .setAction("Action", null).show();
-            }else{
-                sn.make(parent, "Errore Interno", Snackbar.LENGTH_LONG)
-                        .setAction("Action", null).show();
-            }
-
-
-        }
-    }
 
     public void onBackPressed() {
         if (exit) {
@@ -500,6 +464,146 @@ public class mainPage extends AppCompatActivity implements OnMapReadyCallback{
 
         }
 
+    }
+
+
+
+
+    //Gestico la risposta dell'utente alla richiesta dei permessi
+    public void onRequestPermissionsResult(int requestCode,
+                                           String permissions[], int[] grantResults) {
+        switch (requestCode) {
+            case MY_PERMISSIONS_REQUEST: {
+                // If request is cancelled, the result arrays are empty.
+                if (grantResults.length > 0
+                        && grantResults[0] == PackageManager.PERMISSION_GRANTED) {
+
+                    setRequestedOrientation(ActivityInfo.SCREEN_ORIENTATION_PORTRAIT);
+
+                    editor = getSharedPreferences(prefName, MODE_PRIVATE);
+
+                    baseURI = "http://" + editor.getString("IP", "10.0.2.2") + ":" + editor.getString("port", "8182") + "/UserRegApplication/";
+
+                    username = editor.getString("username", "");
+                    password = editor.getString("password", "");
+
+                    FloatingActionButton fab = (FloatingActionButton) findViewById(R.id.fab);
+                    final Drawable d = getDrawable(R.drawable.position);
+                    fab.setImageDrawable(d);
+
+
+                    fab.setOnClickListener(new View.OnClickListener() {
+                        @Override
+                        public void onClick(View view) {
+                            if (mLastReading == null)
+                                sn.make(view, "Impossibile aggiungere posizione inesistente", Snackbar.LENGTH_SHORT).show();
+                            else
+                                new AddPositionRestTask().execute(String.valueOf(mLastReading.getAccuracy()), String.valueOf(mLastReading.getLatitude()), String.valueOf(mLastReading.getLongitude()));
+
+
+                        }
+                    });
+
+
+                    cerca = (Button) findViewById(R.id.Posizione);
+                    update = (Button) findViewById(R.id.update);
+
+
+                    //ottengo una referenza al LocationManager
+
+                    if (null == (mLocationManager = (LocationManager) getSystemService(Context.LOCATION_SERVICE)))
+                        finish();
+
+
+                    update.setOnClickListener(new View.OnClickListener() {
+                        @Override
+                        public void onClick(View v) {
+                            try {
+                                if (null == (mLocationManager = (LocationManager) getSystemService(Context.LOCATION_SERVICE)))
+                                    finish();
+
+                                mLastReading = lastKnownLocation();
+                                updateDisplay(mLastReading);
+                            } catch (Exception e) {
+                                sn.make(v, "Non disponibile al momento", Snackbar.LENGTH_SHORT).show();
+                            }
+                        }
+                    });
+
+
+                    cerca.setOnClickListener(new View.OnClickListener() {
+                        @Override
+                        public void onClick(View v) {
+                            Intent myIntent = new Intent(mainPage.this, findUserActivity.class);
+
+                            startActivity(myIntent);
+                        }
+                    });
+
+                    // Get best last location measurement
+                    mLastReading = lastKnownLocation();
+
+                    //Visualizzo le ultime informazioni lette
+
+                    if (mLastReading != null) {
+                        updateDisplay(mLastReading);
+                    } else
+                        Toast.makeText(this, "Nessuna locazione iniziale disponibile", Toast.LENGTH_SHORT).show();
+                    mLocationListener = new LocationListener() {
+                        @Override
+                        public void onLocationChanged(Location location) {
+                            mLastReading = location;
+
+                            updateDisplay(location);
+                        }
+
+
+                        @Override
+                        public void onStatusChanged(String provider, int status, Bundle extras) {
+
+                        }
+
+                        @Override
+                        public void onProviderEnabled(String provider) {
+
+                        }
+
+                        @Override
+                        public void onProviderDisabled(String provider) {
+
+                        }
+                    };
+
+
+                    SupportMapFragment mapFragment = (SupportMapFragment) getSupportFragmentManager().findFragmentById(R.id.main_map);
+                    mapFragment.getMapAsync(this);
+
+
+                } else {
+                    Toast.makeText(getApplicationContext(), "Check the permission", Toast.LENGTH_SHORT).show();
+                    finish();
+                    // permission denied, boo! Disable the
+                    // functionality that depends on this permission.
+                }
+                return;
+            }
+
+            // other 'case' lines to check for other
+            // permissions this app might request
+        }
+    }
+
+
+
+
+    //Visualizzo un messaggio di conferma
+    private void showMessageOKCancel(String message, DialogInterface.OnClickListener okListener) {
+        new AlertDialog.Builder(mainPage.this)
+                .setMessage(message)
+                .setPositiveButton("OK", okListener)
+                .setNegativeButton("Cancel", null)
+                .create()
+                .show();
     }
 
 

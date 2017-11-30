@@ -27,7 +27,6 @@
         <activity android:name=".application.mainPage" />
         <activity android:name=".application.settingsActivity" />
         <activity android:name=".application.showMapActivity" />
-        <activity android:name=".application.initialPage" />
         <activity android:name=".application.signInActivity"></activity>
 
 

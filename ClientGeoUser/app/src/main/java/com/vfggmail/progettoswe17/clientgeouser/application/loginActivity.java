@@ -50,6 +50,7 @@ public class loginActivity extends AppCompatActivity  {
     private Button mLoginInButton;
     private Button mSignInButton;
     private final int MY_PERMISSIONS_REQUEST=123;
+    private SharedPreferences preferences;
 
 
 
@@ -59,7 +60,6 @@ public class loginActivity extends AppCompatActivity  {
     protected void onCreate(Bundle savedInstanceState) {
         super.onCreate(savedInstanceState);
         setContentView(R.layout.activity_login);
-
 
 
 
@@ -158,7 +158,7 @@ public class loginActivity extends AppCompatActivity  {
 
     private void buildAlertMessageNoGps() {
         final AlertDialog.Builder builder = new AlertDialog.Builder(this);
-        builder.setMessage("Enable your GPS")
+        builder.setMessage("Set your gps on")
                 .setCancelable(false)
                 .setPositiveButton("Yes", new DialogInterface.OnClickListener() {
                     public void onClick(final DialogInterface dialog, final int id) {

@@ -2,23 +2,25 @@ package com.vfggmail.progettoswe17.clientgeouser.commons;
 
 import java.io.Serializable;
 
+import com.google.gson.annotations.Expose;
+
 public class Posizione implements Serializable{
 
-	private static final long serialVersionUID = 7753776522879468559L;
-	private IdPosizione idPosizione;
-	private float accuratezza;
+	@Expose private static final long serialVersionUID = 7753776522879468559L;
+	@Expose private IdPosizione idPosizione;
+	@Expose private float accuratezza;
 	private Utente utente;
 
-
+	
 	public Posizione(IdPosizione idPosizione, Utente utente, float accuratezza){
 		this.idPosizione=idPosizione;
 		this.accuratezza=accuratezza;
 		this.utente=utente;
 	}
-
+	
 	public Posizione(){}
-
-
+	
+	
 	public IdPosizione getIdPosizione() {
 		return idPosizione;
 	}
@@ -75,6 +77,6 @@ public class Posizione implements Serializable{
 	public void setUtente(Utente utente) {
 		this.utente = utente;
 	}
-
-
+	
+	
 }

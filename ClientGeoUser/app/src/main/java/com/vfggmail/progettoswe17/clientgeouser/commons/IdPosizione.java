@@ -1,26 +1,24 @@
 package com.vfggmail.progettoswe17.clientgeouser.commons;
 
-import com.google.gson.annotations.Expose;
-
 import java.io.Serializable;
 import java.sql.Timestamp;
 
-//Classe che racchiude le informazioni relative ad una posizione rilevata
+import com.google.gson.annotations.Expose;
 
 public class IdPosizione implements Serializable,Comparable<Object>{
-
+	
 	@Expose private static final long serialVersionUID = 7753776522879468559L;
 	@Expose private double latitudine,longitudine;
 	@Expose private Timestamp timestamp;
-
+	
 	public IdPosizione(Timestamp timestamp, double latitudine, double longitudine){
 		this.timestamp=(Timestamp) timestamp.clone();
 		this.latitudine=latitudine;
 		this.longitudine=longitudine;
 	}
-
+	
 	public IdPosizione(){}
-
+	
 	public double getLatitudine() {
 		return latitudine;
 	}
@@ -89,10 +87,10 @@ public class IdPosizione implements Serializable,Comparable<Object>{
 	public int compareTo(Object obj) {
 		IdPosizione idPos = (IdPosizione) obj;
 		return this.timestamp.compareTo(idPos.getTimestamp());
-	}
-
-
-
+	}	
+	
+	
+	
 
 }
 
