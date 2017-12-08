@@ -129,11 +129,11 @@ public class signInActivity extends AppCompatActivity {
                 Intent myIntent = new Intent(signInActivity.this, mainPage.class);
                 myIntent.addFlags(Intent.FLAG_ACTIVITY_NEW_TASK);
                 myIntent.addFlags(Intent.FLAG_ACTIVITY_CLEAR_TASK);
-                myIntent.addFlags(Intent.FLAG_ACTIVITY_NO_ANIMATION);
                 editor.putString("username", username.getText().toString());
                 editor.putString("password", password.getText().toString());
                 editor.commit();
                 startActivity(myIntent);
+                overridePendingTransition(R.anim.push_right_in,R.anim.push_right_out);
             } else if (c == 1) {
                 sn.make(parent, "Errore", Snackbar.LENGTH_SHORT).show();
             } else if (c == 2) {

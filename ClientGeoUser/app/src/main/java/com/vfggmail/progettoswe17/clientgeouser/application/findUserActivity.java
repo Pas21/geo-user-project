@@ -17,7 +17,6 @@ import android.widget.ArrayAdapter;
 import android.widget.Button;
 import android.widget.DatePicker;
 import android.widget.EditText;
-
 import com.google.gson.Gson;
 import com.google.gson.JsonArray;
 import com.google.gson.JsonElement;
@@ -28,21 +27,16 @@ import com.vfggmail.progettoswe17.clientgeouser.commons.ErrorCodes;
 import com.vfggmail.progettoswe17.clientgeouser.commons.InvalidDateException;
 import com.vfggmail.progettoswe17.clientgeouser.commons.InvalidUsernameException;
 import com.vfggmail.progettoswe17.clientgeouser.commons.Posizione;
-
-import org.json.JSONArray;
 import org.restlet.data.ChallengeResponse;
 import org.restlet.data.ChallengeScheme;
 import org.restlet.resource.ClientResource;
 import org.restlet.resource.ResourceException;
-
 import java.io.IOException;
 import java.text.ParseException;
 import java.text.SimpleDateFormat;
 import java.util.Calendar;
 import java.util.Date;
 import java.util.HashSet;
-import java.util.Set;
-
 import android.support.design.widget.Snackbar;
 import android.widget.Spinner;
 import android.widget.TextView;
@@ -312,11 +306,12 @@ public class findUserActivity extends AppCompatActivity implements AdapterView.O
             View parent = (View) findViewById(R.id.activity_find_user);
             if (c == 0) {
                 if(posizioni.isEmpty()){
-                    sn.make(parent,"Nessuna posizione registrata dall'utente",Snackbar.LENGTH_SHORT);
+                    sn.make(parent,"Nessuna posizione registrata dall'utente in quell'intervallo di tempo",Snackbar.LENGTH_SHORT).show();
                 }else {
                     Intent myIntent = new Intent(findUserActivity.this, showMapActivity.class);
                     myIntent.putExtra("array", posizioni);
                     startActivity(myIntent);
+                    overridePendingTransition(R.anim.push_right_in,R.anim.push_right_out);
                 }
             } else if (c == 1) {
                 sn.make(parent, "Utente non registrato", Snackbar.LENGTH_SHORT).show();

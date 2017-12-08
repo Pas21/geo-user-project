@@ -3,21 +3,16 @@ package com.vfggmail.progettoswe17.clientgeouser.application;
 import android.content.Intent;
 import android.support.v7.app.AppCompatActivity;
 import android.os.Bundle;
-
 import com.google.android.gms.maps.CameraUpdate;
 import com.google.android.gms.maps.model.CameraPosition;
 import com.vfggmail.progettoswe17.clientgeouser.R;
 import com.vfggmail.progettoswe17.clientgeouser.commons.Posizione;
-
 import com.google.android.gms.maps.CameraUpdateFactory;
 import com.google.android.gms.maps.GoogleMap;
 import com.google.android.gms.maps.OnMapReadyCallback;
 import com.google.android.gms.maps.SupportMapFragment;
 import com.google.android.gms.maps.model.LatLng;
 import com.google.android.gms.maps.model.MarkerOptions;
-
-
-import java.util.ArrayList;
 import java.util.HashSet;
 
 public class showMapActivity extends AppCompatActivity implements OnMapReadyCallback {

@@ -9,7 +9,6 @@ import android.os.Bundle;
 import android.view.View;
 import android.widget.Button;
 import android.widget.EditText;
-
 import com.vfggmail.progettoswe17.clientgeouser.R;
 
 public class settingsActivity extends AppCompatActivity {
@@ -69,7 +68,10 @@ public class settingsActivity extends AppCompatActivity {
                     editor.putString("port", String.valueOf(port.getText()));
                     editor.commit();
                     Intent myIntent = new Intent(settingsActivity.this, loginActivity.class);
+                    myIntent.setFlags(Intent.FLAG_ACTIVITY_NO_HISTORY);
                     startActivity(myIntent);
+                    overridePendingTransition(R.anim.push_right_in,R.anim.push_right_out);
+
                 }
             }
         });

@@ -24,11 +24,8 @@ import android.util.Log;
 import android.view.Menu;
 import android.view.MenuItem;
 import android.view.View;
-import android.widget.ArrayAdapter;
 import android.widget.Button;
-import android.widget.Spinner;
 import android.widget.Toast;
-
 import com.google.android.gms.maps.CameraUpdate;
 import com.google.android.gms.maps.CameraUpdateFactory;
 import com.google.android.gms.maps.GoogleMap;
@@ -173,6 +170,8 @@ public class mainPage extends AppCompatActivity implements OnMapReadyCallback{
                     Intent myIntent = new Intent(mainPage.this, findUserActivity.class);
 
                     startActivity(myIntent);
+                    overridePendingTransition(R.anim.push_right_in,R.anim.push_right_out);
+
                 }
             });
 
@@ -354,8 +353,9 @@ public class mainPage extends AppCompatActivity implements OnMapReadyCallback{
             Intent myIntent=new Intent(mainPage.this,loginActivity.class);
             myIntent.addFlags(Intent.FLAG_ACTIVITY_NEW_TASK);
             myIntent.addFlags(Intent.FLAG_ACTIVITY_CLEAR_TASK);
-            myIntent.addFlags(Intent.FLAG_ACTIVITY_NO_ANIMATION);
             startActivity(myIntent);
+            overridePendingTransition(R.anim.push_right_in,R.anim.push_right_out);
+
         }
 
         return super.onOptionsItemSelected(item);
@@ -366,7 +366,7 @@ public class mainPage extends AppCompatActivity implements OnMapReadyCallback{
 
         mMap = googleMap;
         mMap.setMapType(GoogleMap.MAP_TYPE_HYBRID);
-        mMap.getUiSettings().setAllGesturesEnabled(false);
+
 
         LatLng place=null;
 
@@ -537,6 +537,8 @@ public class mainPage extends AppCompatActivity implements OnMapReadyCallback{
                             Intent myIntent = new Intent(mainPage.this, findUserActivity.class);
 
                             startActivity(myIntent);
+                            overridePendingTransition(R.anim.push_right_in,R.anim.push_right_out);
+
                         }
                     });
 
