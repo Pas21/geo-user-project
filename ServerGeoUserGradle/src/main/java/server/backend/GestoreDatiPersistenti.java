@@ -3,9 +3,11 @@ package server.backend;
 import java.util.Iterator;
 import java.util.List;
 import java.util.Map.Entry;
+
+import javax.persistence.PersistenceException;
+
 import java.util.TreeMap;
 
-import org.hibernate.HibernateException;
 import org.hibernate.Session;
 import org.hibernate.SessionFactory;
 import org.hibernate.Transaction;
@@ -33,6 +35,11 @@ public class GestoreDatiPersistenti {
 		return instance;
 	}
 	
+	//Per JUnit
+	public synchronized SessionFactory getFactory(){
+		return factory;
+	}
+
 	
 	//Metodo per ottenere dal database tutti gli utenti
 	public TreeMap<String,Utente> getUtenti(){
@@ -40,7 +47,7 @@ public class GestoreDatiPersistenti {
 	      Transaction tx = null;
 	      TreeMap<String,Utente> utenti = new TreeMap<String,Utente>();
 	      
-	      try {
+	      try{
 	         tx = session.beginTransaction();
 	         List<?> listaUtenti = session.createQuery("FROM Utente").list(); 		// Query su classe java e non su tabella
 	         for (Iterator<?> iterator = listaUtenti.iterator(); iterator.hasNext();){
@@ -49,13 +56,12 @@ public class GestoreDatiPersistenti {
 	            //System.out.println(utente.toString());
 	         }
 	         tx.commit();
-	      } catch (HibernateException e) {
+	      }catch (PersistenceException e) {
 	         if (tx!=null) tx.rollback();
 	         e.printStackTrace(); 
-	      } 
-	      catch (Exception e) {
+	      }catch (Exception e) {
 		     e.printStackTrace(); 
-		  }finally {
+		  }finally{
 	         session.close();
 	      }
 	      return utenti;
@@ -67,7 +73,7 @@ public class GestoreDatiPersistenti {
 		Transaction tx = null;
 		TreeMap<IdPosizione,Posizione> posizioni = new TreeMap<IdPosizione,Posizione>();
 
-		try {
+		try{
 			tx = session.beginTransaction();
 			List<?> listaPosizioni = session.createQuery("FROM Posizione").list();  // Query su classe java e non su tabella
 			for (Iterator<?> iterator = listaPosizioni.iterator(); iterator.hasNext();){
@@ -77,13 +83,12 @@ public class GestoreDatiPersistenti {
 	            //System.out.println(posizione.toString());
 			}
 			tx.commit();
-		} catch (HibernateException e) {
+		}catch (PersistenceException e) {
 			if (tx!=null) tx.rollback();
 			e.printStackTrace(); 
-		} 
-		catch (Exception e) {
+		}catch (Exception e) {
 			e.printStackTrace(); 
-		}finally {
+		}finally{
 			session.close();
 		}
 		return posizioni;
@@ -91,39 +96,45 @@ public class GestoreDatiPersistenti {
 	
 	
 	// Metodo per aggiungere un utente al database
-	public boolean addUtente(Utente utente){	//Fare controllo in backend se l'utente esiste già non deve invocare questo metodo(vale lo stesso per tutti i successivi metodi)
+	public boolean addUtente(Utente utente){
 		Session session = this.factory.openSession();
 	    Transaction tx = null;
 	    boolean addok = true;
-	    try {
+	    try{
 	       tx = session.beginTransaction();
 	       session.save(utente); 
 	       tx.commit();
-	    } catch (HibernateException e) {
+	    }catch (PersistenceException e) {
 	       if (tx!=null) tx.rollback();
 	       e.printStackTrace(); 
 	       addok=false;
-	    } finally {
+	    }catch (Exception e) {
+			e.printStackTrace(); 
+		    addok=false;
+		}finally{
 	       session.close(); 
 	    }
 	    return addok;
 	}
 	
-	/* Metodo per cancellare un utente dal database */
+	// Metodo per cancellare un utente dal database 
 	public boolean removeUtente(Utente utente){
 		Session session = this.factory.openSession();
 	    Transaction tx = null;
 	    boolean removeok=true;
 	    
-	    try {
+	    try{
 	       tx = session.beginTransaction();
 	       session.delete(utente); 
 	       tx.commit();
-	    } catch (HibernateException e) {
+	    }catch (PersistenceException e) {
 	       if (tx!=null) tx.rollback();
 	       e.printStackTrace(); 
 	       removeok=false;
-	    } finally {
+	    }catch (Exception e) {
+			e.printStackTrace();
+			removeok=false;
+		}finally{
 	       session.close();	       
 	    }
 	    return removeok;
@@ -135,15 +146,18 @@ public class GestoreDatiPersistenti {
 	    Transaction tx = null;
 	    boolean addok = true;
 	    
-	    try {
+	    try{
 	       tx = session.beginTransaction();
 	       session.save(posizione); 
 	       tx.commit();
-	    } catch (HibernateException e) {
+	    }catch (PersistenceException e) {
 	       if (tx!=null) tx.rollback();
 	       e.printStackTrace(); 
 	       addok=false;
-	    } finally {
+	    }catch (Exception e) {
+			e.printStackTrace();
+			addok=false;
+		}finally{
 	       session.close(); 
 	    }
 	    return addok;
@@ -155,15 +169,18 @@ public class GestoreDatiPersistenti {
 	    Transaction tx = null;
 	    boolean removeok=true;
 	    
-	    try {
+	    try{
 	       tx = session.beginTransaction();
 	       session.delete(posizione); 
 	       tx.commit();
-	    } catch (HibernateException e) {
+	    }catch (PersistenceException e) {
 	       if (tx!=null) tx.rollback();
 	       e.printStackTrace(); 
 	       removeok=false;
-	    } finally {
+	    }catch (Exception e) {
+			e.printStackTrace();
+			removeok=false;
+		}finally{
 	       session.close(); 
 	    }
 	    return removeok;
@@ -177,7 +194,7 @@ public class GestoreDatiPersistenti {
 		boolean removeok =  true;
 		Posizione posizione = null;
 		
-		try {
+		try{
 			//Si può fare anche con createNativeQuery!
 			for(Entry<IdPosizione, Posizione> id : posizioni.entrySet()) {
 				posizione = id.getValue();
@@ -188,12 +205,14 @@ public class GestoreDatiPersistenti {
 				    tx.commit();			
 				}
 			}
-			
-		} catch (HibernateException e) {
+		}catch (PersistenceException e) {
 			if (tx!=null) tx.rollback();
 		    e.printStackTrace(); 
 		    removeok=false;
-		} finally {
+		}catch (Exception e) {
+			e.printStackTrace();
+			removeok=false;
+		}finally{
 			session.close(); 
 		}
 		return removeok;
@@ -201,6 +220,6 @@ public class GestoreDatiPersistenti {
 
 	
 	 
-	private SessionFactory factory; 	
+	public SessionFactory factory; 	
 	private static GestoreDatiPersistenti instance;
 }
