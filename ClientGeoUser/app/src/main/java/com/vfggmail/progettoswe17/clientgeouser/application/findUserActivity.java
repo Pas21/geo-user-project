@@ -42,12 +42,11 @@ import android.widget.Spinner;
 import android.widget.TextView;
 import android.widget.TimePicker;
 
-public class findUserActivity extends AppCompatActivity implements AdapterView.OnItemSelectedListener {
+public class FindUserActivity extends AppCompatActivity implements AdapterView.OnItemSelectedListener {
 
     private EditText userC;
     private String username,password;
     private Gson gson;
-    private Snackbar sn;
     private HashSet<Posizione> posizioni;
     SharedPreferences editor;
     public final static String prefName="Preference";
@@ -82,7 +81,6 @@ public class findUserActivity extends AppCompatActivity implements AdapterView.O
         super.onCreate(savedInstanceState);
         setContentView(R.layout.activity_find_user);
         setRequestedOrientation(ActivityInfo.SCREEN_ORIENTATION_PORTRAIT);
-
 
 
 
@@ -180,34 +178,42 @@ public class findUserActivity extends AppCompatActivity implements AdapterView.O
             @Override
             public void onClick(View v) {
                 Date d1=null, d2=null;
+                Snackbar sn;
                 View parent = (View) findViewById(R.id.activity_find_user);
                 SimpleDateFormat format=new SimpleDateFormat("dd/MM/yyyy HH:mm");
                 if(String.valueOf(userC.getText()).equals("")){
-                    sn.make(parent,"inserire un utente da ricercare",Snackbar.LENGTH_SHORT);
+                    sn=Snackbar.make(parent,"inserire un utente da ricercare",Snackbar.LENGTH_SHORT);
+                    sn.show();
                 }
                 try {
                     d1=format.parse(clock1.getText().toString());
                     d2=format.parse(clock2.getText().toString());
                 } catch (ParseException e) {
-                    sn.make(parent,"Formato data non valido",Snackbar.LENGTH_SHORT).show();
+                    sn=Snackbar.make(parent,"Formato data non valido",Snackbar.LENGTH_SHORT);
+                    sn.show();
                 }
 
 
 
-                if(userC.getText().equals("") || clock1.getText().equals("") || clock2.getText().equals(""))
-                    sn.make(parent,"Inserisci i dati",Snackbar.LENGTH_SHORT).show();
+                if(userC.getText().equals("") || clock1.getText().equals("") || clock2.getText().equals("")) {
+                    sn = Snackbar.make(parent, "Inserisci i dati", Snackbar.LENGTH_SHORT);
+                    sn.show();
+                }
+
 
                 else if(d2.before(d1)){
-                    sn.make(parent,"Date non valide",Snackbar.LENGTH_SHORT).show();
+                    sn=Snackbar.make(parent,"Date non valide",Snackbar.LENGTH_SHORT);
+                    sn.show();
+
 
                 }
 
 
                 else{
                     switch(item){
-                        case 0: new findRestTask().execute(String.valueOf(userC.getText()), String.valueOf(clock1.getText()), String.valueOf(clock2.getText()));break;
-                        case 1: new findRestTask().execute(String.valueOf(userC.getText()), String.valueOf(clock1.getText()), "null");break;
-                        case 2: new findRestTask().execute(String.valueOf(userC.getText()), "null", String.valueOf(clock1.getText()));break;
+                        case 0: new FindRestTask().execute(String.valueOf(userC.getText()), String.valueOf(clock1.getText()), String.valueOf(clock2.getText()));break;
+                        case 1: new FindRestTask().execute(String.valueOf(userC.getText()), String.valueOf(clock1.getText()), "null");break;
+                        case 2: new FindRestTask().execute(String.valueOf(userC.getText()), "null", String.valueOf(clock1.getText()));break;
                         default: break;
 
                     }
@@ -221,7 +227,7 @@ public class findUserActivity extends AppCompatActivity implements AdapterView.O
 
     }
 
-    public findRestTask createFindRestTask() {return new findRestTask();}
+    public FindRestTask createFindRestTask() {return new FindRestTask();}
 
     @Override
     public void onItemSelected(AdapterView<?> adapterView, View view, int i, long l) {
@@ -249,7 +255,7 @@ public class findUserActivity extends AppCompatActivity implements AdapterView.O
     }
 
 
-    public class findRestTask extends AsyncTask<String, Void, Integer> {
+    public class FindRestTask extends AsyncTask<String, Void, Integer> {
 
 
         protected Integer doInBackground(String... params) {
@@ -259,7 +265,7 @@ public class findUserActivity extends AppCompatActivity implements AdapterView.O
             data2S=data2S.replaceAll("/", "-");
             data1S=data1S.replaceAll(" ", "_");
             data2S=data2S.replaceAll(" ", "_");
-            String URI=mainPage.baseURI+"auth/positions/"+params[0]+"/"+data1S+"/"+data2S;
+            String URI= MainPage.baseURI+"auth/positions/"+params[0]+"/"+data1S+"/"+data2S;
             ClientResource cr=new ClientResource(URI);
             String gsonResponse=null;
             posizioni=new HashSet<Posizione>(0);
@@ -304,21 +310,30 @@ public class findUserActivity extends AppCompatActivity implements AdapterView.O
 
         protected void onPostExecute(Integer c) {
             View parent = (View) findViewById(R.id.activity_find_user);
+            Snackbar sn;
+
             if (c == 0) {
                 if(posizioni.isEmpty()){
-                    sn.make(parent,"Nessuna posizione registrata dall'utente in quell'intervallo di tempo",Snackbar.LENGTH_SHORT).show();
+                    sn=Snackbar.make(parent,"Nessuna posizione registrata dall'utente in quell'intervallo di tempo",Snackbar.LENGTH_SHORT);
+                    sn.show();
                 }else {
-                    Intent myIntent = new Intent(findUserActivity.this, showMapActivity.class);
+                    Intent myIntent = new Intent(FindUserActivity.this, ShowMapActivity.class);
                     myIntent.putExtra("array", posizioni);
                     startActivity(myIntent);
                     overridePendingTransition(R.anim.push_right_in,R.anim.push_right_out);
                 }
             } else if (c == 1) {
-                sn.make(parent, "Utente non registrato", Snackbar.LENGTH_SHORT).show();
+                sn=Snackbar.make(parent, "Utente non registrato", Snackbar.LENGTH_SHORT);
+                sn.show();
+
             } else if (c == 2) {
-                sn.make(parent, "Errore", Snackbar.LENGTH_SHORT).show();
+                sn=Snackbar.make(parent, "Errore", Snackbar.LENGTH_SHORT);
+                sn.show();
+
             } else if(c == 3){
-                sn.make(parent, "Date in formato errato", Snackbar.LENGTH_SHORT).show();
+                sn=Snackbar.make(parent, "Date in formato errato", Snackbar.LENGTH_SHORT);
+                sn.show();
+
 
             }
 

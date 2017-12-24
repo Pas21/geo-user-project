@@ -1,0 +1,14 @@
+<?xml version="1.0" encoding="UTF-8"?>
+<project version="4">
+  <component name="FindBugs-IDEA">
+    <analysisEffort>max</analysisEffort>
+    <minPriority>Low</minPriority>
+    <hiddenBugCategory>
+      <category name="NOISE" />
+      <category name="STYLE" />
+    </hiddenBugCategory>
+    <includeFilterFiles>
+      <filter file="$PROJECT_DIR$/config/findbugs/includeFilter.xml" enabled="true" />
+    </includeFilterFiles>
+  </component>
+</project>

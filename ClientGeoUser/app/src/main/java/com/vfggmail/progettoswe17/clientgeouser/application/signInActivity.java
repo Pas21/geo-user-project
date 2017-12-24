@@ -8,7 +8,6 @@ import android.os.Bundle;
 import android.support.design.widget.Snackbar;
 import android.support.v7.app.AppCompatActivity;
 import android.text.InputType;
-import android.util.Log;
 import android.view.View;
 import android.widget.Button;
 import android.widget.EditText;
@@ -25,7 +24,7 @@ import org.restlet.resource.ClientResource;
 import java.io.IOException;
 
 
-public class signInActivity extends AppCompatActivity {
+public class SignInActivity extends AppCompatActivity {
 
 
     private static EditText username;
@@ -34,7 +33,6 @@ public class signInActivity extends AppCompatActivity {
     private static EditText email;
     private static EditText name;
     private static EditText surname;
-    private Snackbar sn;
     private Button signIn;
     private SharedPreferences.Editor editor;
     public final static String prefName="Preference";
@@ -73,23 +71,25 @@ public class signInActivity extends AppCompatActivity {
         signIn.setOnClickListener(new View.OnClickListener() {
             @Override
             public void onClick(View view) {
+                Snackbar sn;
                 if (username.getText().toString().equals("") || password.getText().toString().equals("") || rePassword.getText().toString().equals("") || email.getText().toString().equals("") || name.getText().toString().equals("") || surname.getText().toString().equals("")) {
                     View parent = (View) findViewById(R.id.activity_signin_page);
-                    sn.make(parent, "Inserisci i dati", Snackbar.LENGTH_SHORT).show();
+                    sn=Snackbar.make(parent, "Inserisci i dati", Snackbar.LENGTH_SHORT);
+                    sn.show();
                 } else
-                    new regRestTask().execute(String.valueOf(username.getText()), String.valueOf(password.getText()), String.valueOf(rePassword.getText()), String.valueOf(email.getText()), String.valueOf(name.getText()), String.valueOf(surname.getText()));
+                    new RegRestTask().execute(String.valueOf(username.getText()), String.valueOf(password.getText()), String.valueOf(rePassword.getText()), String.valueOf(email.getText()), String.valueOf(name.getText()), String.valueOf(surname.getText()));
             }
         });
     }
 
 
 
-    public regRestTask createRegRestTask() {
-        return new regRestTask();
+    public RegRestTask createRegRestTask() {
+        return new RegRestTask();
     }
 
 
-    public class regRestTask extends AsyncTask<String, Void, Integer> {
+    public class RegRestTask extends AsyncTask<String, Void, Integer> {
 
 
         protected Integer doInBackground(String... params) {
@@ -125,8 +125,9 @@ public class signInActivity extends AppCompatActivity {
 
         protected void onPostExecute(Integer c) {
             View parent = (View) findViewById(R.id.activity_signin_page);
+            Snackbar sn;
             if (c == 0) {
-                Intent myIntent = new Intent(signInActivity.this, mainPage.class);
+                Intent myIntent = new Intent(SignInActivity.this, MainPage.class);
                 myIntent.addFlags(Intent.FLAG_ACTIVITY_NEW_TASK);
                 myIntent.addFlags(Intent.FLAG_ACTIVITY_CLEAR_TASK);
                 editor.putString("username", username.getText().toString());
@@ -135,13 +136,17 @@ public class signInActivity extends AppCompatActivity {
                 startActivity(myIntent);
                 overridePendingTransition(R.anim.push_right_in,R.anim.push_right_out);
             } else if (c == 1) {
-                sn.make(parent, "Errore", Snackbar.LENGTH_SHORT).show();
+                sn=Snackbar.make(parent, "Errore", Snackbar.LENGTH_SHORT);
+                sn.show();
             } else if (c == 2) {
-                sn.make(parent, "Username utilizzato da un altro utente", Snackbar.LENGTH_SHORT).show();
+                sn=Snackbar.make(parent, "Username utilizzato da un altro utente", Snackbar.LENGTH_SHORT);
+                sn.show();
             } else if(c==3){
-                sn.make(parent,"Email utilizzata da un altro utente",Snackbar.LENGTH_SHORT).show();
+                sn=Snackbar.make(parent,"Email utilizzata da un altro utente",Snackbar.LENGTH_SHORT);
+                sn.show();
             } else {
-                sn.make(parent, "Password non coincidenti", Snackbar.LENGTH_SHORT).show();
+                sn=Snackbar.make(parent, "Password non coincidenti", Snackbar.LENGTH_SHORT);
+                sn.show();
             }
         }
     }

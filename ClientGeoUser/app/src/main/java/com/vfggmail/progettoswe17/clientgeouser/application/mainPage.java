@@ -49,7 +49,7 @@ import java.io.IOException;
 import java.sql.Timestamp;
 import java.util.List;
 
-public class mainPage extends AppCompatActivity implements OnMapReadyCallback{
+public class MainPage extends AppCompatActivity implements OnMapReadyCallback{
 
     private static final long POLLING_FREQ = 1000 * 10;
     private static final float MIN_DISTANCE = 10.0f;
@@ -57,7 +57,7 @@ public class mainPage extends AppCompatActivity implements OnMapReadyCallback{
     static String baseURI;
     private String username;
     private String password;
-    private final String TAG = "ANTONIO_APPLICATION";
+    private static String TAG = "ANTONIO_APPLICATION";
     private Boolean exit = false;
 
 
@@ -65,9 +65,8 @@ public class mainPage extends AppCompatActivity implements OnMapReadyCallback{
 
     private Button cerca;
     private Button update;
-    private Snackbar sn;
     private Gson gson;
-    private final int MY_PERMISSIONS_REQUEST=123;
+    private final static int MY_PERMISSIONS_REQUEST=123;
 
 
     // Miglior posizione corrente stimata
@@ -97,7 +96,7 @@ public class mainPage extends AppCompatActivity implements OnMapReadyCallback{
                         new DialogInterface.OnClickListener() {
                             @Override
                             public void onClick(DialogInterface dialog, int which) {
-                                ActivityCompat.requestPermissions(mainPage.this, new String[] {Manifest.permission.ACCESS_COARSE_LOCATION,Manifest.permission.ACCESS_FINE_LOCATION},
+                                ActivityCompat.requestPermissions(MainPage.this, new String[] {Manifest.permission.ACCESS_COARSE_LOCATION,Manifest.permission.ACCESS_FINE_LOCATION},
                                         MY_PERMISSIONS_REQUEST);
                             }
                         });
@@ -128,8 +127,12 @@ public class mainPage extends AppCompatActivity implements OnMapReadyCallback{
             fab.setOnClickListener(new View.OnClickListener() {
                 @Override
                 public void onClick(View view) {
-                    if (mLastReading == null)
-                        sn.make(view, "Impossibile aggiungere posizione inesistente", Snackbar.LENGTH_SHORT).show();
+                    Snackbar sn;
+                    if (mLastReading == null) {
+                        sn = Snackbar.make(view, "Impossibile aggiungere posizione inesistente", Snackbar.LENGTH_SHORT);
+                        sn.show();
+                    }
+
                     else
                         new AddPositionRestTask().execute(String.valueOf(mLastReading.getAccuracy()), String.valueOf(mLastReading.getLatitude()), String.valueOf(mLastReading.getLongitude()));
 
@@ -158,7 +161,8 @@ public class mainPage extends AppCompatActivity implements OnMapReadyCallback{
                         mLastReading = lastKnownLocation();
                         updateDisplay(mLastReading);
                     } catch (Exception e) {
-                        sn.make(v, "Non disponibile al momento", Snackbar.LENGTH_SHORT).show();
+                        Snackbar sn=Snackbar.make(v, "Non disponibile al momento", Snackbar.LENGTH_SHORT);
+                        sn.show();
                     }
                 }
             });
@@ -167,7 +171,7 @@ public class mainPage extends AppCompatActivity implements OnMapReadyCallback{
             cerca.setOnClickListener(new View.OnClickListener() {
                 @Override
                 public void onClick(View v) {
-                    Intent myIntent = new Intent(mainPage.this, findUserActivity.class);
+                    Intent myIntent = new Intent(MainPage.this, FindUserActivity.class);
 
                     startActivity(myIntent);
                     overridePendingTransition(R.anim.push_right_in,R.anim.push_right_out);
@@ -350,7 +354,7 @@ public class mainPage extends AppCompatActivity implements OnMapReadyCallback{
             editor.remove("username");
             editor.remove("password");
             editor.commit();
-            Intent myIntent=new Intent(mainPage.this,loginActivity.class);
+            Intent myIntent=new Intent(MainPage.this,LoginActivity.class);
             myIntent.addFlags(Intent.FLAG_ACTIVITY_NEW_TASK);
             myIntent.addFlags(Intent.FLAG_ACTIVITY_CLEAR_TASK);
             startActivity(myIntent);
@@ -433,12 +437,12 @@ public class mainPage extends AppCompatActivity implements OnMapReadyCallback{
         protected void onPostExecute(Integer c) {
             
             if (c==1) {
-                Toast.makeText(mainPage.this, "Inserimento avvenuto con successo", Toast.LENGTH_SHORT).show();
+                Toast.makeText(MainPage.this, "Inserimento avvenuto con successo", Toast.LENGTH_SHORT).show();
 
             }
 
             else
-                Toast.makeText(mainPage.this, "inserimento fallito", Toast.LENGTH_SHORT).show();
+                Toast.makeText(MainPage.this, "inserimento fallito", Toast.LENGTH_SHORT).show();
 
         }
     }
@@ -495,8 +499,11 @@ public class mainPage extends AppCompatActivity implements OnMapReadyCallback{
                     fab.setOnClickListener(new View.OnClickListener() {
                         @Override
                         public void onClick(View view) {
-                            if (mLastReading == null)
-                                sn.make(view, "Impossibile aggiungere posizione inesistente", Snackbar.LENGTH_SHORT).show();
+                            Snackbar sn;
+                            if (mLastReading == null) {
+                                sn = Snackbar.make(view, "Impossibile aggiungere posizione inesistente", Snackbar.LENGTH_SHORT);
+                                sn.show();
+                            }
                             else
                                 new AddPositionRestTask().execute(String.valueOf(mLastReading.getAccuracy()), String.valueOf(mLastReading.getLatitude()), String.valueOf(mLastReading.getLongitude()));
 
@@ -525,7 +532,8 @@ public class mainPage extends AppCompatActivity implements OnMapReadyCallback{
                                 mLastReading = lastKnownLocation();
                                 updateDisplay(mLastReading);
                             } catch (Exception e) {
-                                sn.make(v, "Non disponibile al momento", Snackbar.LENGTH_SHORT).show();
+                                Snackbar sn=Snackbar.make(v, "Non disponibile al momento", Snackbar.LENGTH_SHORT);
+                                sn.show();
                             }
                         }
                     });
@@ -534,7 +542,7 @@ public class mainPage extends AppCompatActivity implements OnMapReadyCallback{
                     cerca.setOnClickListener(new View.OnClickListener() {
                         @Override
                         public void onClick(View v) {
-                            Intent myIntent = new Intent(mainPage.this, findUserActivity.class);
+                            Intent myIntent = new Intent(MainPage.this, FindUserActivity.class);
 
                             startActivity(myIntent);
                             overridePendingTransition(R.anim.push_right_in,R.anim.push_right_out);
@@ -600,7 +608,7 @@ public class mainPage extends AppCompatActivity implements OnMapReadyCallback{
 
     //Visualizzo un messaggio di conferma
     private void showMessageOKCancel(String message, DialogInterface.OnClickListener okListener) {
-        new AlertDialog.Builder(mainPage.this)
+        new AlertDialog.Builder(MainPage.this)
                 .setMessage(message)
                 .setPositiveButton("OK", okListener)
                 .setNegativeButton("Cancel", null)

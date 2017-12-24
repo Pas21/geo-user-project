@@ -15,7 +15,7 @@ import com.google.android.gms.maps.model.LatLng;
 import com.google.android.gms.maps.model.MarkerOptions;
 import java.util.HashSet;
 
-public class showMapActivity extends AppCompatActivity implements OnMapReadyCallback {
+public class ShowMapActivity extends AppCompatActivity implements OnMapReadyCallback {
 
     private GoogleMap mMap;
     private HashSet<Posizione> posizioni;

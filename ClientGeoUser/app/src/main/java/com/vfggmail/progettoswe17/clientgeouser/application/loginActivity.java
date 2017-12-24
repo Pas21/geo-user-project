@@ -18,15 +18,12 @@ import android.os.AsyncTask;
 import android.os.Bundle;
 import android.text.InputType;
 import android.util.Log;
-import android.view.KeyEvent;
 import android.view.Menu;
 import android.view.MenuItem;
 import android.view.View;
 import android.view.View.OnClickListener;
-import android.view.inputmethod.EditorInfo;
 import android.widget.Button;
 import android.widget.EditText;
-import android.widget.TextView;
 import android.widget.Toast;
 import java.io.IOException;
 import com.google.gson.Gson;
@@ -37,7 +34,7 @@ import org.restlet.resource.ResourceException;
 
 
 
-public class loginActivity extends AppCompatActivity  {
+public class LoginActivity extends AppCompatActivity  {
 
 
     private EditText mUsernameView;
@@ -67,7 +64,7 @@ public class loginActivity extends AppCompatActivity  {
         if(preferences!=null && preferences.contains("username") && preferences.contains("password")){
             setContentView(R.layout.load_layout);
 
-            new loginRestTask().execute(preferences.getString("username",null),preferences.getString("password",null));
+            new LoginRestTask().execute(preferences.getString("username",null),preferences.getString("password",null));
 
         } else {
             setContentView(R.layout.activity_login);
@@ -80,7 +77,7 @@ public class loginActivity extends AppCompatActivity  {
                             new DialogInterface.OnClickListener() {
                                 @Override
                                 public void onClick(DialogInterface dialog, int which) {
-                                    ActivityCompat.requestPermissions(loginActivity.this, new String[]{Manifest.permission.ACCESS_COARSE_LOCATION, Manifest.permission.ACCESS_FINE_LOCATION},
+                                    ActivityCompat.requestPermissions(LoginActivity.this, new String[]{Manifest.permission.ACCESS_COARSE_LOCATION, Manifest.permission.ACCESS_FINE_LOCATION},
                                             MY_PERMISSIONS_REQUEST);
                                 }
                             });
@@ -98,16 +95,7 @@ public class loginActivity extends AppCompatActivity  {
                 mPasswordView = (EditText) findViewById(R.id.password);
                 mPasswordView.setInputType(InputType.TYPE_CLASS_TEXT | InputType.TYPE_TEXT_VARIATION_PASSWORD);
 
-                mPasswordView.setOnEditorActionListener(new TextView.OnEditorActionListener() {
-                    @Override
-                    public boolean onEditorAction(TextView textView, int id, KeyEvent keyEvent) {
-                        if (id == EditorInfo.IME_ACTION_DONE || id == EditorInfo.IME_NULL) {
 
-                            return true;
-                        }
-                        return false;
-                    }
-                });
 
                 mLoginInButton = (Button) findViewById(R.id.login_button);
 
@@ -115,7 +103,7 @@ public class loginActivity extends AppCompatActivity  {
                 if (preferences != null && preferences.contains("username") && preferences.contains("password")) {
                     mPasswordView.setText(preferences.getString("password", null));
                     mUsernameView.setText(preferences.getString("username", null));
-                    new loginRestTask().execute(preferences.getString("username", null), preferences.getString("password", null));
+                    new LoginRestTask().execute(preferences.getString("username", null), preferences.getString("password", null));
 
                 }
 
@@ -127,7 +115,7 @@ public class loginActivity extends AppCompatActivity  {
                             View parent = (View) findViewById(R.id.activity_login_page);
                             sn.make(parent, "Inserisci i dati", Snackbar.LENGTH_SHORT).show();
                         } else
-                            new loginRestTask().execute(String.valueOf(mUsernameView.getText()), String.valueOf(mPasswordView.getText()));
+                            new LoginRestTask().execute(String.valueOf(mUsernameView.getText()), String.valueOf(mPasswordView.getText()));
                     }
                 });
 
@@ -136,7 +124,7 @@ public class loginActivity extends AppCompatActivity  {
                 mSignInButton.setOnClickListener(new OnClickListener() {
                     @Override
                     public void onClick(View view) {
-                        Intent myIntent = new Intent(loginActivity.this, signInActivity.class);
+                        Intent myIntent = new Intent(LoginActivity.this, SignInActivity.class);
                         startActivity(myIntent);
                         overridePendingTransition(R.anim.push_right_in,R.anim.push_right_out);
 
@@ -185,12 +173,12 @@ public class loginActivity extends AppCompatActivity  {
 
 
 
-    public loginRestTask createLoginRestTask() {
-        return new loginRestTask();
+    public LoginRestTask createLoginRestTask() {
+        return new LoginRestTask();
     }
 
 
-    public class loginRestTask extends AsyncTask<String, Void, Integer> {
+    public class LoginRestTask extends AsyncTask<String, Void, Integer> {
 
         private Gson gson = new Gson();
 
@@ -209,7 +197,7 @@ public class loginActivity extends AppCompatActivity  {
                         activity.runOnUiThread(new Runnable() {
                             @Override
                             public void run() {
-                                Toast.makeText(loginActivity.this, "Autenticazione con il server fallita", Toast.LENGTH_SHORT).show();
+                                Toast.makeText(LoginActivity.this, "Autenticazione con il server fallita", Toast.LENGTH_SHORT).show();
                                 finish();
                             }
                         });
@@ -259,7 +247,7 @@ public class loginActivity extends AppCompatActivity  {
         protected void onPostExecute(Integer c) {
             View parent = (View) findViewById(R.id.activity_login_page);
             if (c == 0) {
-                Intent myIntent = new Intent(loginActivity.this, mainPage.class);
+                Intent myIntent = new Intent(LoginActivity.this, MainPage.class);
                 myIntent.addFlags(Intent.FLAG_ACTIVITY_NEW_TASK);
                 myIntent.addFlags(Intent.FLAG_ACTIVITY_CLEAR_TASK);
                 if(!preferences.contains("username")) {
@@ -300,7 +288,7 @@ public class loginActivity extends AppCompatActivity  {
 
         //noinspection SimplifiableIfStatement
         if(id ==R.id.action_settings){
-            Intent myIntent=new Intent(loginActivity.this,settingsActivity.class);
+            Intent myIntent=new Intent(LoginActivity.this,SettingsActivity.class);
             startActivity(myIntent);
             overridePendingTransition(R.anim.push_right_in,R.anim.push_right_out);
 
@@ -326,16 +314,6 @@ public class loginActivity extends AppCompatActivity  {
                     mPasswordView = (EditText) findViewById(R.id.password);
                     mPasswordView.setInputType(InputType.TYPE_CLASS_TEXT | InputType.TYPE_TEXT_VARIATION_PASSWORD);
 
-                    mPasswordView.setOnEditorActionListener(new TextView.OnEditorActionListener() {
-                        @Override
-                        public boolean onEditorAction(TextView textView, int id, KeyEvent keyEvent) {
-                            if (id == EditorInfo.IME_ACTION_DONE || id == EditorInfo.IME_NULL) {
-
-                                return true;
-                            }
-                            return false;
-                        }
-                    });
 
                     mLoginInButton = (Button) findViewById(R.id.login_button);
 
@@ -354,7 +332,7 @@ public class loginActivity extends AppCompatActivity  {
                                 View parent=(View) findViewById(R.id.activity_login_page);
                                 sn.make(parent, "Inserisci i dati",Snackbar.LENGTH_SHORT).show();
                             } else
-                                new loginRestTask().execute(String.valueOf(mUsernameView.getText()), String.valueOf(mPasswordView.getText()));
+                                new LoginRestTask().execute(String.valueOf(mUsernameView.getText()), String.valueOf(mPasswordView.getText()));
                         }
                     });
 
@@ -363,7 +341,7 @@ public class loginActivity extends AppCompatActivity  {
                     mSignInButton.setOnClickListener(new OnClickListener() {
                         @Override
                         public void onClick(View view) {
-                            Intent myIntent=new Intent(loginActivity.this, signInActivity.class);
+                            Intent myIntent=new Intent(LoginActivity.this, SignInActivity.class);
                             startActivity(myIntent);
                             overridePendingTransition(R.anim.push_right_in,R.anim.push_right_out);
 
@@ -390,7 +368,7 @@ public class loginActivity extends AppCompatActivity  {
 
     //Visualizzo un messaggio di conferma
     private void showMessageOKCancel(String message, DialogInterface.OnClickListener okListener) {
-        new AlertDialog.Builder(loginActivity.this)
+        new AlertDialog.Builder(LoginActivity.this)
                 .setMessage(message)
                 .setPositiveButton("OK", okListener)
                 .setNegativeButton("Cancel", null)
