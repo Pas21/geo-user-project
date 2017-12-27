@@ -53,9 +53,9 @@ public class UserAuthJSONTest {
 		Utente u2= new Utente("lor", "lor", "lor@gmail.com", "Lorenzo", "Goglia");
 		Utente u3= new Utente("ant", "ant", "ant@gmail.com", "Antonio", "Varone");
 		
-		assertTrue("L'utente "+u1.getUsername() +" non esiste e dovrebbere essere aggiunto al database!",g.addUtente(u1));
-		assertTrue("L'utente "+u2.getUsername() +" non esiste e dovrebbere essere aggiunto al database!",g.addUtente(u2));
-		assertTrue("L'utente "+u3.getUsername() +" non esiste e dovrebbere essere aggiunto al database!",g.addUtente(u3));
+		assertTrue("L'utente "+u1.getUsername() +" non esiste e dovrebbe essere aggiunto al database!",g.addUtente(u1));
+		assertTrue("L'utente "+u2.getUsername() +" non esiste e dovrebbe essere aggiunto al database!",g.addUtente(u2));
+		assertTrue("L'utente "+u3.getUsername() +" non esiste e dovrebbe essere aggiunto al database!",g.addUtente(u3));
 	}
 
 	@After

@@ -2,8 +2,6 @@ package server.web.resources.json;
 
 import static org.junit.Assert.*;
 
-import javax.persistence.PersistenceException;
-
 import org.hibernate.Session;
 import org.hibernate.SessionFactory;
 import org.hibernate.Transaction;
@@ -75,9 +73,9 @@ public class UserRegJSONTest {
 		String u1S=gson.toJson(u1,Utente.class);
 		try{
 			gson.fromJson(userRegJson.addUser(u1S),String.class);
-			assertTrue("L'utente "+u1.getUsername() +" già esiste e non dovrebbere essere aggiunto al database!", false);
-		}catch (PersistenceException e) {
-			assertTrue("L'utente "+u1.getUsername() +" già esiste e non dovrebbere essere aggiunto al database!", true);
+			assertTrue("L'utente "+u1.getUsername() +" gia' esiste e non dovrebbe essere aggiunto al database!", false);
+		}catch (Exception e) {
+			assertTrue("L'utente "+u1.getUsername() +" gia' esiste e non dovrebbe essere aggiunto al database!", true);
 		}
 		
 		//aggiunta utente con email esistente
@@ -85,9 +83,9 @@ public class UserRegJSONTest {
 		String u1eS=gson.toJson(u1e,Utente.class);
 		try{
 			gson.fromJson(userRegJson.addUser(u1eS),String.class);
-			assertTrue("L'utente "+u1e.getUsername() +" ha un email già esistente e non dovrebbere essere aggiunto al database!", false);
-		}catch (PersistenceException e) {
-			assertTrue("L'utente "+u1e.getUsername() +" ha un email già esistente e non dovrebbere essere aggiunto al database!", true);
+			assertTrue("L'utente "+u1e.getUsername() +" ha un email gia' esistente e non dovrebbe essere aggiunto al database!", false);
+		}catch (Exception e) {
+			assertTrue("L'utente "+u1e.getUsername() +" ha un email gia' esistente e non dovrebbe essere aggiunto al database!", true);
 		}
 		
 
@@ -95,9 +93,9 @@ public class UserRegJSONTest {
 		String u2S=gson.toJson(u2,Utente.class);
 		try{
 			gson.fromJson(userRegJson.addUser(u2S),String.class);
-			assertTrue("L'utente "+u2.getUsername() +" non esiste e dovrebbere essere aggiunto al database!", true);
-		}catch (PersistenceException e) {
-			assertTrue("L'utente "+u2.getUsername() +" non esiste e dovrebbere essere aggiunto al database!", false);
+			assertTrue("L'utente "+u2.getUsername() +" non esiste e dovrebbe essere aggiunto al database!", true);
+		}catch (Exception e) {
+			assertTrue("L'utente "+u2.getUsername() +" non esiste e dovrebbe essere aggiunto al database!", false);
 		}
 
 		System.out.println(UserRegistryWebApplication.verifier.getLocalSecrets().toString());
