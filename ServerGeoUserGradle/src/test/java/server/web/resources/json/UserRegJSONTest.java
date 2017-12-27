@@ -2,6 +2,8 @@ package server.web.resources.json;
 
 import static org.junit.Assert.*;
 
+import javax.persistence.PersistenceException;
+
 import org.hibernate.Session;
 import org.hibernate.SessionFactory;
 import org.hibernate.Transaction;
@@ -33,7 +35,6 @@ public class UserRegJSONTest {
 		session.createNativeQuery("delete from utenti").executeUpdate();
 		tx.commit();
 		session.close();
-		UserRegistryWebApplication.main(null);
 	}
 
 	@AfterClass
@@ -75,7 +76,7 @@ public class UserRegJSONTest {
 		try{
 			gson.fromJson(userRegJson.addUser(u1S),String.class);
 			assertTrue("L'utente "+u1.getUsername() +" già esiste e non dovrebbere essere aggiunto al database!", false);
-		}catch (Exception e) {
+		}catch (PersistenceException e) {
 			assertTrue("L'utente "+u1.getUsername() +" già esiste e non dovrebbere essere aggiunto al database!", true);
 		}
 		
@@ -85,7 +86,7 @@ public class UserRegJSONTest {
 		try{
 			gson.fromJson(userRegJson.addUser(u1eS),String.class);
 			assertTrue("L'utente "+u1e.getUsername() +" ha un email già esistente e non dovrebbere essere aggiunto al database!", false);
-		}catch (Exception e) {
+		}catch (PersistenceException e) {
 			assertTrue("L'utente "+u1e.getUsername() +" ha un email già esistente e non dovrebbere essere aggiunto al database!", true);
 		}
 		
@@ -95,7 +96,7 @@ public class UserRegJSONTest {
 		try{
 			gson.fromJson(userRegJson.addUser(u2S),String.class);
 			assertTrue("L'utente "+u2.getUsername() +" non esiste e dovrebbere essere aggiunto al database!", true);
-		}catch (Exception e) {
+		}catch (PersistenceException e) {
 			assertTrue("L'utente "+u2.getUsername() +" non esiste e dovrebbere essere aggiunto al database!", false);
 		}
 
