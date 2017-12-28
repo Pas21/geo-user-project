@@ -14,5 +14,5 @@ notifications:
   
 after_script:
 - cat /home/travis/build/Pas21/geo-user-project/ServerGeoUserGradle/build/findbugsReports/main.html
-- cat $TRAVIS_TEST_RESULT/index.html
-- ls $TRAVIS_TEST_RESULT
+- cd /home/travis/build/Pas21/geo-user-project/ServerGeoUserGradle/build/reports
+- ls
