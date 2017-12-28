@@ -195,7 +195,7 @@ public class GestoreDatiPersistenti {
 		Posizione posizione = null;
 		
 		try{
-			//Si può fare anche con createNativeQuery!
+			//Si puo' fare anche con createNativeQuery!
 			for(Entry<IdPosizione, Posizione> id : posizioni.entrySet()) {
 				posizione = id.getValue();
 				//Nell'if si deve usare il metodo equals della classe utente
