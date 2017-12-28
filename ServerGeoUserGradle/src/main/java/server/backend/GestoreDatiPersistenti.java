@@ -50,7 +50,7 @@ public class GestoreDatiPersistenti {
 	      try{
 	         tx = session.beginTransaction();
 	         utenti = new TreeMap<String,Utente>();
-	         List<?> listaUtenti = session.createQuery("FROM Utente").list(); 		// Query su classe java e non su tabella
+	         List<?> listaUtenti = session.createNativeQuery("FROM Utente").list(); 		// Query su classe java e non su tabella
 	         for (Iterator<?> iterator = listaUtenti.iterator(); iterator.hasNext();){
 	            Utente utente = (Utente) iterator.next(); 
 	            utenti.put(utente.getUsername(), utente);
