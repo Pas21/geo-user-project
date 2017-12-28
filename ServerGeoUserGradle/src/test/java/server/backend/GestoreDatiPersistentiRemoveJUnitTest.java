@@ -17,7 +17,6 @@ import org.junit.Test;
 import commons.IdPosizione;
 import commons.Posizione;
 import commons.Utente;
-import server.web.frontend.UserRegistryWebApplication;
 
 public class GestoreDatiPersistentiRemoveJUnitTest {
 	static GestoreDatiPersistenti g = GestoreDatiPersistenti.getInstance();
@@ -45,7 +44,6 @@ public class GestoreDatiPersistentiRemoveJUnitTest {
 		session.createNativeQuery("delete from utenti").executeUpdate();
 		tx.commit();
 		session.close();
-		UserRegistryWebApplication.main(null);
 	}
 
 	@AfterClass

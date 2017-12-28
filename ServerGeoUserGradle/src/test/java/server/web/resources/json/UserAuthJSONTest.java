@@ -18,7 +18,6 @@ import com.google.gson.Gson;
 
 import commons.Utente;
 import server.backend.GestoreDatiPersistenti;
-import server.web.frontend.UserRegistryWebApplication;
 
 public class UserAuthJSONTest {
 	static GestoreDatiPersistenti g = GestoreDatiPersistenti.getInstance();
@@ -34,7 +33,6 @@ public class UserAuthJSONTest {
 		session.createNativeQuery("delete from utenti").executeUpdate();
 		tx.commit();
 		session.close();
-		UserRegistryWebApplication.main(null);
 	}
 
 	@AfterClass

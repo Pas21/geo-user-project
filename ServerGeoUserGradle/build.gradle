@@ -88,6 +88,10 @@ tasks.withType(JacocoReport) {
 	}
 }
 
+test {
+    reports.html.destination = file("$project.buildDir/reports/JUnitReport")
+}
+
 task createDB {
      project.exec {
 		//commandLine 'C:\\Program Files\\MySQL\\MySQL Server 5.7\\bin\\mysql', "--user=utente", "--password=password",
