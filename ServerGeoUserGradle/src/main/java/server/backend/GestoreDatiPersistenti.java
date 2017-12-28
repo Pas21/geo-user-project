@@ -59,9 +59,7 @@ public class GestoreDatiPersistenti {
 	      }catch (PersistenceException e) {
 	         if (tx!=null) tx.rollback();
 	         e.printStackTrace(); 
-	      }catch (Exception e) {
-		     e.printStackTrace(); 
-		  }finally{
+	      }finally{
 	         session.close();
 	      }
 	      return utenti;
@@ -86,8 +84,6 @@ public class GestoreDatiPersistenti {
 		}catch (PersistenceException e) {
 			if (tx!=null) tx.rollback();
 			e.printStackTrace(); 
-		}catch (Exception e) {
-			e.printStackTrace(); 
 		}finally{
 			session.close();
 		}
@@ -108,10 +104,7 @@ public class GestoreDatiPersistenti {
 	       if (tx!=null) tx.rollback();
 	       e.printStackTrace(); 
 	       addok=false;
-	    }catch (Exception e) {
-			e.printStackTrace(); 
-		    addok=false;
-		}finally{
+	    }finally{
 	       session.close(); 
 	    }
 	    return addok;
@@ -131,10 +124,7 @@ public class GestoreDatiPersistenti {
 	       if (tx!=null) tx.rollback();
 	       e.printStackTrace(); 
 	       removeok=false;
-	    }catch (Exception e) {
-			e.printStackTrace();
-			removeok=false;
-		}finally{
+	    }finally{
 	       session.close();	       
 	    }
 	    return removeok;
@@ -154,10 +144,7 @@ public class GestoreDatiPersistenti {
 	       if (tx!=null) tx.rollback();
 	       e.printStackTrace(); 
 	       addok=false;
-	    }catch (Exception e) {
-			e.printStackTrace();
-			addok=false;
-		}finally{
+	    }finally{
 	       session.close(); 
 	    }
 	    return addok;
@@ -177,10 +164,7 @@ public class GestoreDatiPersistenti {
 	       if (tx!=null) tx.rollback();
 	       e.printStackTrace(); 
 	       removeok=false;
-	    }catch (Exception e) {
-			e.printStackTrace();
-			removeok=false;
-		}finally{
+	    }finally{
 	       session.close(); 
 	    }
 	    return removeok;
@@ -209,9 +193,6 @@ public class GestoreDatiPersistenti {
 			if (tx!=null) tx.rollback();
 		    e.printStackTrace(); 
 		    removeok=false;
-		}catch (Exception e) {
-			e.printStackTrace();
-			removeok=false;
 		}finally{
 			session.close(); 
 		}
