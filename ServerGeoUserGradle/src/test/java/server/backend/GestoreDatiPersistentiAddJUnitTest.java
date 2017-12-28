@@ -73,7 +73,7 @@ public class GestoreDatiPersistentiAddJUnitTest {
 		assertTrue("La lista di utenti deve contenere solo l'utente aggiunto!", g.addUtente(u) && g.getUtenti().containsKey(u.getUsername()));	
 
 		//DB aggiunta utente esistente
-		//assertTrue("L'utente gia' esistente e' stato aggiunto erroneamente!",	!g.addUtente(u));
+		assertTrue("L'utente gia' esistente e' stato aggiunto erroneamente!",	!g.addUtente(u));
 	
 		
 
@@ -81,34 +81,34 @@ public class GestoreDatiPersistentiAddJUnitTest {
 		
 		
 		//DB senza Posizioni
-		//TreeMap<IdPosizione, Posizione> posizioni = g.getPosizioni();
-		//assertTrue("La lista delle posizioni ottenuta deve essere vuota!", posizioni.isEmpty());	
+		TreeMap<IdPosizione, Posizione> posizioni = g.getPosizioni();
+		assertTrue("La lista delle posizioni ottenuta deve essere vuota!", posizioni.isEmpty());	
 
 
 		//DB aggiunta posizione non esistente a utente non esistente
-		//LocalDateTime localDateTime = LocalDateTime.of(2016, 02, 10, 00, 00, 00);
-		//IdPosizione idPos = new IdPosizione(Timestamp.valueOf(localDateTime), 14.4111111,  14.4111111);
-		//Utente u1=new Utente("lor","lor","lor@gmail.com","Lorenzo","Goglia");
-		//Posizione p=new Posizione(idPos,u1, 20);
-		//assertTrue("La posizione e' stata aggiunta ad un utente non esistente!", !g.addPosizione(p));	
+		LocalDateTime localDateTime = LocalDateTime.of(2016, 02, 10, 00, 00, 00);
+		IdPosizione idPos = new IdPosizione(Timestamp.valueOf(localDateTime), 14.4111111,  14.4111111);
+		Utente u1=new Utente("lor","lor","lor@gmail.com","Lorenzo","Goglia");
+		Posizione p=new Posizione(idPos,u1, 20);
+		assertTrue("La posizione e' stata aggiunta ad un utente non esistente!", !g.addPosizione(p));	
 		
-		//posizioni=g.getPosizioni();
-		//assertTrue("La lista delle posizioni ottenuta deve essere vuota!", posizioni.isEmpty());	
+		posizioni=g.getPosizioni();
+		assertTrue("La lista delle posizioni ottenuta deve essere vuota!", posizioni.isEmpty());	
 
 
 		//DB aggiunta posizione non esistente a utente esistente
-		//p=new Posizione(idPos,u, 20);
-		//assertTrue("La posizione pur non essendo presente nel database, non e' stata aggiunta ad un utente esistente!", g.addPosizione(p) && g.getPosizioni().containsKey(idPos));	
+		p=new Posizione(idPos,u, 20);
+		assertTrue("La posizione pur non essendo presente nel database, non e' stata aggiunta ad un utente esistente!", g.addPosizione(p) && g.getPosizioni().containsKey(idPos));	
 		
 		//DB con Posizioni
-		//posizioni=g.getPosizioni();
-		//assertTrue("La lista di posizioni deve contenere solo la posizione aggiunta!", posizioni.containsKey(idPos));
+		posizioni=g.getPosizioni();
+		assertTrue("La lista di posizioni deve contenere solo la posizione aggiunta!", posizioni.containsKey(idPos));
 		
 		//DB aggiunta posizione gia' esistente
-		//assertTrue("La posizione gia' esistente e' stata aggiunta di nuovo!", !g.addPosizione(p));
+		assertTrue("La posizione gia' esistente e' stata aggiunta di nuovo!", !g.addPosizione(p));
 		
 		//DB aggiunta posizione gia' esistente ad un utente
-		//assertTrue("Aggiunta consentita di una posizione gia' esistente ad un utente!", !g.addPosizione(p) && g.getPosizioni().containsKey(idPos));
+		assertTrue("Aggiunta consentita di una posizione gia' esistente ad un utente!", !g.addPosizione(p) && g.getPosizioni().containsKey(idPos));
 
 	}
 
