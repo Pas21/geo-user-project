@@ -39,7 +39,6 @@ CREATE TABLE `posizioni` (
 
 LOCK TABLES `posizioni` WRITE;
 /*!40000 ALTER TABLE `posizioni` DISABLE KEYS */;
-INSERT INTO `posizioni` VALUES ('antonio.user',41.130101,14.785006,'2017-10-20 10:00:37',20),('antonio.user',41.132008,14.778238,'2017-11-01 14:35:37',20),('lorenzo.user',41.141321,14.770239,'2017-11-02 09:52:20',20),('pasquale.user',41.130726,14.777501,'2017-11-03 20:10:20',20);
 /*!40000 ALTER TABLE `posizioni` ENABLE KEYS */;
 UNLOCK TABLES;
 
@@ -67,7 +66,6 @@ CREATE TABLE `utenti` (
 
 LOCK TABLES `utenti` WRITE;
 /*!40000 ALTER TABLE `utenti` DISABLE KEYS */;
-INSERT INTO `utenti` VALUES ('antonio.user','antonio.password','antonio.email','antonio','varone'),('lorenzo.user','lorenzo.password','lorenzo.email','lorenzo','goglia'),('pasquale.user','pasquale.password','pasquale.email','pasquale','forgione');
 /*!40000 ALTER TABLE `utenti` ENABLE KEYS */;
 UNLOCK TABLES;
 /*!40103 SET TIME_ZONE=@OLD_TIME_ZONE */;
@@ -80,4 +78,4 @@ UNLOCK TABLES;
 /*!40101 SET COLLATION_CONNECTION=@OLD_COLLATION_CONNECTION */;
 /*!40111 SET SQL_NOTES=@OLD_SQL_NOTES */;
 
--- Dump completed on 2017-11-09  9:45:32
+-- Dump completed on 2017-12-28 11:53:45

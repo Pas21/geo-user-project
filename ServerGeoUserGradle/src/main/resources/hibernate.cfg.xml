@@ -14,7 +14,9 @@
         <property name="hibernate.show_sql">true</property>
         <property name="hibernate.dialect">org.hibernate.dialect.MySQLDialect</property>
 
-        <mapping resource="/commons/Utente.hbm.xml" />
-        <mapping resource="/commons/Posizione.hbm.xml" />
+        <!--<mapping resource="/commons/Utente.hbm.xml" />
+        <mapping resource="/commons/Posizione.hbm.xml" />-->
+        <mapping resource="Utente.hbm.xml" />
+        <mapping resource="Posizione.hbm.xml" />
     </session-factory>
 </hibernate-configuration>
