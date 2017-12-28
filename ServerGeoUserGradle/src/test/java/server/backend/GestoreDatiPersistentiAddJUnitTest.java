@@ -65,7 +65,7 @@ public class GestoreDatiPersistentiAddJUnitTest {
 		assertTrue("La lista di utenti deve contenere solo l'utente aggiunto!", g.addUtente(u) && g.getUtenti().containsKey(u.getUsername()));	
 
 		//DB aggiunta utente esistente
-		assertTrue("L'utente già esistente e' stato aggiunto erroneamente!",	!g.addUtente(u));
+		assertTrue("L'utente gia' esistente e' stato aggiunto erroneamente!",	!g.addUtente(u));
 	
 		
 
@@ -97,7 +97,7 @@ public class GestoreDatiPersistentiAddJUnitTest {
 		assertTrue("La lista di posizioni deve contenere solo la posizione aggiunta!", posizioni.containsKey(idPos));
 		
 		//DB aggiunta posizione gia' esistente
-		assertTrue("La posizione già esistente e' stata aggiunta di nuovo!", !g.addPosizione(p));
+		assertTrue("La posizione gia' esistente e' stata aggiunta di nuovo!", !g.addPosizione(p));
 		
 		//DB aggiunta posizione gia' esistente ad un utente
 		assertTrue("Aggiunta consentita di una posizione gia' esistente ad un utente!", !g.addPosizione(p) && g.getPosizioni().containsKey(idPos));

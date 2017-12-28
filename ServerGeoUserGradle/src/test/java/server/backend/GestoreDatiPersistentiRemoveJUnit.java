@@ -96,7 +96,7 @@ public class GestoreDatiPersistentiRemoveJUnit {
 
 		
 		//Eliminazione posizioni utente con una posizione
-		assertTrue("Eliminazione non consentita di più posizioni dell'utente 'lor' avente una posizione!", g.removePosizioniUtente(u2));
+		assertTrue("Eliminazione non consentita di piu' posizioni dell'utente 'lor' avente una posizione!", g.removePosizioniUtente(u2));
 		//verificare che le posizioni dell'utente sono assenti nel DB
 		SessionFactory sessionFactory = g.getFactory();
 		Session session = sessionFactory.openSession();
@@ -111,7 +111,7 @@ public class GestoreDatiPersistentiRemoveJUnit {
 		session = sessionFactory.openSession();
 		tx = session.beginTransaction();
 		results=session.createNativeQuery("select * from posizioni where utente='pas'");
-		assertTrue("La lista delle posizioni dell'utente 'pas' deve avere più di una posizione!", results.getResultList().size()>1);
+		assertTrue("La lista delle posizioni dell'utente 'pas' deve avere piu' di una posizione!", results.getResultList().size()>1);
 		tx.commit();
 		session.close();
 		

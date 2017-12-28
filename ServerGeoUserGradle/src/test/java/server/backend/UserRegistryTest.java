@@ -138,7 +138,7 @@ public class UserRegistryTest {
 		}
 		
 		//Test rimozione di tutte le posizioni di un utente
-		//NB: non cancellare anche se è commentato!
+		//NB: non cancellare anche se e' commentato!
 		/*try {
 			userreg.removePosizioni("pietro.user");
 			utenti = userreg.getUtenti();
