@@ -4,6 +4,7 @@ services:
 - mysql
 
 before_install:
+- cat ~travis/.my.cnf
 - cd ServerGeoUserGradle
 - chmod +x gradlew
 
