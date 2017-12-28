@@ -8,6 +8,7 @@ import javax.persistence.PersistenceException;
 
 import java.util.TreeMap;
 
+import org.hibernate.HibernateException;
 import org.hibernate.Session;
 import org.hibernate.SessionFactory;
 import org.hibernate.Transaction;
@@ -100,7 +101,7 @@ public class GestoreDatiPersistenti {
 	       tx = session.beginTransaction();
 	       session.save(utente); 
 	       tx.commit();
-	    }catch (PersistenceException e) {
+	    }catch (HibernateException e) {
 	       if (tx!=null) tx.rollback();
 	       e.printStackTrace(); 
 	       addok=false;
