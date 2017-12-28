@@ -26,7 +26,7 @@ public class UserRegJSONTest {
 	@BeforeClass
 	public static void setUpBeforeClass() throws Exception {
 		SessionFactory sessionFactory = g.getFactory();
-		//svuoto le tabelle del DB
+		//Svuotamento delle tabelle del DB
 		Session session = sessionFactory.openSession();
 		Transaction tx = session.beginTransaction();
 		session.createNativeQuery("delete from posizioni").executeUpdate();
@@ -38,7 +38,7 @@ public class UserRegJSONTest {
 	@AfterClass
 	public static void tearDownAfterClass() throws Exception {
 		SessionFactory sessionFactory = g.getFactory();
-		//svuoto le tabelle del DB
+		//Svuotamento delle tabelle del DB
 		Session session = sessionFactory.openSession();
 		Transaction tx = session.beginTransaction();
 		session.createNativeQuery("delete from posizioni").executeUpdate();
@@ -69,7 +69,7 @@ public class UserRegJSONTest {
 		Utente u3= new Utente("a", "a", "a@gmail.com", "A", "A");
 	
 
-		//aggiunta utente già esistente
+		//aggiunta utente gia' esistente
 		String u1S=gson.toJson(u1,Utente.class);
 		try{
 			gson.fromJson(userRegJson.addUser(u1S),String.class);

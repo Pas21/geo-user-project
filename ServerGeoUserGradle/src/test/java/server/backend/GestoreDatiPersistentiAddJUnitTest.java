@@ -25,7 +25,7 @@ public class GestoreDatiPersistentiAddJUnitTest {
 	@BeforeClass
 	public static void setUpBeforeClass() throws Exception {
 		SessionFactory sessionFactory = g.getFactory();
-		//svuoto le tabelle del DB
+		//Svuotamento delle tabelle del DB
 		Session session = sessionFactory.openSession();
 		Transaction tx = session.beginTransaction();
 		session.createNativeQuery("delete from posizioni").executeUpdate();
@@ -37,7 +37,7 @@ public class GestoreDatiPersistentiAddJUnitTest {
 	@AfterClass
 	public static void tearDownAfterClass() throws Exception {
 		SessionFactory sessionFactory = g.getFactory();
-		//svuoto le tabelle del DB
+		//Svuotamento delle tabelle del DB
 		Session session = sessionFactory.openSession();
 		Transaction tx = session.beginTransaction();
 		session.createNativeQuery("delete from posizioni").executeUpdate();
@@ -96,16 +96,12 @@ public class GestoreDatiPersistentiAddJUnitTest {
 		posizioni=g.getPosizioni();
 		assertTrue("La lista di posizioni deve contenere solo la posizione aggiunta!", posizioni.containsKey(idPos));
 		
-		//DB aggiunta posizione già esistente
+		//DB aggiunta posizione gia' esistente
 		assertTrue("La posizione già esistente e' stata aggiunta di nuovo!", !g.addPosizione(p));
 		
-		//DB aggiunta posizione con identificatore uguale a utente esistente
-		assertTrue("Aggiunta fallita di un secondo utente non esistente!", g.addUtente(u1) && g.getUtenti().containsKey(u1.getUsername()));
+		//DB aggiunta posizione gia' esistente ad un utente
+		assertTrue("Aggiunta consentita di una posizione gia' esistente ad un utente!", !g.addPosizione(p) && g.getPosizioni().containsKey(idPos));
 
-
-		
-		
-		
 	}
 
 }

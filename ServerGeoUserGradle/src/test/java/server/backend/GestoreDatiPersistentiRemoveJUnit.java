@@ -37,7 +37,7 @@ public class GestoreDatiPersistentiRemoveJUnit {
 	@BeforeClass
 	public static void setUpBeforeClass() throws Exception {
 		SessionFactory sessionFactory = g.getFactory();
-		//svuoto le tabelle del DB
+		//Svuotamento delle tabelle del DB
 		Session session = sessionFactory.openSession();
 		Transaction tx = session.beginTransaction();
 		session.createNativeQuery("delete from posizioni").executeUpdate();
@@ -49,7 +49,7 @@ public class GestoreDatiPersistentiRemoveJUnit {
 	@AfterClass
 	public static void tearDownAfterClass() throws Exception {
 		SessionFactory sessionFactory = g.getFactory();
-		//svuoto le tabelle del DB
+		//Svuotamento delle tabelle del DB
 		Session session = sessionFactory.openSession();
 		Transaction tx = session.beginTransaction();
 		session.createNativeQuery("delete from posizioni").executeUpdate();
@@ -91,13 +91,13 @@ public class GestoreDatiPersistentiRemoveJUnit {
 		//Eliminazione una posizione di un utente
 		assertTrue("Eliminazione non consentita di una posizione di un utente!", g.removePosizione(p1) && !g.getPosizioni().containsValue(p1));
 		
-		//Aggiungo di nuovo la posizione
+		//Aggiunta della posizione eliminata allo stesso utente
 		assertTrue("Aggiunta non consentita di una nuova posizione ad un utente!", g.addPosizione(p1) && g.getPosizioni().containsKey(idPos1));
 
 		
 		//Eliminazione posizioni utente con una posizione
 		assertTrue("Eliminazione non consentita di più posizioni dell'utente 'lor' avente una posizione!", g.removePosizioniUtente(u2));
-		//vedo se le posizioni dell'utente sono assenti nel DB
+		//verificare che le posizioni dell'utente sono assenti nel DB
 		SessionFactory sessionFactory = g.getFactory();
 		Session session = sessionFactory.openSession();
 		Transaction tx = session.beginTransaction();
@@ -106,7 +106,7 @@ public class GestoreDatiPersistentiRemoveJUnit {
 		tx.commit();
 		session.close();
 
-		//Eliminazione posizioni utente con più di una posizione
+		//Eliminazione posizioni utente con piu' di una posizione
 		sessionFactory = g.getFactory();
 		session = sessionFactory.openSession();
 		tx = session.beginTransaction();
@@ -116,7 +116,7 @@ public class GestoreDatiPersistentiRemoveJUnit {
 		session.close();
 		
 		assertTrue("Eliminazione non consentita di piu' posizioni dell'utente 'pas' avente piu' posizioni!", g.removePosizioniUtente(u1));
-		//vedo se le posizioni dell'utente sono assenti nel DB
+		//Verificare che le posizioni dell'utente sono assenti nel DB
 		sessionFactory = g.getFactory();
 		session = sessionFactory.openSession();
 		tx = session.beginTransaction();
