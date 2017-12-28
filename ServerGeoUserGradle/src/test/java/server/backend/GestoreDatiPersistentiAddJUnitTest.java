@@ -20,30 +20,15 @@ import commons.Posizione;
 import commons.Utente;
 
 public class GestoreDatiPersistentiAddJUnitTest {
-	static GestoreDatiPersistenti g = GestoreDatiPersistenti.getInstance();
 
 	@BeforeClass
 	public static void setUpBeforeClass() throws Exception {
-		SessionFactory sessionFactory = g.getFactory();
-		//Svuotamento delle tabelle del DB
-		Session session = sessionFactory.openSession();
-		Transaction tx = session.beginTransaction();
-		session.createNativeQuery("delete from posizioni").executeUpdate();
-		session.createNativeQuery("delete from utenti").executeUpdate();
-		tx.commit();
-		session.close();
+		
 	}
 
 	@AfterClass
 	public static void tearDownAfterClass() throws Exception {
-		SessionFactory sessionFactory = g.getFactory();
-		//Svuotamento delle tabelle del DB
-		Session session = sessionFactory.openSession();
-		Transaction tx = session.beginTransaction();
-		session.createNativeQuery("delete from posizioni").executeUpdate();
-		session.createNativeQuery("delete from utenti").executeUpdate();
-		tx.commit();
-		session.close();
+		
 	}
 
 	@Before
@@ -52,6 +37,13 @@ public class GestoreDatiPersistentiAddJUnitTest {
 
 	@After
 	public void tearDown() throws Exception {
+		
+	}
+
+	@Test
+	public void test() {
+		GestoreDatiPersistenti g = GestoreDatiPersistenti.getInstance();
+
 		SessionFactory sessionFactory = g.getFactory();
 		//Svuotamento delle tabelle del DB
 		Session session = sessionFactory.openSession();
@@ -60,10 +52,8 @@ public class GestoreDatiPersistentiAddJUnitTest {
 		session.createNativeQuery("delete from utenti").executeUpdate();
 		tx.commit();
 		session.close();
-	}
-
-	@Test
-	public void test() {
+		
+		
 		//DB senza Utenti
 		TreeMap<String, Utente> utenti = g.getUtenti();
 		assertTrue("La lista di utenti ottenuta deve essere vuota!", utenti.isEmpty());	
@@ -110,6 +100,17 @@ public class GestoreDatiPersistentiAddJUnitTest {
 		//DB aggiunta posizione gia' esistente ad un utente
 		assertTrue("Aggiunta consentita di una posizione gia' esistente ad un utente!", !g.addPosizione(p) && g.getPosizioni().containsKey(idPos));
 
+		
+		
+		
+		sessionFactory = g.getFactory();
+		//Svuotamento delle tabelle del DB
+		session = sessionFactory.openSession();
+		tx = session.beginTransaction();
+		session.createNativeQuery("delete from posizioni").executeUpdate();
+		session.createNativeQuery("delete from utenti").executeUpdate();
+		tx.commit();
+		session.close();
 	}
 
 }
