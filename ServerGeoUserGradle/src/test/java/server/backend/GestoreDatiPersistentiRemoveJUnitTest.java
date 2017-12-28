@@ -18,7 +18,7 @@ import commons.IdPosizione;
 import commons.Posizione;
 import commons.Utente;
 
-public class GestoreDatiPersistentiRemoveJUnit {
+public class GestoreDatiPersistentiRemoveJUnitTest {
 	static GestoreDatiPersistenti g = GestoreDatiPersistenti.getInstance();
 	Utente u1=new Utente("pas","pas","pas@gmail.com","Pasquale","Forgione");//utente con due posizioni
 	Utente u2=new Utente("lor","lor","lor@gmail.com","Lorenzo","Goglia");//utente con una posizione
