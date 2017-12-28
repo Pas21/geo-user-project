@@ -33,6 +33,7 @@ public class UserRegJSONTest {
 		session.createNativeQuery("delete from utenti").executeUpdate();
 		tx.commit();
 		session.close();
+		UserRegistryWebApplication.main(null);
 	}
 
 	@AfterClass
@@ -49,13 +50,13 @@ public class UserRegJSONTest {
 
 	@Before
 	public void setUp() throws Exception {
-		Utente u1= new Utente("pas", "pas", "pas@gmail.com", "Pasquale", "Forgione");
-		Utente u2= new Utente("lor", "lor", "lor@gmail.com", "Lorenzo", "Goglia");
-		Utente u3= new Utente("ant", "ant", "ant@gmail.com", "Antonio", "Varone");
+		Utente utente1= new Utente("pas", "pas", "pas@gmail.com", "Pasquale", "Forgione");
+		Utente utente2= new Utente("lor", "lor", "lor@gmail.com", "Lorenzo", "Goglia");
+		Utente utente3= new Utente("ant", "ant", "ant@gmail.com", "Antonio", "Varone");
 		
-		userRegJson.addUser(gson.toJson(u1,Utente.class));
-		userRegJson.addUser(gson.toJson(u2,Utente.class));
-		userRegJson.addUser(gson.toJson(u3,Utente.class));
+		userRegJson.addUser(gson.toJson(utente1,Utente.class));
+		userRegJson.addUser(gson.toJson(utente2,Utente.class));
+		userRegJson.addUser(gson.toJson(utente3,Utente.class));
 	}
 
 	@After
