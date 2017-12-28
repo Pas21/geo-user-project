@@ -1,5 +1,8 @@
 language: java
 
+services:
+- mysql
+
 before_install: 
 - cd ServerGeoUserGradle
 - chmod +x gradlew
