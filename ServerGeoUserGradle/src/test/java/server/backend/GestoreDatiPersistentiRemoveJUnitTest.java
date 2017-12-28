@@ -60,15 +60,6 @@ public class GestoreDatiPersistentiRemoveJUnitTest {
 
 	@Before
 	public void setUp() throws Exception {
-		SessionFactory sessionFactory = g.getFactory();
-		//svuoto le tabelle del DB
-		Session session = sessionFactory.openSession();
-		Transaction tx = session.beginTransaction();
-		session.createNativeQuery("delete from posizioni").executeUpdate();
-		session.createNativeQuery("delete from utenti").executeUpdate();
-		tx.commit();
-		session.close();
-		
 		//Aggiunta Utenti
 		assertTrue("Errore nell'aggiunta utente1!", g.addUtente(u1) && g.getUtenti().containsKey(u1.getUsername()));	
 		assertTrue("Errore nell'aggiunta utente2!", g.addUtente(u2) && g.getUtenti().containsKey(u2.getUsername()));	

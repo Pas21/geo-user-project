@@ -48,14 +48,6 @@ public class GestoreDatiPersistentiAddJUnitTest {
 
 	@Before
 	public void setUp() throws Exception {
-		SessionFactory sessionFactory = g.getFactory();
-		//svuoto le tabelle del DB
-		Session session = sessionFactory.openSession();
-		Transaction tx = session.beginTransaction();
-		session.createNativeQuery("delete from posizioni").executeUpdate();
-		session.createNativeQuery("delete from utenti").executeUpdate();
-		tx.commit();
-		session.close();
 	}
 
 	@After
