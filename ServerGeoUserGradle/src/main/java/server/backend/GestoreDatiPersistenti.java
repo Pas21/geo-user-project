@@ -45,10 +45,11 @@ public class GestoreDatiPersistenti {
 	public TreeMap<String,Utente> getUtenti(){
 	      Session session = this.factory.openSession();
 	      Transaction tx = null;
-	      TreeMap<String,Utente> utenti = new TreeMap<String,Utente>();
+	      TreeMap<String,Utente> utenti;
 	      
 	      try{
 	         tx = session.beginTransaction();
+	         utenti = new TreeMap<String,Utente>();
 	         List<?> listaUtenti = session.createQuery("FROM Utente").list(); 		// Query su classe java e non su tabella
 	         for (Iterator<?> iterator = listaUtenti.iterator(); iterator.hasNext();){
 	            Utente utente = (Utente) iterator.next(); 
@@ -58,7 +59,8 @@ public class GestoreDatiPersistenti {
 	         tx.commit();
 	      }catch (PersistenceException e) {
 	         if (tx!=null) tx.rollback();
-	         e.printStackTrace(); 
+	         utenti = null;
+	         e.printStackTrace();
 	      }finally{
 	         session.close();
 	      }
