@@ -59,9 +59,8 @@ public class GestoreDatiPersistentiAddJUnitTest {
 		assertTrue("La lista di utenti ottenuta deve essere vuota!", utenti.isEmpty());	
 		
 		//DB aggiunta utente non esistente
-
-		//Utente u=new Utente("pas","pas","pas@gmail.com","Pasquale","Forgione");
-		//assertTrue("La lista di utenti deve contenere solo l'utente aggiunto!", g.addUtente(u) && g.getUtenti().containsKey(u.getUsername()));	
+		Utente u=new Utente("pas","pas","pas@gmail.com","Pasquale","Forgione");
+		assertTrue("La lista di utenti deve contenere solo l'utente aggiunto!", (g.addUtente(u) && g.getUtenti().containsKey(u.getUsername())));	
 
 
 		//DB aggiunta utente esistente
