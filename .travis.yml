@@ -3,7 +3,8 @@ language: java
 services:
 - mysql
 
-before_install: 
+before_install:
+- mysql --user=root --host=localhost -e 'CREATE DATABASE IF NOT EXISTS geouserdb;' 
 - cd ServerGeoUserGradle
 - chmod +x gradlew
 - ./gradlew clean
