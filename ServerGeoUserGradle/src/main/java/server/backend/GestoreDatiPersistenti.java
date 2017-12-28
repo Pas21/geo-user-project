@@ -98,7 +98,7 @@ public class GestoreDatiPersistenti {
 	    boolean addok = true;
 	    try{
 	       tx = session.beginTransaction();
-	       session.persist(utente); 
+	       session.save(utente); 
 	       tx.commit();
 	    }catch (PersistenceException e) {
 	       if (tx!=null) tx.rollback();
