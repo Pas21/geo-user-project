@@ -4,10 +4,10 @@ services:
 - mysql
 
 before_install:
-- mysql --user=root --host=localhost -e "CREATE DATABASE IF NOT EXISTS geouserdb;" 
+- mysql --user=root --host=localhost -e "CREATE DATABASE IF NOT EXISTS geouserdb;"
+- rm -rf $GRADLE_HOME/caches/build-cache-* 
 - cd ServerGeoUserGradle
 - chmod +x gradlew
-- ./gradlew cleanBuildCache
 
 jdk: oraclejdk8
 
