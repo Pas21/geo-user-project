@@ -46,7 +46,7 @@ public class PositionsByUserJSON extends ServerResource{
 			newPosizione.setUtente(userregAPI.getUtenti().get(username));
 				try {
 					userregAPI.addPosizione(newPosizione);
-					return gson.toJson("La posizione con id " + newPosizione.getIdPosizione().toString() + " è stata aggiunta!",String.class);
+					return gson.toJson("La posizione con id " + newPosizione.getIdPosizione().toString() + " e' stata aggiunta!",String.class);
 				} catch (InvalidUsernameException e) {
 					Status s = new Status(ErrorCodes.INVALID_USERNAME_CODE);
 					setStatus(s);
