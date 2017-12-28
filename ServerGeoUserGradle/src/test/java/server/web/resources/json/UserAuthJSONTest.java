@@ -49,6 +49,15 @@ public class UserAuthJSONTest {
 
 	@Before
 	public void setUp() throws Exception {
+		SessionFactory sessionFactory = g.getFactory();
+		//svuoto le tabelle del DB
+		Session session = sessionFactory.openSession();
+		Transaction tx = session.beginTransaction();
+		session.createNativeQuery("delete from posizioni").executeUpdate();
+		session.createNativeQuery("delete from utenti").executeUpdate();
+		tx.commit();
+		session.close();
+		
 		Utente u1= new Utente("pas", "pas", "pas@gmail.com", "Pasquale", "Forgione");
 		Utente u2= new Utente("lor", "lor", "lor@gmail.com", "Lorenzo", "Goglia");
 		Utente u3= new Utente("ant", "ant", "ant@gmail.com", "Antonio", "Varone");
