@@ -6,6 +6,7 @@ services:
 before_install: 
 - cd ServerGeoUserGradle
 - chmod +x gradlew
+- ./gradlew clean
 
 jdk: oraclejdk8
 

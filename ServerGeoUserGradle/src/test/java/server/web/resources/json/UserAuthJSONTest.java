@@ -70,7 +70,7 @@ public class UserAuthJSONTest {
 		String[] usernamesArray = gson.fromJson(usernamesGSON,String[].class);
 		ArrayList<String> usernames = new ArrayList<String>((Arrays.asList(usernamesArray)));
 		for(String username : usernames){
-			assertTrue("L'username "+username+" non è presente nella lista di username di tutti gli utenti registati!", usernames.contains(username));
+			assertTrue("L'username "+username+" non e' presente nella lista di username di tutti gli utenti registati!", usernames.contains(username));
 		}
 	}
 

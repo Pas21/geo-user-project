@@ -65,11 +65,11 @@ public class GestoreDatiPersistentiRemoveJUnit {
 		assertTrue("Errore nell'aggiunta utente2!", g.addUtente(u2) && g.getUtenti().containsKey(u2.getUsername()));	
 		assertTrue("Errore nell'aggiunta utente2!", g.addUtente(u3) && g.getUtenti().containsKey(u3.getUsername()));	
 
-		assertTrue("La posizione1 pur non essendo presente nel database, non è stata aggiunta ad un utente esistente!", g.addPosizione(p1) && g.getPosizioni().containsKey(idPos1));	
+		assertTrue("La posizione1 pur non essendo presente nel database, non e' stata aggiunta ad un utente esistente!", g.addPosizione(p1) && g.getPosizioni().containsKey(idPos1));	
 
-		assertTrue("La posizione2 pur non essendo presente nel database, non è stata aggiunta ad un utente esistente!", g.addPosizione(p2) && g.getPosizioni().containsKey(idPos2));	
+		assertTrue("La posizione2 pur non essendo presente nel database, non e' stata aggiunta ad un utente esistente!", g.addPosizione(p2) && g.getPosizioni().containsKey(idPos2));	
 
-		assertTrue("La posizione3 pur non essendo presente nel database, non è stata aggiunta ad un utente esistente!", g.addPosizione(p3) && g.getPosizioni().containsKey(idPos3));	
+		assertTrue("La posizione3 pur non essendo presente nel database, non e' stata aggiunta ad un utente esistente!", g.addPosizione(p3) && g.getPosizioni().containsKey(idPos3));	
 
 		
 
@@ -115,7 +115,7 @@ public class GestoreDatiPersistentiRemoveJUnit {
 		tx.commit();
 		session.close();
 		
-		assertTrue("Eliminazione non consentita di più posizioni dell'utente 'pas' avente più posizioni!", g.removePosizioniUtente(u1));
+		assertTrue("Eliminazione non consentita di piu' posizioni dell'utente 'pas' avente piu' posizioni!", g.removePosizioniUtente(u1));
 		//vedo se le posizioni dell'utente sono assenti nel DB
 		sessionFactory = g.getFactory();
 		session = sessionFactory.openSession();
