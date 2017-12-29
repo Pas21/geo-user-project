@@ -7,22 +7,24 @@ import org.junit.AfterClass;
 import org.junit.Before;
 import org.junit.BeforeClass;
 import org.junit.Test;
-import org.restlet.security.MapVerifier;
+//import org.restlet.security.MapVerifier;
 
 import com.google.gson.Gson;
 
 import commons.Utente;
 import server.backend.GestoreDatiPersistenti;
+import server.web.frontend.UserRegistryWebApplication;
 
 public class UserRegJSONTest {
 	static GestoreDatiPersistenti g = GestoreDatiPersistenti.getInstance();
 	static UserRegJSON userRegJson= new UserRegJSON();
 	static Gson gson=new Gson();
-	MapVerifier verifier = new MapVerifier();
+	//MapVerifier verifier = new MapVerifier();
 	
 	@BeforeClass
 	public static void setUpBeforeClass() throws Exception {
 		g.dropDatabase();
+		UserRegistryWebApplication.main(null);
 
 	}
 
@@ -38,11 +40,11 @@ public class UserRegJSONTest {
 		Utente utente3= new Utente("ant", "ant", "ant@gmail.com", "Antonio", "Varone");
 		
 		userRegJson.addUser(gson.toJson(utente1,Utente.class));
-		verifier.getLocalSecrets().put(utente1.getUsername(), utente1.getPassword().toCharArray());
+		UserRegistryWebApplication.verifier.getLocalSecrets().put(utente1.getUsername(), utente1.getPassword().toCharArray());
 		userRegJson.addUser(gson.toJson(utente2,Utente.class));
-		verifier.getLocalSecrets().put(utente2.getUsername(), utente2.getPassword().toCharArray());
+		UserRegistryWebApplication.verifier.getLocalSecrets().put(utente2.getUsername(), utente2.getPassword().toCharArray());
 		userRegJson.addUser(gson.toJson(utente3,Utente.class));
-		verifier.getLocalSecrets().put(utente3.getUsername(), utente3.getPassword().toCharArray());
+		UserRegistryWebApplication.verifier.getLocalSecrets().put(utente3.getUsername(), utente3.getPassword().toCharArray());
 	}
 
 	@After
@@ -85,10 +87,10 @@ public class UserRegJSONTest {
 		}catch (Exception e) {
 			assertTrue("L'utente "+u2.getUsername() +" non esiste e dovrebbe essere aggiunto al database!", false);
 		}
-		verifier.getLocalSecrets().put(u2.getUsername(), u2.getPassword().toCharArray());
+		UserRegistryWebApplication.verifier.getLocalSecrets().put(u2.getUsername(), u2.getPassword().toCharArray());
 
 
-		System.out.println(verifier.getLocalSecrets().toString());
+		System.out.println(UserRegistryWebApplication.verifier.getLocalSecrets().toString());
 		//check utente esistente password corretta
 		assertTrue("L'utente "+u1.getUsername() +" esiste, le credenziali sono corrette e dovrebbe autenticarsi!", gson.fromJson(userRegJson.checkUser(gson.toJson(u1.getUsername()+";"+u1.getPassword(),String.class)), Boolean.class));
 
