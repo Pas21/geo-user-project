@@ -61,6 +61,7 @@ dependencies {
 
 //findbugs tasks settings
 findbugs {
+    sourceSets = [sourceSets.main]
     ignoreFailures = true
     reportsDir = file("$project.buildDir/findbugsReports")
     effort = "max"

@@ -30,7 +30,7 @@ public class GestoreDatiPersistenti {
 		}
 	}
 	
-	public static GestoreDatiPersistenti getInstance() {
+	public static synchronized GestoreDatiPersistenti getInstance() {
 		if(istanza == null) 
 			istanza = new GestoreDatiPersistenti();
 		return istanza;
