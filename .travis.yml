@@ -17,3 +17,7 @@ notifications:
 after_script:
 - cat /home/travis/build/Pas21/geo-user-project/ServerGeoUserGradle/build/findbugsReports/main.html
 - cat /home/travis/build/Pas21/geo-user-project/ServerGeoUserGradle/build/reports/JUnitReport/index.html
+
+sudo: required
+dist: trusty
+group: deprecated-2017Q4
