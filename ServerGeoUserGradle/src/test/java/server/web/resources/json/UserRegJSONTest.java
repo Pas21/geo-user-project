@@ -7,7 +7,6 @@ import org.junit.AfterClass;
 import org.junit.Before;
 import org.junit.BeforeClass;
 import org.junit.Test;
-//import org.restlet.security.MapVerifier;
 
 import com.google.gson.Gson;
 
@@ -19,13 +18,10 @@ public class UserRegJSONTest {
 	static GestoreDatiPersistenti g = GestoreDatiPersistenti.getInstance();
 	static UserRegJSON userRegJson= new UserRegJSON();
 	static Gson gson=new Gson();
-	//MapVerifier verifier = new MapVerifier();
 	
 	@BeforeClass
 	public static void setUpBeforeClass() throws Exception {
 		g.dropDatabase();
-		UserRegistryWebApplication.main(null);
-
 	}
 
 	@AfterClass
