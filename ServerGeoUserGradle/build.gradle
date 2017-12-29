@@ -58,7 +58,7 @@ dependencies {
     testCompile group: 'junit', name: 'junit', version: '4.12'
 }
 
-/*
+
 //findbugs tasks settings
 findbugs {
     ignoreFailures = true
@@ -127,4 +127,3 @@ test {
 //   tasks.test.didWork
 //}
 
-*/
