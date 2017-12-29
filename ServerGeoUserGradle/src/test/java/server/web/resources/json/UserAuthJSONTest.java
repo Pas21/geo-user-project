@@ -5,9 +5,6 @@ import static org.junit.Assert.*;
 import java.util.ArrayList;
 import java.util.Arrays;
 
-import org.hibernate.Session;
-import org.hibernate.SessionFactory;
-import org.hibernate.Transaction;
 import org.junit.After;
 import org.junit.AfterClass;
 import org.junit.Before;
@@ -25,26 +22,12 @@ public class UserAuthJSONTest {
 	
 	@BeforeClass
 	public static void setUpBeforeClass() throws Exception {
-		SessionFactory sessionFactory = g.getFactory();
-		//svuoto le tabelle del DB
-		Session session = sessionFactory.openSession();
-		Transaction tx = session.beginTransaction();
-		session.createNativeQuery("delete from posizioni").executeUpdate();
-		session.createNativeQuery("delete from utenti").executeUpdate();
-		tx.commit();
-		session.close();
+		g.dropDatabase();
 	}
 
 	@AfterClass
 	public static void tearDownAfterClass() throws Exception {
-		SessionFactory sessionFactory = g.getFactory();
-		//svuoto le tabelle del DB
-		Session session = sessionFactory.openSession();
-		Transaction tx = session.beginTransaction();
-		session.createNativeQuery("delete from posizioni").executeUpdate();
-		session.createNativeQuery("delete from utenti").executeUpdate();
-		tx.commit();
-		session.close();
+		g.dropDatabase();
 	}
 
 	@Before
@@ -60,14 +43,7 @@ public class UserAuthJSONTest {
 
 	@After
 	public void tearDown() throws Exception {
-		SessionFactory sessionFactory = g.getFactory();
-		//Svuotamento delle tabelle del DB
-		Session session = sessionFactory.openSession();
-		Transaction tx = session.beginTransaction();
-		session.createNativeQuery("delete from posizioni").executeUpdate();
-		session.createNativeQuery("delete from utenti").executeUpdate();
-		tx.commit();
-		session.close();
+		g.dropDatabase();
 	}
 
 	@Test

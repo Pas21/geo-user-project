@@ -6,9 +6,6 @@ import java.sql.Timestamp;
 import java.time.LocalDateTime;
 import java.util.TreeMap;
 
-import org.hibernate.Session;
-import org.hibernate.SessionFactory;
-import org.hibernate.Transaction;
 import org.junit.After;
 import org.junit.AfterClass;
 import org.junit.Before;
@@ -24,6 +21,7 @@ public class GestoreDatiPersistentiAddJUnitTest {
 
 	@BeforeClass
 	public static void setUpBeforeClass() throws Exception {
+		g.dropDatabase();
 		//SessionFactory sessionFactory = g.getFactory();
 		//Svuotamento delle tabelle del DB
 		//Session session = sessionFactory.openSession();
@@ -36,6 +34,7 @@ public class GestoreDatiPersistentiAddJUnitTest {
 
 	@AfterClass
 	public static void tearDownAfterClass() throws Exception {
+		g.dropDatabase();
 		//SessionFactory sessionFactory = g.getFactory();
 		//Svuotamento delle tabelle del DB
 		//Session session = sessionFactory.openSession();
@@ -52,6 +51,7 @@ public class GestoreDatiPersistentiAddJUnitTest {
 
 	@After
 	public void tearDown() throws Exception {
+		g.dropDatabase();
 		//SessionFactory sessionFactory = g.getFactory();
 		//Svuotamento delle tabelle del DB
 		//Session session = sessionFactory.openSession();
