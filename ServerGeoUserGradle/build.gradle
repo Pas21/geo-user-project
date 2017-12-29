@@ -10,10 +10,10 @@
 apply plugin: 'java'
 
 //Apply findbugs inspection plugin
-//apply plugin: 'findbugs'
+apply plugin: 'findbugs'
 
 //Apply Jacoco plugin
-//apply plugin: 'jacoco'
+apply plugin: 'jacoco'
 
 // In this section you declare where to find the dependencies of your project
 repositories {
