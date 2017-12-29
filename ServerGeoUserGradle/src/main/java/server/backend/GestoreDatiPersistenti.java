@@ -43,7 +43,7 @@ public class GestoreDatiPersistenti {
 	public TreeMap<String,Utente> getUtenti(){
 		Session session = this.factory.openSession();
 		Transaction tx = null;
-		TreeMap<String,Utente> utenti;
+		TreeMap<String,Utente> utenti = null;
 
 		try{
 			tx = session.beginTransaction();
@@ -52,13 +52,12 @@ public class GestoreDatiPersistenti {
 			for (Iterator<?> iterator = listaUtenti.iterator(); iterator.hasNext();){
 				Utente utente = (Utente) iterator.next(); 
 				utenti.put(utente.getUsername(), utente);
-				//System.out.println(utente.toString());
+				System.out.println(utente.toString());
 			}
 			session.flush();
 			tx.commit();
 		}catch (Exception e) {
 			if (tx!=null) tx.rollback();
-			utenti = null;
 			e.printStackTrace();
 		}finally{
 			session.close();

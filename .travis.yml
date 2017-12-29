@@ -6,7 +6,6 @@ services:
 before_install:
 - cd ServerGeoUserGradle
 - chmod +x gradlew
-- sudo apt-get update -y && sudo apt-get upgrade -y
 - sudo service mysql restart
 
 jdk: 
