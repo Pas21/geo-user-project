@@ -54,6 +54,7 @@ public class GestoreDatiPersistenti {
 				utenti.put(utente.getUsername(), utente);
 				//System.out.println(utente.toString());
 			}
+			session.flush();
 			tx.commit();
 		}catch (Exception e) {
 			if (tx!=null) tx.rollback();
@@ -80,6 +81,7 @@ public class GestoreDatiPersistenti {
 				posizioni.put(idPosizione,posizione);
 				//System.out.println(posizione.toString());
 			}
+			session.flush();
 			tx.commit();
 		}catch (Exception e) {
 			if (tx!=null) tx.rollback();
@@ -99,6 +101,7 @@ public class GestoreDatiPersistenti {
 		try{
 			tx = session.beginTransaction();
 			session.save(utente); 
+			session.flush();
 			tx.commit();
 		}catch (Exception e) {
 			if (tx!=null) tx.rollback();
@@ -119,6 +122,7 @@ public class GestoreDatiPersistenti {
 		try{
 			tx = session.beginTransaction();
 			session.delete(utente); 
+			session.flush();
 			tx.commit();
 		}catch (Exception e) {
 			if (tx!=null) tx.rollback();
@@ -139,6 +143,7 @@ public class GestoreDatiPersistenti {
 		try{
 			tx = session.beginTransaction();
 			session.save(posizione); 
+			session.flush();
 			tx.commit();
 		}catch (Exception e) {
 			if (tx!=null) tx.rollback();
@@ -159,6 +164,7 @@ public class GestoreDatiPersistenti {
 		try{
 			tx = session.beginTransaction();
 			session.delete(posizione); 
+			session.flush();
 			tx.commit();
 		}catch (Exception e) {
 			if (tx!=null) tx.rollback();
@@ -186,7 +192,8 @@ public class GestoreDatiPersistenti {
 				if(posizione.getUtente().getUsername().equals(utente.getUsername())) {
 					tx = session.beginTransaction();
 					session.delete(posizione); 
-					tx.commit();			
+					session.flush();
+					tx.commit();
 				}
 			}
 		}catch (Exception e) {
