@@ -6,7 +6,6 @@ import java.util.Map.Entry;
 
 import java.util.TreeMap;
 
-import javax.persistence.EntityManager;
 
 import org.hibernate.Session;
 import org.hibernate.SessionFactory;
@@ -46,12 +45,11 @@ public class GestoreDatiPersistenti {
 		Session session = this.factory.openSession();
 		Transaction tx = null;
 		TreeMap<String,Utente> utenti = new TreeMap<String,Utente>();
-		EntityManager entityManager;
 
 		try{
 			tx = session.beginTransaction(); 
 			// Query su classe java e non su tabella
-			List<?> listaUtenti = session.createNativeQuery("SELECT * FROM Utente").list();
+			List<?> listaUtenti = session.createQuery("FROM Utente").list();
 			for (Iterator<?> iterator = listaUtenti.iterator(); iterator.hasNext();){
 				Utente utente = (Utente) iterator.next(); 
 				utenti.put(utente.getUsername(), utente);
