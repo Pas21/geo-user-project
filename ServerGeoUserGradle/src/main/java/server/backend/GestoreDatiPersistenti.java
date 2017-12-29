@@ -1,165 +1,224 @@
 package server.backend;
 
-import java.sql.Connection;
-import java.sql.DriverManager;
-import java.sql.ResultSet;
-import java.sql.SQLException;
-import java.sql.Statement;
-import java.sql.Timestamp;
+import java.util.Iterator;
+import java.util.List;
+import java.util.Map.Entry;
+
 import java.util.TreeMap;
+
+
+import org.hibernate.Session;
+import org.hibernate.SessionFactory;
+import org.hibernate.Transaction;
+import org.hibernate.cfg.Configuration;
 
 import commons.IdPosizione;
 import commons.Posizione;
 import commons.Utente;
 
 public class GestoreDatiPersistenti {
-	private GestoreDatiPersistenti() {
+	//Pattern Singleton
+	private GestoreDatiPersistenti(){
 		try {
-			Class.forName("com.mysql.jdbc.Driver");
-		} catch (ClassNotFoundException e) {
-			System.err.println("Errore caricamento driver MySQL");
-		}
-		
-		this.connection = null;
-		
-		try {
-			this.connection = DriverManager.getConnection(url);
-			this.stm = this.connection.createStatement();
-		} catch (SQLException e) {
-			System.err.println("Errore connessione database");
+			this.factory = new Configuration().configure().buildSessionFactory();
+		} catch (Throwable ex) { 
+			System.err.println("Failed to create sessionFactory object." + ex);
+			throw new ExceptionInInitializerError(ex); 
 		}
 	}
-	
-	public static GestoreDatiPersistenti getInstance() {
-		if(istanza == null) 
-			istanza = new GestoreDatiPersistenti();
-		return istanza;
+
+	//Costruttore pubblico
+	public static synchronized GestoreDatiPersistenti getInstance(){
+		if(instance==null)
+			instance=new GestoreDatiPersistenti();
+		return instance;
 	}
 	
-	//Caricamento utenti database
-	public TreeMap<String, Utente> getUtenti(){
-		TreeMap<String, Utente> utenti = new TreeMap<String, Utente>();
-		ResultSet rs = null;
-		Utente utente = null;
-		System.out.println("Caricamento utenti:");
-		try {
-			rs = stm.executeQuery("select * from utenti");
-			while (rs.next()) {
-				utente = new Utente(rs.getString("username"), rs.getString("password"), rs.getString("email"), rs.getString("nome"), rs.getString("cognome"));
+
+	//Per JUnit
+	public synchronized SessionFactory getFactory(){
+		return factory;
+	}
+
+	//Metodo per ottenere dal database tutti gli utenti
+	public TreeMap<String,Utente> getUtenti(){
+		Session session = this.factory.openSession();
+		Transaction tx = null;
+		TreeMap<String,Utente> utenti = new TreeMap<String,Utente>();
+
+		try{
+			tx = session.beginTransaction(); 
+			// Query su classe java e non su tabella
+			List<?> listaUtenti = session.createQuery("FROM Utente").list();
+			for (Iterator<?> iterator = listaUtenti.iterator(); iterator.hasNext();){
+				Utente utente = (Utente) iterator.next(); 
 				utenti.put(utente.getUsername(), utente);
 				System.out.println(utente.toString());
 			}
-			return utenti;
-		} catch (SQLException e) {
-			System.err.println("Errore caricamento utenti");
-			return null;
+			session.flush();
+			tx.commit();
+		}catch (Exception e) {
+			if (tx!=null) tx.rollback();
+			utenti = null;
+			e.printStackTrace();
+		}finally{
+			session.close();
 		}
+		return utenti;
 	}
-	
-	//Caricamento posizioni database
-	public TreeMap<IdPosizione, Posizione> getPosizioni() {
-		TreeMap<IdPosizione, Posizione> posizioni = new TreeMap<IdPosizione, Posizione>();
-		TreeMap<String, Utente> utenti;
-		ResultSet rs = null;
-		IdPosizione idPos = null;
-		Posizione posizione = null;
-		System.out.println("Caricamento posizioni:");
-		
-		try {
-			utenti=getUtenti();
-			rs = stm.executeQuery("select * from posizioni");
-			while (rs.next()) {
-				idPos = new IdPosizione(Timestamp.valueOf(rs.getString("timestamp")), Double.parseDouble(rs.getString("latitudine")), Double.parseDouble(rs.getString("longitudine")));
-				posizione = new Posizione(idPos, utenti.get(rs.getString("utente")), Float.parseFloat(rs.getString("accuratezza")));
-				posizioni.put(idPos, posizione);
-				System.out.println(posizione.toString());
-			}
-			return posizioni;
-		} catch (SQLException e) {
-			System.err.println("Errore caricamento posizioni");
-			return null;
-		}
-	}
-	
-	
-	
-	//Aggiunta utente al database
-	public boolean addUtente(Utente utente) {
-		System.out.println("Inserimento utente: "+utente.getUsername());
-		try {
-			//System.out.println("insert into utenti (username, password, email, nome, cognome) values('" + utente.getUsername() + "','" + utente.getPassword() + "','" + utente.getEmail() + "','" + utente.getNome() + "','" + utente.getCognome() + "')");
-			stm.executeUpdate("insert into utenti (username, password, email, nome, cognome) values('" + utente.getUsername() + "','" + utente.getPassword() + "','" + utente.getEmail() + "','" + utente.getNome() + "','" + utente.getCognome() + "')");
-			return true;
-		} catch (SQLException e) {
-			System.err.println("Errore inserimento utente: "+utente.getUsername());
-			return false;
-		}
-	}
-	
-	//Rimozione utente dal database
-	public boolean removeUtente(Utente utente) {
-		System.out.println("Eliminazione utente: "+ utente.getUsername());
-		try {
-			stm.executeUpdate("delete from utenti where username='"+utente.getUsername()+"'");
-			return true;
-		} catch (SQLException e) {
-			System.err.println("Errore eliminazione utente: "+ utente.getUsername());
-			return false;
-		}
-	}
-	
-	
-	//Aggiunta posizione al database
-	public boolean addPosizione(Posizione pos) {
-		System.out.println("Inserimento posizione: " + pos.toString());
-		try {
-			stm.executeUpdate("insert into posizioni (utente, latitudine, longitudine, timestamp, accuratezza) values('" + pos.getUtente().getUsername() + "','" + pos.getIdPosizione().getLatitudine() + "','" + pos.getIdPosizione().getLongitudine() + "','" + pos.getIdPosizione().getTimestamp() + "','" + pos.getAccuratezza() + "')");
-			return true;
-		} catch (SQLException e) {
-			System.err.println("Errore inserimento posizione: " + pos.toString());
-			return false;
-		}
-	}
-	
-	//Rimozione posizione dal database
-	public boolean removePosizione(Posizione pos) {
-		System.out.println("Eliminazione posizione: "+ pos.getIdPosizione().toString());
-		try {
-			stm.executeUpdate("delete from posizioni where utente='"+pos.getUtente().getUsername()+"' AND timestamp='"+pos.getIdPosizione().getTimestamp()+"'");
-			return true;
-		} catch (SQLException e) {
-			System.err.println("Errore eliminazione posizione: "+ pos.getIdPosizione().toString());
-			return false;
-		}
-	}		
-	
-	//Rimozione tutte le posizioni dal database
-	public boolean removePosizioniUtente(Utente utente) {
-		System.out.println("Eliminazione posizioni dell'utente: "+ utente.getUsername());
-		try {
-			stm.executeUpdate("delete from posizioni where utente='"+utente.getUsername()+"'");
-			return true;
-		} catch (SQLException e) {
-			System.err.println("Errore eliminazione posizioni dell'utente: "+ utente.getUsername());
-			return false;
-		}
-	}	
-	
-	//Svuotamento del database
-	public boolean dropDatabase() {
-		System.out.println("Svuotamento database... ");
-		try {
-			stm.executeUpdate("delete from posizioni");
-			stm.executeUpdate("delete from utenti");
-			return true;
-		} catch (SQLException e) {
-			System.err.println("Errore svuotamento database");
-			return false;
-		}
-	}	
 
-	private final static String url = "jdbc:mysql://localhost:3306/geouserdb?user=root&password=";
-	private Connection connection;
-	private Statement stm;
-	private static GestoreDatiPersistenti istanza;
+	//Metodo per ottenere dal database tutte le posizioni degli utenti
+	public TreeMap<IdPosizione,Posizione> getPosizioni(){
+		Session session = this.factory.openSession();
+		Transaction tx = null;
+		TreeMap<IdPosizione,Posizione> posizioni = new TreeMap<IdPosizione,Posizione>();
+
+		try{
+			tx = session.beginTransaction();
+			List<?> listaPosizioni = session.createQuery("FROM Posizione").list();  // Query su classe java e non su tabella
+			for (Iterator<?> iterator = listaPosizioni.iterator(); iterator.hasNext();){
+				Posizione posizione = (Posizione) iterator.next(); 
+				IdPosizione idPosizione = new IdPosizione(posizione.getIdPosizione().getTimestamp(), posizione.getIdPosizione().getLatitudine(), posizione.getIdPosizione().getLongitudine());
+				posizioni.put(idPosizione,posizione);
+				//System.out.println(posizione.toString());
+			}
+			session.flush();
+			tx.commit();
+		}catch (Exception e) {
+			if (tx!=null) tx.rollback();
+			e.printStackTrace(); 
+		}finally{
+			session.close();
+		}
+		return posizioni;
+	}
+
+
+	// Metodo per aggiungere un utente al database
+	public boolean addUtente(Utente utente){
+		Session session = this.factory.openSession();
+		Transaction tx = null;
+		boolean addok = true;
+		try{
+			tx = session.beginTransaction();
+			session.save(utente); 
+			session.flush();
+			tx.commit();
+		}catch (Exception e) {
+			if (tx!=null) tx.rollback();
+			e.printStackTrace(); 
+			addok=false;
+		}finally{
+			session.close(); 
+		}
+		return addok;
+	}
+
+	// Metodo per cancellare un utente dal database 
+	public boolean removeUtente(Utente utente){
+		Session session = this.factory.openSession();
+		Transaction tx = null;
+		boolean removeok=true;
+
+		try{
+			tx = session.beginTransaction();
+			session.delete(utente); 
+			session.flush();
+			tx.commit();
+		}catch (Exception e) {
+			if (tx!=null) tx.rollback();
+			e.printStackTrace(); 
+			removeok=false;
+		}finally{
+			session.close();	       
+		}
+		return removeok;
+	}
+
+	// Metodo per aggiungere una posizione al database 
+	public boolean addPosizione(Posizione posizione){
+		Session session = this.factory.openSession();
+		Transaction tx = null;
+		boolean addok = true;
+
+		try{
+			tx = session.beginTransaction();
+			session.save(posizione); 
+			session.flush();
+			tx.commit();
+		}catch (Exception e) {
+			if (tx!=null) tx.rollback();
+			e.printStackTrace(); 
+			addok=false;
+		}finally{
+			session.close(); 
+		}
+		return addok;
+	}
+
+	// Metodo per cancellare una posizione dal database 
+	public boolean removePosizione(Posizione posizione){
+		Session session = this.factory.openSession();
+		Transaction tx = null;
+		boolean removeok=true;
+
+		try{
+			tx = session.beginTransaction();
+			session.delete(posizione); 
+			session.flush();
+			tx.commit();
+		}catch (Exception e) {
+			if (tx!=null) tx.rollback();
+			e.printStackTrace(); 
+			removeok=false;
+		}finally{
+			session.close(); 
+		}
+		return removeok;
+	}
+
+	//Metodo per rimuovere tutte le posizioni di un utente
+	public boolean removePosizioniUtente(Utente utente) {
+		TreeMap<IdPosizione, Posizione> posizioni = this.getPosizioni();		
+		Session session = this.factory.openSession();
+		Transaction tx = null;
+		boolean removeok =  true;
+		Posizione posizione = null;
+
+		try{
+			//Si puo' fare anche con createNativeQuery!
+			for(Entry<IdPosizione, Posizione> id : posizioni.entrySet()) {
+				posizione = id.getValue();
+				//Nell'if si deve usare il metodo equals della classe utente
+				if(posizione.getUtente().getUsername().equals(utente.getUsername())) {
+					tx = session.beginTransaction();
+					session.delete(posizione); 
+					session.flush();
+					tx.commit();
+				}
+			}
+		}catch (Exception e) {
+			if (tx!=null) tx.rollback();
+			e.printStackTrace(); 
+			removeok=false;
+		}finally{
+			session.close(); 
+		}
+		return removeok;
+	}
+	
+	//Metodo per svuotare il database
+	public void dropDatabase(){
+		Session session = this.factory.openSession();
+		Transaction tx = session.beginTransaction();
+		session.createNativeQuery("delete from posizioni").executeUpdate();
+		session.createNativeQuery("delete from utenti").executeUpdate();
+		tx.commit();
+		session.close();
+	}
+
+
+
+	private SessionFactory factory; 	
+	private static GestoreDatiPersistenti instance;
 }

@@ -22,27 +22,11 @@ public class GestoreDatiPersistentiAddJUnitTest {
 	@BeforeClass
 	public static void setUpBeforeClass() throws Exception {
 		g.dropDatabase();
-		//SessionFactory sessionFactory = g.getFactory();
-		//Svuotamento delle tabelle del DB
-		//Session session = sessionFactory.openSession();
-		//Transaction tx = session.beginTransaction();
-		//session.createNativeQuery("delete from posizioni").executeUpdate();
-		//session.createNativeQuery("delete from utenti").executeUpdate();
-		//tx.commit();
-		//session.close();
 	}
 
 	@AfterClass
 	public static void tearDownAfterClass() throws Exception {
 		g.dropDatabase();
-		//SessionFactory sessionFactory = g.getFactory();
-		//Svuotamento delle tabelle del DB
-		//Session session = sessionFactory.openSession();
-		//Transaction tx = session.beginTransaction();
-		//session.createNativeQuery("delete from posizioni").executeUpdate();
-		//session.createNativeQuery("delete from utenti").executeUpdate();
-		//tx.commit();
-		//session.close();
 	}
 
 	@Before
@@ -52,14 +36,6 @@ public class GestoreDatiPersistentiAddJUnitTest {
 	@After
 	public void tearDown() throws Exception {
 		g.dropDatabase();
-		//SessionFactory sessionFactory = g.getFactory();
-		//Svuotamento delle tabelle del DB
-		//Session session = sessionFactory.openSession();
-		//Transaction tx = session.beginTransaction();
-		//session.createNativeQuery("delete from posizioni").executeUpdate();
-		//session.createNativeQuery("delete from utenti").executeUpdate();
-		//tx.commit();
-		//session.close();
 	}
 
 	@Test
@@ -74,10 +50,6 @@ public class GestoreDatiPersistentiAddJUnitTest {
 
 		//DB aggiunta utente esistente
 		assertTrue("L'utente gia' esistente e' stato aggiunto erroneamente!",	!g.addUtente(u));
-	
-		
-
-		
 		
 		
 		//DB senza Posizioni
@@ -109,7 +81,6 @@ public class GestoreDatiPersistentiAddJUnitTest {
 		
 		//DB aggiunta posizione gia' esistente ad un utente
 		assertTrue("Aggiunta consentita di una posizione gia' esistente ad un utente!", !g.addPosizione(p) && g.getPosizioni().containsKey(idPos));
-
 	}
-
+	
 }

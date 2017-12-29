@@ -4,6 +4,10 @@ import static org.junit.Assert.*;
 
 import java.sql.Timestamp;
 
+import org.hibernate.Session;
+import org.hibernate.SessionFactory;
+import org.hibernate.Transaction;
+import org.hibernate.query.NativeQuery;
 import org.junit.After;
 import org.junit.AfterClass;
 import org.junit.Before;
@@ -78,10 +82,13 @@ public class GestoreDatiPersistentiRemoveJUnitTest {
 		//Aggiunta della posizione eliminata allo stesso utente
 		assertTrue("Aggiunta non consentita di una nuova posizione ad un utente!", g.addPosizione(p1) && g.getPosizioni().containsKey(idPos1));
 
-		
+
 		//Eliminazione posizioni utente con una posizione
-/*		assertTrue("Eliminazione non consentita di piu' posizioni dell'utente 'lor' avente una posizione!", g.removePosizioniUtente(u2));
+		assertTrue("Eliminazione non consentita di piu' posizioni dell'utente 'lor' avente una posizione!", g.removePosizioniUtente(u2));
 		//verificare che le posizioni dell'utente sono assenti nel DB
+		SessionFactory sessionFactory = g.getFactory();
+		Session session = sessionFactory.openSession();
+		Transaction tx = session.beginTransaction();
 		NativeQuery<?> results=session.createNativeQuery("select * from posizioni where utente='lor'");
 		assertTrue("La lista delle posizioni dell'utente 'lor' deve essere vuota!", results.getFirstResult()==0);
 		tx.commit();
@@ -105,8 +112,6 @@ public class GestoreDatiPersistentiRemoveJUnitTest {
 		assertTrue("La lista delle posizioni dell'utente 'lor' deve essere vuota!", results.getFirstResult()==0);
 		tx.commit();
 		session.close();
-*/
-
 	}
-
+	
 }
