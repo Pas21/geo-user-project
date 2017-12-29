@@ -1,5 +1,8 @@
 apply plugin: 'com.android.application'
 
+//Apply findbugs inspection plugin
+apply plugin: 'findbugs'
+
 android {
     compileSdkVersion 26
     defaultConfig {
@@ -25,13 +28,37 @@ dependencies {
     testImplementation 'junit:junit:4.12'
     androidTestImplementation 'com.android.support.test:runner:1.0.1'
     androidTestImplementation 'com.android.support.test.espresso:espresso-core:3.0.1'
-    compile 'com.google.code.gson:gson:2.8+'
-    compile 'org.restlet.jee:org.restlet:2.3+'
-    compile 'com.android.support:design:26.1.0'
-    compile 'com.google.android.gms:play-services-maps:10.2.0'
+    implementation 'com.google.code.gson:gson:2.8+'
+    implementation 'org.restlet.jee:org.restlet:2.3+'
+    implementation 'com.android.support:design:26.1.0'
+    implementation 'com.google.android.gms:play-services-maps:10.2.0'
+    //Import findbugs library
+    implementation 'com.google.code.findbugs:annotations:3+'
 
 
 }
 
+apply plugin: 'findbugs'
 
+task customFindbugs(type: FindBugs) {
+    effort = "max"
+    reportLevel = "low"
+    ignoreFailures = true
+    effort = "default"
+    reportLevel = "medium"
+    classes = files("$project.buildDir/intermediates/classes/debug/com/vfggmail/progettoswe17/clientgeouser")
+    includeFilter = file("$rootProject.rootDir/config/findbugs/includeFilter.xml")
 
+    source = fileTree('src/main/java/')
+    classpath = files()
+    reports {
+        xml.enabled = false
+        xml.withMessages = true
+        html.enabled = !xml.isEnabled()
+        xml.setDestination("$project.buildDir/outputs/findbugs/findbugs-output.xml")
+        html.setDestination("$project.buildDir/outputs/findbugs/findbugs-output.html")
+        //Directory report --> ...\ClientGeoUser\app\build\outputs\findbugs\findbugs-output.html
+    }
+}
+// UPDATE: renamed the task to customFindbugs and made it automatically be called when build is called
+check.dependsOn customFindbugs
