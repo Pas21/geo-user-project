@@ -16,9 +16,7 @@ before_install:
 - sudo service mysql restart
 - cd ServerGeoUserGradle
 - chmod +x gradlew
-- mysql --user=root --host=localhost --execute="DROP DATABASE IF EXISTS geouserdb;"
-- mysql --user=root --host=localhost --execute="CREATE DATABASE IF NOT EXISTS geouserdb;"
-- mysql --user=root --host=localhost geouserdb < geouserdb.sql 
+ 
 
 
 jdk: 
