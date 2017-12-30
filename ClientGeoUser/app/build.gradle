@@ -1,9 +1,9 @@
 apply plugin: 'com.android.application'
 
-//Apply findbugs inspection plugin
-apply plugin: 'findbugs'
-
 android {
+    lintOptions {
+        abortOnError false
+    }
     compileSdkVersion 26
     defaultConfig {
         applicationId "com.vfggmail.progettoswe17.clientgeouser"
@@ -33,11 +33,12 @@ dependencies {
     implementation 'com.android.support:design:26.1.0'
     implementation 'com.google.android.gms:play-services-maps:10.2.0'
     //Import findbugs library
-    implementation 'com.google.code.findbugs:annotations:3+'
+    //implementation 'com.google.code.findbugs:annotations:3.0.1'
 
 
 }
 
+//Apply findbugs inspection plugin
 apply plugin: 'findbugs'
 
 task customFindbugs(type: FindBugs) {
@@ -61,4 +62,5 @@ task customFindbugs(type: FindBugs) {
     }
 }
 // UPDATE: renamed the task to customFindbugs and made it automatically be called when build is called
-check.dependsOn customFindbugs
+//check.dependsOn customFindbugs
+build.finalizedBy(customFindbugs)
