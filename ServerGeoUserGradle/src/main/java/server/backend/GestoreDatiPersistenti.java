@@ -36,6 +36,10 @@ public class GestoreDatiPersistenti {
 		return istanza;
 	}
 	
+	public Connection getConnection() {
+		return connection;
+	}
+
 	//Caricamento utenti database
 	public TreeMap<String, Utente> getUtenti(){
 		TreeMap<String, Utente> utenti = new TreeMap<String, Utente>();
