@@ -117,14 +117,14 @@ task loadDB {
 loadDB.dependsOn createDB
 tasks.test.dependsOn loadDB
 
-task printJacocoReport {
-	project.exec {
-   	workingDir "$rootProject.projectDir/"
-    	commandLine 'gradle test jacocoTestReport'
-	}         
-}
+//task printJacocoReport {
+//	project.exec {
+//   	workingDir "$rootProject.projectDir/"
+//    	commandLine 'gradlew test jacocoTestReport'
+//	}         
+//}
 
-printJacocoReport.onlyIf{
-   tasks.test.didWork
-}
+//printJacocoReport.onlyIf{
+//   tasks.test.didWork
+//}
 
