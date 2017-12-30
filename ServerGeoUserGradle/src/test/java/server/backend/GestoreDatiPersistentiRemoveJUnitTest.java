@@ -65,7 +65,6 @@ public class GestoreDatiPersistentiRemoveJUnitTest {
 
 	@Test
 	public void test() {
-		
 		//Eliminazione utente avente posizioni
 		assertTrue("Eliminazione utente avente posizioni memorizzate!", !g.removeUtente(u1));
 		
