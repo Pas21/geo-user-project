@@ -101,7 +101,7 @@ public class GestoreDatiPersistentiRemoveJUnitTest {
 			}
 		}
 
-		//Verificare che l'utente u1 abbia più di una posizione memorizzata nel DB
+		//Verificare che l'utente u1 abbia piu' di una posizione memorizzata nel DB
 		try{
 			stm = g.getConnection().createStatement();
 			results=stm.executeQuery("select * from posizioni where utente='pas'");
