@@ -17,7 +17,6 @@ import commons.Utente;
 import server.backend.wrapper.UserRegistryAPI;
 import server.web.frontend.UserRegistryWebApplication;
 
-// TODO: Auto-generated Javadoc
 /**
  * The Class UserRegJSON defines Web resources to sign a new user (HTTP method POST) and to authenticate a user (HTTP method PUT).
  */

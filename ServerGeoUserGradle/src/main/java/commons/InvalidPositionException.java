@@ -1,6 +1,5 @@
 package commons;
 
-// TODO: Auto-generated Javadoc
 /**
  * The Class InvalidPositionException reports the exception on duplicate emails.
  */

@@ -13,7 +13,6 @@ import commons.Posizione;
 import commons.Utente;
 import server.backend.UserRegistry;
 
-// TODO: Auto-generated Javadoc
 /**
  * The Class UserRegistryAPI is a wrapper class of the User Registry class and defines an API to interact with the server backend.
  */

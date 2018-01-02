@@ -13,9 +13,8 @@ import commons.IdPosizione;
 import commons.Posizione;
 import commons.Utente;
 
-// TODO: Auto-generated Javadoc
 /**
- * The Class GestoreDatiPersistenti is a pure fabrication class that has the purpose of interfacing directly with the database.
+ * The Class GestoreDatiPersistenti is a pure fabrication class that has the purpose of interfacing directly with the database through the Mysql driver.
  */
 public class GestoreDatiPersistenti {
 	
@@ -44,9 +43,9 @@ public class GestoreDatiPersistenti {
 	 * @return istance the singleton instance of GestoreDatiPersistenti
 	 */
 	public static synchronized GestoreDatiPersistenti getInstance() {
-		if(istance == null) 
-			istance = new GestoreDatiPersistenti();
-		return istance;
+		if(instance == null) 
+			instance = new GestoreDatiPersistenti();
+		return instance;
 	}
 	
 	/**
@@ -323,5 +322,5 @@ public class GestoreDatiPersistenti {
 	private Connection connection;
 	
 	/** The singleton istance of GestoreDatiPersistenti. */
-	private static GestoreDatiPersistenti istance;
+	private static GestoreDatiPersistenti instance;
 }

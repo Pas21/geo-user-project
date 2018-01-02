@@ -17,7 +17,6 @@ import commons.InvalidUsernameException;
 import commons.Posizione;
 import server.backend.wrapper.UserRegistryAPI;
 
-// TODO: Auto-generated Javadoc
 /**
  * The Class PositionsByUserJSON defines Web resources to get positions by user (HTTP method GET) and to add a position  (HTTP method POST).
  */

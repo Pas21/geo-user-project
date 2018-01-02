@@ -15,7 +15,6 @@ import commons.InvalidUsernameException;
 import commons.Utente;
 import commons.Posizione;
 
-// TODO: Auto-generated Javadoc
 /**
  * The Class UserRegistry is a back-end class for managing data on the server.
  */

@@ -1,6 +1,5 @@
 package commons;
 
-// TODO: Auto-generated Javadoc
 /**
  * The Class InvalidDateException reports the exception on incorrect date/dates.
  */

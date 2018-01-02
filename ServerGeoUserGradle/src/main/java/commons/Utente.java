@@ -6,7 +6,7 @@ import java.util.Set;
 import com.google.gson.annotations.Expose;
 
 /**
- * The Class Utente represents the abstraction of a user.
+ * The Class Utente represents the abstraction of an user.
  *
  */
 public class Utente implements Serializable,Comparable<Object>{

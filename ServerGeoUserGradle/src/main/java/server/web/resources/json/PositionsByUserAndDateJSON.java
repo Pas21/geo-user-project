@@ -17,7 +17,6 @@ import commons.InvalidUsernameException;
 import commons.Posizione;
 import server.backend.wrapper.UserRegistryAPI;
 
-// TODO: Auto-generated Javadoc
 /**
  * The Class PositionsByUserAndDateJSON defines Web resource to get all positions 
  * of an user, specified by his username in the URI, added in a range defined by an initial date and a final date (HTTP method GET).

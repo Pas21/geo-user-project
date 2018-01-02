@@ -28,7 +28,6 @@ import server.web.resources.json.PositionsByUserJSON;
 import server.web.resources.json.UserAuthJSON;
 import server.web.resources.json.UserRegJSON;
 
-// TODO: Auto-generated Javadoc
 /**
  * The Class UserRegistryWebApplication defines the front-end class for setting server configuration and its running.
  */

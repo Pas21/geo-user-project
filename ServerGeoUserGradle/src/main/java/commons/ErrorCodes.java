@@ -1,6 +1,5 @@
 package commons;
 
-// TODO: Auto-generated Javadoc
 /**
  * The Class ErrorCodes defines error codes and their related descriptions.
  */

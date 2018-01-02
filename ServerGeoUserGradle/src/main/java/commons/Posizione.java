@@ -4,9 +4,8 @@ import java.io.Serializable;
 
 import com.google.gson.annotations.Expose;
 
-// TODO: Auto-generated Javadoc
 /**
- * The Class Posizione represents the abstraction of a user position.
+ * The Class Posizione represents the abstraction of an user position.
  */
 public class Posizione implements Serializable{
 

@@ -12,7 +12,6 @@ import com.google.gson.Gson;
 import commons.Utente;
 import server.backend.wrapper.UserRegistryAPI;
 
-// TODO: Auto-generated Javadoc
 /**
  * The Class UserAuthJSON defines Web resources (HTTP method GET) to get all usernames of the registered users.
  */

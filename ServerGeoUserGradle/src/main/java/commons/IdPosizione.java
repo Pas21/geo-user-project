@@ -5,7 +5,6 @@ import java.sql.Timestamp;
 
 import com.google.gson.annotations.Expose;
 
-// TODO: Auto-generated Javadoc
 /**
  * The Class IdPosizione represents the position id of the user position.
  */
