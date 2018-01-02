@@ -13,7 +13,15 @@ import commons.IdPosizione;
 import commons.Posizione;
 import commons.Utente;
 
+// TODO: Auto-generated Javadoc
+/**
+ * The Class GestoreDatiPersistenti is a pure fabrication class that has the purpose of interfacing directly with the database.
+ */
 public class GestoreDatiPersistenti {
+	
+	/**
+	 * Instantiates the singleton istance of GestoreDatiPersistenti.
+	 */
 	private GestoreDatiPersistenti() {
 		try {
 			Class.forName("com.mysql.jdbc.Driver");
@@ -30,16 +38,31 @@ public class GestoreDatiPersistenti {
 		}
 	}
 	
+	/**
+	 * Gets the singleton istance of GestoreDatiPersistenti.
+	 *
+	 * @return istance the singleton instance of GestoreDatiPersistenti
+	 */
 	public static synchronized GestoreDatiPersistenti getInstance() {
-		if(istanza == null) 
-			istanza = new GestoreDatiPersistenti();
-		return istanza;
+		if(istance == null) 
+			istance = new GestoreDatiPersistenti();
+		return istance;
 	}
 	
+	/**
+	 * Gets the connection to the database.
+	 *
+	 * @return connection the connection to the database
+	 */
 	public Connection getConnection() {
 		return connection;
 	}
 
+	/**
+	 * Gets all registered users on the database.
+	 *
+	 * @return utenti all registered users on the database
+	 */
 	//Caricamento utenti database
 	public TreeMap<String, Utente> getUtenti(){
 		TreeMap<String, Utente> utenti = new TreeMap<String, Utente>();
@@ -71,6 +94,11 @@ public class GestoreDatiPersistenti {
 		}
 	}
 	
+	/**
+	 * Gets all registered positions on the database.
+	 *
+	 * @return posizioni all registered positions on the database
+	 */
 	//Caricamento posizioni database
 	public TreeMap<IdPosizione, Posizione> getPosizioni() {
 		TreeMap<IdPosizione, Posizione> posizioni = new TreeMap<IdPosizione, Posizione>();
@@ -108,6 +136,12 @@ public class GestoreDatiPersistenti {
 	}
 	
 	
+	/**
+	 * Inserts a new user to the database.
+	 *
+	 * @param utente the user to add
+	 * @return true, if successful and false otherwise
+	 */
 	//Aggiunta utente al database
 	public boolean addUtente(Utente utente) {
 		System.out.println("Inserimento utente: "+utente.getUsername());
@@ -136,6 +170,12 @@ public class GestoreDatiPersistenti {
 		}
 	}
 	
+	/**
+	 * Deletes user from database.
+	 *
+	 * @param utente the user to delete
+	 * @return true, if successful and false otherwise
+	 */
 	//Rimozione utente dal database
 	public boolean removeUtente(Utente utente) {
 		System.out.println("Eliminazione utente: "+ utente.getUsername());
@@ -158,23 +198,29 @@ public class GestoreDatiPersistenti {
 		}
 	}
 		
+	/**
+	 * Inserts a new position to the database.
+	 *
+	 * @param newPosition the new position to insert
+	 * @return true, if successful and false otherwise
+	 */
 	//Aggiunta posizione al database
-	public boolean addPosizione(Posizione pos) {
-		System.out.println("Inserimento posizione: " + pos.toString());
+	public boolean addPosizione(Posizione newPosition) {
+		System.out.println("Inserimento posizione: " + newPosition.toString());
 		PreparedStatement stm=null;
 		try {
 			//stm.executeUpdate("insert into posizioni (utente, latitudine, longitudine, timestamp, accuratezza) values('" + pos.getUtente().getUsername() + "','" + pos.getIdPosizione().getLatitudine() + "','" + pos.getIdPosizione().getLongitudine() + "','" + pos.getIdPosizione().getTimestamp() + "','" + pos.getAccuratezza() + "')");
 
 			stm = this.connection.prepareStatement("INSERT INTO posizioni (utente, latitudine, longitudine, timestamp, accuratezza) values(?,?,?,?,?)");
-			stm.setString(1, pos.getUtente().getUsername()); 									/* utente */
-			stm.setString(2, String.valueOf(pos.getIdPosizione().getLatitudine())); 			/* latitudine */
-			stm.setString(3, String.valueOf(pos.getIdPosizione().getLongitudine()));  			/* longitudine */
-			stm.setString(4, String.valueOf(pos.getIdPosizione().getTimestamp())); 				/* timestamp */
-			stm.setString(5, String.valueOf(pos.getAccuratezza()));    							/* accuratezza */
+			stm.setString(1, newPosition.getUtente().getUsername()); 									/* utente */
+			stm.setString(2, String.valueOf(newPosition.getIdPosizione().getLatitudine())); 			/* latitudine */
+			stm.setString(3, String.valueOf(newPosition.getIdPosizione().getLongitudine()));  			/* longitudine */
+			stm.setString(4, String.valueOf(newPosition.getIdPosizione().getTimestamp())); 				/* timestamp */
+			stm.setString(5, String.valueOf(newPosition.getAccuratezza()));    							/* accuratezza */
 			stm.executeUpdate();
 			return true;
 		} catch (SQLException e) {
-			System.err.println("Errore inserimento posizione: " + pos.toString());
+			System.err.println("Errore inserimento posizione: " + newPosition.toString());
 			return false;
 		}finally {
 			try {
@@ -186,18 +232,24 @@ public class GestoreDatiPersistenti {
 		}
 	}
 	
+	/**
+	 * Deletes an existent position from database.
+	 *
+	 * @param position the position to delete
+	 * @return true, if successful and false otherwise
+	 */
 	//Rimozione posizione dal database
-	public boolean removePosizione(Posizione pos) {
-		System.out.println("Eliminazione posizione: "+ pos.getIdPosizione().toString());
+	public boolean removePosizione(Posizione position) {
+		System.out.println("Eliminazione posizione: "+ position.getIdPosizione().toString());
 		PreparedStatement stm=null;
 		try {
 			stm = this.connection.prepareStatement("DELETE FROM posizioni where utente=? AND timestamp=?");
-			stm.setString(1, pos.getUtente().getUsername());
-			stm.setString(2, String.valueOf(pos.getIdPosizione().getTimestamp()));
+			stm.setString(1, position.getUtente().getUsername());
+			stm.setString(2, String.valueOf(position.getIdPosizione().getTimestamp()));
 			stm.executeUpdate();
 			return true;
 		} catch (SQLException e) {
-			System.err.println("Errore eliminazione posizione: "+ pos.getIdPosizione().toString());
+			System.err.println("Errore eliminazione posizione: "+ position.getIdPosizione().toString());
 			return false;
 		}finally {
 			try {
@@ -209,6 +261,12 @@ public class GestoreDatiPersistenti {
 		}
 	}		
 	
+	/**
+	 * Deletes all positions of an existent user from database.
+	 *
+	 * @param utente the user to whom to delete the positions 
+	 * @return true, if successful and false otherwise
+	 */
 	//Rimozione tutte le posizioni dal database
 	public boolean removePosizioniUtente(Utente utente) {
 		System.out.println("Eliminazione posizioni dell'utente: "+ utente.getUsername());
@@ -231,6 +289,11 @@ public class GestoreDatiPersistenti {
 		}
 	}	
 	
+	/**
+	 * Drop database.
+	 *
+	 * @return true, if successful and false otherwise
+	 */
 	//Svuotamento del database
 	public boolean dropDatabase() {
 		System.out.println("Svuotamento database... ");
@@ -253,7 +316,12 @@ public class GestoreDatiPersistenti {
 		}
 	}	
 
+	/** The Constant url to connect to the database. */
 	private final static String url = "jdbc:mysql://localhost:3306/geouserdb?user=root&password=";
+	
+	/** The reference to database connection. */
 	private Connection connection;
-	private static GestoreDatiPersistenti istanza;
+	
+	/** The singleton istance of GestoreDatiPersistenti. */
+	private static GestoreDatiPersistenti istance;
 }

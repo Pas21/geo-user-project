@@ -17,9 +17,19 @@ import commons.Utente;
 import server.backend.wrapper.UserRegistryAPI;
 import server.web.frontend.UserRegistryWebApplication;
 
+// TODO: Auto-generated Javadoc
+/**
+ * The Class UserRegJSON defines Web resources to sign a new user (HTTP method POST) and to authenticate a user (HTTP method PUT).
+ */
 public class UserRegJSON extends ServerResource{
 	
 
+	/**
+	 * Signs a new user.
+	 *
+	 * @param payload the user to sign in JSON
+	 * @return the string with the result of the HTTP request
+	 */
 	//Metodo per l'aggiunta di un utente
 	@Post
 	public String addUser(String payload){
@@ -41,6 +51,12 @@ public class UserRegJSON extends ServerResource{
 		}
 	}
 	
+	/**
+	 * Authenticates an user checking his credentials on the MapVerifier.
+	 *
+	 * @param payload the credentials of the user in JSON
+	 * @return True, if authenticated and False otherwise, both in JSON
+	 */
 	//Metodo per l'autenticazione dell'utente
 	@Put
 	public String checkUser(String payload){

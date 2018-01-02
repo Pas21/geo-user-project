@@ -15,9 +15,15 @@ import commons.InvalidUsernameException;
 import commons.Utente;
 import commons.Posizione;
 
+// TODO: Auto-generated Javadoc
+/**
+ * The Class UserRegistry is a back-end class for managing data on the server.
+ */
 public class UserRegistry {
 	
-	//Costruttore
+	/**
+	 * Instantiates a new user registry that creates an instance of the GestoriDatiPersistenti class and takes care of loading the data from the database.
+	 */
 	public UserRegistry(){
 		//Ottenimento di un'istanza del gestore del database
 		this.gestoreDB = GestoreDatiPersistenti.getInstance();
@@ -55,6 +61,13 @@ public class UserRegistry {
 		}
 	}
 
+	/**
+	 * Adds an user to set of registered users and inserts him to the database.
+	 *
+	 * @param newUtente the new user to add
+	 * @throws InvalidUsernameException the invalid username exception, username of the new user already exists
+	 * @throws InvalidEmailException the invalid email exception, email of the new user already exists
+	 */
 	//Metodo per l'aggiunta di un nuovo utente
 	public void addUtente(Utente newUtente) throws InvalidUsernameException, InvalidEmailException{
 		try{
@@ -81,6 +94,13 @@ public class UserRegistry {
 		}
 	}
 	
+	/**
+	 * Removes an user, specified by his username, from set of registered users and deletes him from the database.
+	 *
+	 * @param username the username of the user to remove 
+	 * @return true, if successful
+	 * @throws InvalidUsernameException the invalid username exception, username doesn't exist in the set of registered usernames
+	 */
 	//Metodo per la rimozione di un utente esistente
 	public boolean removeUtente(String username) throws InvalidUsernameException {
 		try {
@@ -111,6 +131,13 @@ public class UserRegistry {
 		}
 	}
 	
+	/**
+	 * Adds a user position to set of positions of its user and inserts it to the database.*
+	 * 
+	 * @param newPosizione the new position to add
+	 * @throws InvalidUsernameException the invalid username exception, username doesn't exist
+	 * @throws InvalidPositionException the invalid position exception, position already exists
+	 */
 	//Metodo per l'aggiunta di una posizione ad un utente esistente
 	public void addPosizione(Posizione newPosizione) throws InvalidUsernameException, InvalidPositionException {
 		try {
@@ -139,6 +166,13 @@ public class UserRegistry {
 		}
 	}
 	
+	/**
+	 * Removes a user position, specified by its id, from set of positions of its user and deletes him from the database.
+	 *
+	 * @param idPosizione the id posizione
+	 * @return true, if successful
+	 * @throws InvalidPositionException the invalid position exception, position doesn't exist
+	 */
 	//Metodo per la rimozione di una posizione di un utente esistente
 	public boolean removePosizione(IdPosizione idPosizione) throws InvalidPositionException {
 		try {
@@ -170,6 +204,13 @@ public class UserRegistry {
 		}
 	}
 	
+	/**
+	 * Removes all positions of an user specified by his username.
+	 *
+	 * @param username the username of the user to remove
+	 * @return true, if successful
+	 * @throws InvalidUsernameException the invalid username exception, username doesn't exist
+	 */
 	//Metodo per la rimozione di tutte le posizioni di un utente esistente
 	public boolean removePosizioni(String username) throws InvalidUsernameException{
 		try {
@@ -204,6 +245,13 @@ public class UserRegistry {
 				
 	}
 	
+	/**
+	 * Gets all positions of an user specified by his username.
+	 *
+	 * @param username the username of the user
+	 * @return posizioni all position of the user
+	 * @throws InvalidUsernameException the invalid username exception, username doesn't exists
+	 */
 	//Metodo per l'ottenimento di tutte le posizioni di un determinato utente
 	public Set<Posizione> getPosizioniByUtente(String username) throws InvalidUsernameException {
 		try {
@@ -220,6 +268,16 @@ public class UserRegistry {
 		}
 	}
 	
+	/**
+	 * Gets all positions of an user, specified by his username, added in a range defined by an initial date and a final date.
+	 *
+	 * @param username the username of the user
+	 * @param from initial date of the range 
+	 * @param to final date of the range 
+	 * @return posizioni all position of the user in the specified range
+	 * @throws InvalidUsernameException the invalid username exception, username doesn't exist
+	 * @throws InvalidDateException the invalid date exception, incorrect values of the dates
+	 */
 	//Metodo per l'ottenenimento di tutte le posizioni di un utente che ricadono entro un intervallo di tempo
 	public Set<Posizione> getPosizioniUtenteByData(String username, Timestamp from, Timestamp to) throws InvalidUsernameException, InvalidDateException {
 		try {
@@ -264,20 +322,40 @@ public class UserRegistry {
 		}
 	}
 	
+	/**
+	 * Gets all registered users.
+	 *
+	 * @return utenti all registered users
+	 */
 	//Metodi getter
 	public TreeMap<String, Utente> getUtenti(){
 		return this.utenti;
 	}
 	
+	/**
+	 * Gets all registered positions.
+	 *
+	 * @return posizioni all registered positions
+	 */
 	public TreeMap<IdPosizione, Posizione> getPosizioni() {
 		return this.posizioni;
 	}
 	
+	/**
+	 * Gets singleton istance of GestoreDatiPersistenti.
+	 *
+	 * @return gestoreDB singleton istance of GestoreDatiPersistenti
+	 */
 	public GestoreDatiPersistenti getGestoreDB() {
 		return this.gestoreDB;
 	}
 	
+	/** All registered users. */
 	private TreeMap<String, Utente> utenti;
+	
+	/** All registered positions. */
 	private TreeMap<IdPosizione, Posizione> posizioni;
+	
+	/** The singleton istance of GestoreDatiPersistenti. */
 	private GestoreDatiPersistenti gestoreDB;
 }

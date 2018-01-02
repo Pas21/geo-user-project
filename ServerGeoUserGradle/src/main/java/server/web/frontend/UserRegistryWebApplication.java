@@ -28,19 +28,35 @@ import server.web.resources.json.PositionsByUserJSON;
 import server.web.resources.json.UserAuthJSON;
 import server.web.resources.json.UserRegJSON;
 
+// TODO: Auto-generated Javadoc
+/**
+ * The Class UserRegistryWebApplication defines the front-end class for setting server configuration and its running.
+ */
 public class UserRegistryWebApplication extends Application{
 	
+	/** The Constant verifier that contains all credentials of registered users for authentication. */
 	//Creo il Map Verifier (mappa degli utenti registrati)
 	public final static MapVerifier verifier = new MapVerifier(); 		
 	
+	/**
+	 * The Class Settings defines server port and static content web directory.
+	 */
 	private class Settings{
+		
+		/** The port. */
 		public int port;
-	    public String web_base_dir;
+	    
+    	/** The web base dir. */
+    	public String web_base_dir;
 	    
 	}
 	
+	/** The root dir for web static files. */
 	private static String rootDirForWebStaticFiles;
 
+	/* (non-Javadoc)
+	 * @see org.restlet.Application#createInboundRoot()
+	 */
 	public Restlet createInboundRoot(){
 		//creiamo un router restlet che ha la funzioni di rispondere ad ogni chiamata con l'appropriata serverResource
 		Router router=new Router(getContext());
@@ -77,6 +93,11 @@ public class UserRegistryWebApplication extends Application{
 		
 	}
 	
+	/**
+	 * The main method loads server settings from file, loads credentials of registered users on MapVerifier and runs server.
+	 *
+	 * @param args the arguments of the main method
+	 */
 	public static void main(String[] args){
 		Gson gson=new Gson();
 		Settings settings=null;

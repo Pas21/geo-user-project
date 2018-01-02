@@ -17,8 +17,18 @@ import commons.InvalidUsernameException;
 import commons.Posizione;
 import server.backend.wrapper.UserRegistryAPI;
 
+// TODO: Auto-generated Javadoc
+/**
+ * The Class PositionsByUserAndDateJSON defines Web resource to get all positions 
+ * of an user, specified by his username in the URI, added in a range defined by an initial date and a final date (HTTP method GET).
+ */
 public class PositionsByUserAndDateJSON extends ServerResource{
 	
+	/**
+	 * Gets all positions of an user, specified by his username in the URI, added in a range defined by an initial date and a final date in the URI.
+	 *
+	 * @return posizioni all position of the user in the specified range
+	 */
 	//Metodo per l'ottenimento delle posizioni di un determinato utente che ricadono entro un certo intervallo temporale
 	@Get
 	public String getPosizioniByData() {
@@ -60,8 +70,18 @@ public class PositionsByUserAndDateJSON extends ServerResource{
 		}
 	}
 
+	/**
+	 * The Class MyTypeToken is an inner class for managing the serialization of objects in JSON.
+	 */
 	//Inner class per la gestione della serializzazione degli oggetti in JSON
 	static class MyTypeToken {
+		
+		/**
+		 * List type.
+		 *
+		 * @param <T> the generic type
+		 * @return the type token
+		 */
 		static <T> TypeToken<Set<T>> listType() {
 			return new TypeToken<Set<T>>() {};
 		}

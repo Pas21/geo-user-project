@@ -17,8 +17,17 @@ import commons.InvalidUsernameException;
 import commons.Posizione;
 import server.backend.wrapper.UserRegistryAPI;
 
+// TODO: Auto-generated Javadoc
+/**
+ * The Class PositionsByUserJSON defines Web resources to get positions by user (HTTP method GET) and to add a position  (HTTP method POST).
+ */
 public class PositionsByUserJSON extends ServerResource{
 	
+	/**
+	 * Gets all positions of an user specified by his username in the URI.
+	 *
+	 * @return posizioni all position of the user
+	 */
 	//Metodo per l'ottenimento delle posizioni di un utente
 		@Get
 		public String getPosizioniByUtente() {
@@ -36,6 +45,12 @@ public class PositionsByUserJSON extends ServerResource{
 			}
 		}
 		
+		/**
+		 * Adds a user position to set of positions of its user and inserts it to the database.*
+		 *
+		 * @param payload the position to add in JSON
+		 * @return the string with the result of the HTTP request
+		 */
 		//Metodo per l'aggiunta di una nuova posizione ad un determinato utente
 		@Post
 		public String addPosizione(String payload) {
@@ -58,8 +73,18 @@ public class PositionsByUserJSON extends ServerResource{
 				}
 		}
 		
+		/**
+		 * The Class MyTypeToken is an inner class for managing the serialization of objects in JSON.
+		 */
 		//Inner class per la gestione della serializzazione degli oggetti in JSON
 		static class MyTypeToken {
+			
+			/**
+			 * List type.
+			 *
+			 * @param <T> the generic type
+			 * @return the type token
+			 */
 			static <T> TypeToken<Set<T>> listType() {
 				return new TypeToken<Set<T>>() {};
 			}
