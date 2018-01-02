@@ -197,8 +197,10 @@ public class LoginActivity extends AppCompatActivity  {
                         activity.runOnUiThread(new Runnable() {
                             @Override
                             public void run() {
+
                                 Toast.makeText(LoginActivity.this, "Autenticazione con il server fallita", Toast.LENGTH_SHORT).show();
                                 finish();
+
                             }
                         });
                     }
@@ -216,7 +218,7 @@ public class LoginActivity extends AppCompatActivity  {
             ClientResource cr = new ClientResource(URI);
             String gsonResponse = null;
             Boolean response;
-
+            Log.i("Connection","Connection establishing");
 
             try {
                 gsonResponse = cr.put(gson.toJson(params[0] + ";" + params[1], String.class)).getText();
@@ -269,6 +271,8 @@ public class LoginActivity extends AppCompatActivity  {
 
 
         }
+
+
     }
 
 

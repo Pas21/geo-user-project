@@ -9,6 +9,6 @@
     Qui va inserita la chiave per i servizi google
     -->
     <string name="google_maps_key" templateMergeStrategy="preserve" translatable="false">
-        AIzaSyB_H8qd3l92rFFzb3xggXWErcCpgdt3jty
+        AIzaSyBtA0TUn4t5TekUkKFLitm6CDkHcv_fAaQ
     </string>
 </resources>
