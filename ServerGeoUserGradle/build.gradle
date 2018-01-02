@@ -65,7 +65,7 @@ task generateJavadoc(type: Javadoc) {
    classpath = configurations.compile
    failOnError = false
 }
-//tasks.check.dependsOn generateJavadoc
+tasks.check.dependsOn generateJavadoc
 //tasks.test.dependsOn generateJavadoc
 
 
