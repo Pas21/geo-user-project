@@ -65,7 +65,7 @@ task generateJavadoc(type: Javadoc) {
    classpath = configurations.compile
    failOnError = false
  }
-tasks.test.dependsOn generateJavadoc
+//tasks.test.dependsOn generateJavadoc
  
  
 //findbugs tasks settings
@@ -102,6 +102,7 @@ tasks.withType(JacocoReport) {
 test {
     reports.html.destination = file("$project.buildDir/reports/JUnitReport")
     finalizedBy jacocoTestReport
+    finalizedBy generateJavadoc
 }
 
 task createDB {
