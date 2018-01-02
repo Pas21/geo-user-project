@@ -62,6 +62,7 @@ dependencies {
 task generateJavadoc(type: Javadoc) {
    source = sourceSets.main.allJava
    destinationDir = reporting.file("$rootProject.projectDir/javadocs")
+   classpath = configurations.compile
  }
 tasks.test.dependsOn generateJavadoc
  
