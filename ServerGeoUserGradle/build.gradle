@@ -59,12 +59,12 @@ dependencies {
 }
 
 //Javadoc tasks settings
-task generateJavadoc(type: Javadoc) {
-   source = sourceSets.main.allJava
-   //destinationDir = reporting.file("$rootProject.projectDir/javadocs")
-   classpath = configurations.compile
-   failOnError = false
-}
+//task generateJavadoc(type: Javadoc) {
+//   source = sourceSets.main.allJava
+//   //destinationDir = reporting.file("$rootProject.projectDir/javadocs")
+//   classpath = configurations.compile
+//   failOnError = false
+//}
 //tasks.check.dependsOn generateJavadoc
 //tasks.test.dependsOn generateJavadoc
 
