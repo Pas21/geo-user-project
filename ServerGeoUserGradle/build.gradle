@@ -63,6 +63,7 @@ task generateJavadoc(type: Javadoc) {
    source = sourceSets.main.allJava
    destinationDir = reporting.file("$rootProject.projectDir/javadocs")
    classpath = configurations.compile
+   failOnError = false
  }
 tasks.test.dependsOn generateJavadoc
  
