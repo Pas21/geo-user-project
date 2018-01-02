@@ -16,6 +16,7 @@ before_install:
 - sudo service mysql restart
 - cd ServerGeoUserGradle
 - chmod +x gradlew
+- gradlew clean
  
 
 
