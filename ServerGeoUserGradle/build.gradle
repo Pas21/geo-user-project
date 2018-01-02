@@ -107,21 +107,21 @@ test {
 
 task createDB {
      project.exec {
-		commandLine 'C:\\Program Files\\MySQL\\MySQL Server 5.7\\bin\\mysql', "--user=utente", "--password=password",
-    	"--host=localhost", "--port=3306", "--execute=CREATE DATABASE IF NOT EXISTS geouserdb"
+		//commandLine 'C:\\Program Files\\MySQL\\MySQL Server 5.7\\bin\\mysql', "--user=utente", "--password=password",
+    	//"--host=localhost", "--port=3306", "--execute=CREATE DATABASE IF NOT EXISTS geouserdb"
     	
-    	//commandLine 'mysql', "--user=root", "--host=localhost", "--execute=CREATE DATABASE IF NOT EXISTS geouserdb"
+    	commandLine 'mysql', "--user=root", "--host=localhost", "--execute=CREATE DATABASE IF NOT EXISTS geouserdb"
     	
 	}    
 }
 
 task loadDB {
 	project.exec {
-		standardInput = new FileInputStream(project.file("$rootProject.projectDir/geouserdb.sql"))
-    	commandLine 'C:\\Program Files\\MySQL\\MySQL Server 5.7\\bin\\mysql', "--user=utente", "--password=password",
-    	"--host=localhost", "--port=3306", 'geouserdb'
+		//standardInput = new FileInputStream(project.file("$rootProject.projectDir/geouserdb.sql"))
+    	//commandLine 'C:\\Program Files\\MySQL\\MySQL Server 5.7\\bin\\mysql', "--user=utente", "--password=password",
+    	//"--host=localhost", "--port=3306", 'geouserdb'
     	
-    	//commandLine 'mysql', "--user=root", "--host=localhost", 'geouserdb'
+    	commandLine 'mysql', "--user=root", "--host=localhost", 'geouserdb'
 	}   
 }
 
