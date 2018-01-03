@@ -23,6 +23,7 @@ import com.google.gson.Gson;
 
 import commons.Utente;
 import server.backend.wrapper.UserRegistryAPI;
+import server.web.resources.json.LastPositionAllUsersJSON;
 import server.web.resources.json.PositionsByUserAndDateJSON;
 import server.web.resources.json.PositionsByUserJSON;
 import server.web.resources.json.UserAuthJSON;
@@ -73,6 +74,10 @@ public class UserRegistryWebApplication extends Application{
 		guardStaticPositionsByUser.setVerifier(verifier);
 		guardStaticPositionsByUser.setNext(PositionsByUserJSON.class);
 		
+		ChallengeAuthenticator guardStaticLastPositionUsers=new ChallengeAuthenticator(getContext(),ChallengeScheme.HTTP_BASIC,"guardStaticLastPositionUsers");
+		guardStaticLastPositionUsers.setVerifier(verifier);
+		guardStaticLastPositionUsers.setNext(LastPositionAllUsersJSON.class);
+		
 		Directory directory= new Directory(getContext(),rootDirForWebStaticFiles);
 		directory.setListingAllowed(true);
 		directory.setDeeplyAccessible(true);
@@ -87,6 +92,9 @@ public class UserRegistryWebApplication extends Application{
 		router.attach("/UserRegApplication/auth/positions/{username}/",guardStaticPositionsByUser);
 		router.attach("/UserRegApplication/auth/positions/{username}/{fromdata}/{todata}",guardStaticPositionsByUserAndDate);
 		router.attach("/UserRegApplication/auth/positions/{username}/{fromdata}/{todata}/",guardStaticPositionsByUserAndDate);
+		router.attach("/UserRegApplication/auth/positions",guardStaticLastPositionUsers);
+		router.attach("/UserRegApplication/auth/positions/",guardStaticLastPositionUsers);
+
 		
 		return router;
 		
