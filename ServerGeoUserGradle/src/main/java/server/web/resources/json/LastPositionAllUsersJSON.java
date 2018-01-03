@@ -1,6 +1,7 @@
 package server.web.resources.json;
 
 import java.sql.Timestamp;
+import java.util.HashMap;
 import java.util.Map;
 import java.util.TreeMap;
 
@@ -32,7 +33,7 @@ public class LastPositionAllUsersJSON extends ServerResource{
 		Gson gson = new GsonBuilder().excludeFieldsWithoutExposeAnnotation().create();
 		UserRegistryAPI userregAPI = UserRegistryAPI.instance();
 		Timestamp dataMin=new Timestamp(0);
-		ultimaPosizioneUtenti = new TreeMap<String,Posizione>();
+		ultimaPosizioneUtenti = new HashMap<String,Posizione>();
 		TreeMap<String,Utente> utenti;
 		Posizione posizione;
 		
@@ -65,8 +66,8 @@ public class LastPositionAllUsersJSON extends ServerResource{
 		 *
 		 * @return the type token
 		 */
-		static TypeToken<TreeMap<String,Posizione>> listType() {
-			return new TypeToken<TreeMap<String,Posizione>>() {};
+		static TypeToken<HashMap<String,Posizione>> listType() {
+			return new TypeToken<HashMap<String,Posizione>>() {};
 		}
 	}
 }
