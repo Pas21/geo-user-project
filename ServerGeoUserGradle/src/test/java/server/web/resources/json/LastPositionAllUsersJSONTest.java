@@ -4,7 +4,7 @@ import static org.junit.Assert.*;
 
 import java.sql.Timestamp;
 import java.time.LocalDateTime;
-import java.util.Map;
+import java.util.TreeMap;
 
 import org.junit.After;
 import org.junit.AfterClass;
@@ -87,7 +87,7 @@ public class LastPositionAllUsersJSONTest {
 		LastPositionAllUsersJSON lastPositionAllUsersJSON = new LastPositionAllUsersJSON();
 		String response = lastPositionAllUsersJSON.getUltimaPosizioneOgniUtente();
 		System.out.println(response);
-		Map<String,Posizione> mapLastPositionAllUsers = gson.fromJson(response, MyTypeToken.listType().getType());
+		TreeMap<String,Posizione> mapLastPositionAllUsers = gson.fromJson(response, MyTypeToken.listType().getType());
 		System.out.println(mapLastPositionAllUsers.getClass());
 		System.out.println(mapLastPositionAllUsers);
 		
