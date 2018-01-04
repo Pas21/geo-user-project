@@ -19,8 +19,6 @@ import server.backend.wrapper.UserRegistryAPI;
  */
 public class LastPositionAllUsersJSON extends ServerResource{
 
-	private Map<String,Posizione> ultimaPosizioneUtenti;
-
 	/**
 	 * Gets map with last position of each registered user.
 	 *
@@ -32,7 +30,7 @@ public class LastPositionAllUsersJSON extends ServerResource{
 		Gson gson = new GsonBuilder().excludeFieldsWithoutExposeAnnotation().create();
 		UserRegistryAPI userregAPI = UserRegistryAPI.instance();
 		Timestamp dataMin=new Timestamp(0);
-		ultimaPosizioneUtenti = new TreeMap<String,Posizione>();
+		Map<String,Posizione> ultimaPosizioneUtenti = new TreeMap<String,Posizione>();
 		TreeMap<String,Utente> utenti;
 		Posizione posizione;
 		
@@ -53,13 +51,12 @@ public class LastPositionAllUsersJSON extends ServerResource{
 		System.out.println(ultimaPosizioneUtenti);
 		return gson.toJson(ultimaPosizioneUtenti, MyTypeToken.listType().getType());
 	}
-	
-	
+
 	/**
 	 * The Class MyTypeToken is an inner class for managing the serialization of Map with type of key as String and type of value as Posizione objects in JSON.
 	 */
 	static class MyTypeToken {
-		
+
 		/**
 		 * List type.
 		 *
@@ -70,3 +67,4 @@ public class LastPositionAllUsersJSON extends ServerResource{
 		}
 	}
 }
+
