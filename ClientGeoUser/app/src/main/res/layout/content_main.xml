@@ -22,13 +22,13 @@
 
 
     <Button
-        android:text="@string/trova_utente"
+        android:id="@+id/Posizione"
         android:layout_width="wrap_content"
         android:layout_height="wrap_content"
-        android:layout_marginStart="51dp"
-        android:id="@+id/Posizione"
         android:layout_alignParentBottom="true"
-        android:layout_alignParentStart="true" />
+        android:layout_alignParentStart="true"
+        android:layout_marginStart="35dp"
+        android:text="@string/trova_utente" />
 
     <Button
         android:text="@string/update_gps"
@@ -38,6 +38,15 @@
         android:layout_alignStart="@+id/Posizione"
         android:layout_marginBottom="12dp"
         android:id="@+id/update" />
+
+    <Button
+        android:id="@+id/allUserPositionButton"
+        android:layout_width="wrap_content"
+        android:layout_height="wrap_content"
+        android:layout_alignTop="@+id/update"
+        android:layout_marginStart="24dp"
+        android:layout_toEndOf="@+id/update"
+        android:text="@string/allUserPosition" />
 
 
 </RelativeLayout>

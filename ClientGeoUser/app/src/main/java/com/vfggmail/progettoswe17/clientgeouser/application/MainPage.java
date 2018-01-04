@@ -35,9 +35,14 @@ import com.google.android.gms.maps.model.CameraPosition;
 import com.google.android.gms.maps.model.LatLng;
 import com.google.android.gms.maps.model.MarkerOptions;
 import com.google.gson.Gson;
+import com.google.gson.JsonArray;
+import com.google.gson.JsonElement;
+import com.google.gson.JsonParser;
+import com.google.gson.reflect.TypeToken;
 import com.vfggmail.progettoswe17.clientgeouser.R;
 import com.vfggmail.progettoswe17.clientgeouser.commons.ErrorCodes;
 import com.vfggmail.progettoswe17.clientgeouser.commons.IdPosizione;
+import com.vfggmail.progettoswe17.clientgeouser.commons.InvalidDateException;
 import com.vfggmail.progettoswe17.clientgeouser.commons.InvalidUsernameException;
 import com.vfggmail.progettoswe17.clientgeouser.commons.Posizione;
 import com.vfggmail.progettoswe17.clientgeouser.commons.Utente;
@@ -47,7 +52,11 @@ import org.restlet.resource.ClientResource;
 import org.restlet.resource.ResourceException;
 import java.io.IOException;
 import java.sql.Timestamp;
+import java.util.HashMap;
+import java.util.HashSet;
 import java.util.List;
+import java.util.Map;
+import java.util.TreeMap;
 
 public class MainPage extends AppCompatActivity implements OnMapReadyCallback{
 
@@ -65,6 +74,7 @@ public class MainPage extends AppCompatActivity implements OnMapReadyCallback{
 
     private Button cerca;
     private Button update;
+    private Button allPositionUserButton;
     private Gson gson;
     private final static int MY_PERMISSIONS_REQUEST=123;
 
@@ -143,6 +153,7 @@ public class MainPage extends AppCompatActivity implements OnMapReadyCallback{
 
             cerca = (Button) findViewById(R.id.Posizione);
             update = (Button) findViewById(R.id.update);
+            allPositionUserButton=(Button) findViewById(R.id.allUserPositionButton);
 
 
             //ottengo una referenza al LocationManager
@@ -175,6 +186,14 @@ public class MainPage extends AppCompatActivity implements OnMapReadyCallback{
 
                     startActivity(myIntent);
                     overridePendingTransition(R.anim.push_right_in,R.anim.push_right_out);
+
+                }
+            });
+
+            allPositionUserButton.setOnClickListener(new View.OnClickListener() {
+                @Override
+                public void onClick(View view) {
+                    new GetAllUserPositionRestTask().execute();
 
                 }
             });
@@ -449,6 +468,100 @@ public class MainPage extends AppCompatActivity implements OnMapReadyCallback{
 
 
 
+    public GetAllUserPositionRestTask createGetAllUserRestTask(){
+        return new GetAllUserPositionRestTask();
+    }
+
+
+
+
+    public class GetAllUserPositionRestTask extends AsyncTask<String, Void, Integer> {
+
+        TreeMap<String,Posizione> utenti;
+
+        protected Integer doInBackground(String... params) {
+
+            String URI= MainPage.baseURI+"auth/positions/";
+            ClientResource cr=new ClientResource(URI);
+            String gsonResponse=null;
+            utenti=new TreeMap<String,Posizione>();
+            gson=new Gson();
+
+            ChallengeScheme scheme = ChallengeScheme.HTTP_BASIC;
+            ChallengeResponse authentication = new ChallengeResponse(scheme,username,password);
+
+            cr.setChallengeResponse(authentication);
+
+
+
+
+            try{
+                gsonResponse=cr.get().getText();
+
+                utenti= gson.fromJson(gsonResponse, new TypeToken<TreeMap<String,Posizione>>() {}.getType());
+
+                if(cr.getStatus().getCode()== ErrorCodes.INVALID_USERNAME_CODE)
+                    throw gson.fromJson(gsonResponse, InvalidUsernameException.class);
+                else if(cr.getStatus().getCode()==ErrorCodes.INVALID_DATE_CODE)
+                    throw gson.fromJson(gsonResponse, InvalidDateException.class);
+
+                return 0;
+
+            }catch(InvalidUsernameException e2){
+                return 1;
+            } catch (ResourceException e1) {
+                return 2;
+            } catch (IOException e1) {
+                return 2;
+            } catch (InvalidDateException e) {
+                return 3;
+            }
+
+
+
+        }
+
+
+        protected void onPostExecute(Integer c) {
+            View parent = (View) findViewById(R.id.activity_find_user);
+            Snackbar sn;
+            HashSet<Posizione> posizioni=new HashSet<Posizione>();
+            Utente utente=new Utente();
+
+            if (c == 0) {
+                if(utenti.isEmpty()){
+                    sn=Snackbar.make(parent,"Nessuna posizione registrata dall'utente in quell'intervallo di tempo",Snackbar.LENGTH_SHORT);
+                    sn.show();
+                }else {
+
+                    for(Map.Entry<String, Posizione> posizioniUtente : this.utenti.entrySet()) {
+                        utente.setUsername(posizioniUtente.getKey());
+                        posizioniUtente.getValue().setUtente(utente);
+                        posizioni.add(posizioniUtente.getValue());
+                    }
+                    Intent myIntent = new Intent(MainPage.this, ShowMapActivity.class);
+                    myIntent.putExtra("array", posizioni);
+                    startActivity(myIntent);
+                    overridePendingTransition(R.anim.push_right_in,R.anim.push_right_out);
+                }
+            } else if (c == 1) {
+                sn=Snackbar.make(parent, "Utente non registrato", Snackbar.LENGTH_SHORT);
+                sn.show();
+
+            } else if (c == 2) {
+                sn=Snackbar.make(parent, "Errore", Snackbar.LENGTH_SHORT);
+                sn.show();
+
+            } else if(c == 3){
+                sn=Snackbar.make(parent, "Date in formato errato", Snackbar.LENGTH_SHORT);
+                sn.show();
+
+        }
+        }
+    }
+
+
+
 
 
 
@@ -546,6 +659,14 @@ public class MainPage extends AppCompatActivity implements OnMapReadyCallback{
 
                             startActivity(myIntent);
                             overridePendingTransition(R.anim.push_right_in,R.anim.push_right_out);
+
+                        }
+                    });
+
+                    allPositionUserButton.setOnClickListener(new View.OnClickListener() {
+                        @Override
+                        public void onClick(View view) {
+                            new GetAllUserPositionRestTask().execute();
 
                         }
                     });
