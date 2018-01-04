@@ -43,10 +43,10 @@ public class UserRegistryWebApplication extends Application{
 	 */
 	private class Settings{
 		
-		/** The port. */
+		/** The port on which the server is listening. */
 		public int port;
 	    
-    	/** The web base dir. */
+    	/** The web base directory */
     	public String web_base_dir;
 	    
 	}
@@ -111,7 +111,7 @@ public class UserRegistryWebApplication extends Application{
 		UserRegistryAPI urapi=UserRegistryAPI.instance();
 
 		try{
-			BufferedReader br = new BufferedReader(new InputStreamReader(new FileInputStream("Settings.json"), Charset.defaultCharset()));
+			BufferedReader br = new BufferedReader(new InputStreamReader(new FileInputStream("settings.json"), Charset.defaultCharset()));
 			settings=gson.fromJson(br.readLine(), Settings.class);
 			br.close();
 			System.err.println("Loading settings from file");

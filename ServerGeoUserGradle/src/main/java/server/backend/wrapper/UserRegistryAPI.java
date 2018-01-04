@@ -28,9 +28,9 @@ public class UserRegistryAPI {
 	}
 	
 	/**
-	 * Singleton istance of the UserRegistryAPI class.
+	 * Singleton instance of the UserRegistryAPI class.
 	 *
-	 * @return istance the ingleton istance of the UserRegistryAPI class
+	 * @return instance the singleton instance of the UserRegistryAPI class
 	 */
 	public static synchronized UserRegistryAPI instance(){
 		if(instance==null)

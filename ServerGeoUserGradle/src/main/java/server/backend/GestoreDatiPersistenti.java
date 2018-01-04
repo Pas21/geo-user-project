@@ -1,5 +1,10 @@
 package server.backend;
 
+import java.io.BufferedReader;
+import java.io.FileInputStream;
+import java.io.IOException;
+import java.io.InputStreamReader;
+import java.nio.charset.Charset;
 import java.sql.Connection;
 import java.sql.DriverManager;
 import java.sql.PreparedStatement;
@@ -8,6 +13,8 @@ import java.sql.SQLException;
 import java.sql.Statement;
 import java.sql.Timestamp;
 import java.util.TreeMap;
+
+import com.google.gson.Gson;
 
 import commons.IdPosizione;
 import commons.Posizione;
@@ -19,7 +26,7 @@ import commons.Utente;
 public class GestoreDatiPersistenti {
 	
 	/**
-	 * Instantiates the singleton istance of GestoreDatiPersistenti.
+	 * Instantiates the singleton instance of GestoreDatiPersistenti.
 	 */
 	private GestoreDatiPersistenti() {
 		try {
@@ -29,6 +36,58 @@ public class GestoreDatiPersistenti {
 		}
 		
 		this.connection = null;
+		
+		Gson gson=new Gson();
+		SettingsDB settingsDB=null;
+		BufferedReader br = null;
+		FileInputStream fis = null;
+		InputStreamReader isr = null;
+		try{
+			fis = new FileInputStream("settingsdb.json");
+			isr = new InputStreamReader(fis, Charset.defaultCharset());
+			br = new BufferedReader(isr);
+			settingsDB=gson.fromJson(br.readLine(), SettingsDB.class);
+			System.err.println("Loading database settings from file");
+			if(settingsDB.userDB==null){
+				throw new IOException("usernameDB is null");
+			}
+			if(settingsDB.passwordDB==null){
+				settingsDB.passwordDB="";
+			}
+			br.close();
+			fis.close();
+		} catch (IOException e) {
+			System.err.println("Database settings file not found");
+		}finally{
+			if(br!=null){
+				try {
+					br.close();
+				} catch (IOException e) {
+					e.printStackTrace();
+				}
+			}
+			if(isr!=null){
+				try {
+					isr.close();
+				} catch (IOException e) {
+					e.printStackTrace();
+				}
+			}
+			if(fis!=null){
+				try {
+					fis.close();
+				} catch (IOException e) {
+					e.printStackTrace();
+				}
+			}
+		}
+		try{
+			url = "jdbc:mysql://localhost:3306/geouserdb?user="+settingsDB.userDB+"&password="+settingsDB.passwordDB;
+			System.err.println("Credentials DB: " + url);
+		}catch(NullPointerException e){
+			url = "jdbc:mysql://localhost:3306/geouserdb?user=root&password=";
+			System.err.println("Error in loading database credentials, set default url: " + url);
+		}
 		
 		try {
 			this.connection = DriverManager.getConnection(url);
@@ -316,11 +375,26 @@ public class GestoreDatiPersistenti {
 	}	
 
 	/** The Constant url to connect to the database. */
-	private final static String url = "jdbc:mysql://localhost:3306/geouserdb?user=root&password=";
+	private String url;
 	
 	/** The reference to database connection. */
 	private Connection connection;
 	
 	/** The singleton istance of GestoreDatiPersistenti. */
 	private static GestoreDatiPersistenti instance;
+	
+	
+	
+	
+	/**
+	 * The Class Settings defines database credentials.
+	 */
+	private class SettingsDB{
+		
+		/** The username of the user of the database. */
+		public String userDB;
+	    
+		/** The password of the user of the database. */
+    	public String passwordDB;	    
+	}
 }
