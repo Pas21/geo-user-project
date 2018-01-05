@@ -21,7 +21,7 @@ import commons.Posizione;
 import commons.Utente;
 
 /**
- * The Class GestoreDatiPersistenti is a pure fabrication class that has the purpose of interfacing directly with the database through the Mysql driver.
+ * The Class GestoreDatiPersistenti is a pure fabrication class that has the purpose of interfacing directly with the database through the MySQL driver.
  */
 public class GestoreDatiPersistenti {
 	
