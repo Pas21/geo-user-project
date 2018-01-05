@@ -257,10 +257,12 @@ public class FindUserActivity extends AppCompatActivity implements AdapterView.O
 
     public class FindRestTask extends AsyncTask<String, Void, Integer> {
 
+        String searchedUser;
 
         protected Integer doInBackground(String... params) {
 
             String data1S=params[1],data2S=params[2];
+            searchedUser=params[0];
             data1S=data1S.replaceAll("/", "-");
             data2S=data2S.replaceAll("/", "-");
             data1S=data1S.replaceAll(" ", "_");
@@ -319,6 +321,7 @@ public class FindUserActivity extends AppCompatActivity implements AdapterView.O
                 }else {
                     Intent myIntent = new Intent(FindUserActivity.this, ShowMapActivity.class);
                     myIntent.putExtra("array", posizioni);
+                    myIntent.putExtra("searchedUser",searchedUser);
                     startActivity(myIntent);
                     overridePendingTransition(R.anim.push_right_in,R.anim.push_right_out);
                 }

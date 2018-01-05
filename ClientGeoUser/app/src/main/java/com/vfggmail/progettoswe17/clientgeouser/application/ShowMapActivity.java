@@ -25,6 +25,7 @@ public class ShowMapActivity extends AppCompatActivity implements OnMapReadyCall
     private HashSet<Posizione> posizioni;
     Intent intent;
     public final static String prefName="Preference";
+    private String searchedUser;
 
 
     @Override
@@ -34,8 +35,9 @@ public class ShowMapActivity extends AppCompatActivity implements OnMapReadyCall
 
 
 
-
         intent=getIntent();
+        searchedUser=intent.getStringExtra("searchedUser");
+
         posizioni=(HashSet<Posizione>)intent.getSerializableExtra("array");
 
         SupportMapFragment mapFragment = (SupportMapFragment) getSupportFragmentManager().findFragmentById(R.id.map);
@@ -57,7 +59,10 @@ public class ShowMapActivity extends AppCompatActivity implements OnMapReadyCall
         if(!posizioni.isEmpty()) {
             for (Posizione pos : posizioni) {
                 place = new LatLng(pos.getIdPosizione().getLatitudine(),pos.getIdPosizione().getLongitudine());
-                mMap.addMarker(new MarkerOptions().position(place).title(getSharedPreferences(prefName,MODE_PRIVATE).getString("username","null")).snippet("Registered in date : "+format.format(pos.getIdPosizione().getTimestamp())));
+                if(pos.getUtente()==null)
+                    mMap.addMarker(new MarkerOptions().position(place).title(searchedUser).snippet("Registered in date : "+format.format(pos.getIdPosizione().getTimestamp())));
+                else
+                    mMap.addMarker(new MarkerOptions().position(place).title(pos.getUtente().getUsername()).snippet("Registered in date : "+format.format(pos.getIdPosizione().getTimestamp())));
 
             }
 

@@ -538,6 +538,7 @@ public class MainPage extends AppCompatActivity implements OnMapReadyCallback{
                         utente.setUsername(posizioniUtente.getKey());
                         posizioniUtente.getValue().setUtente(utente);
                         posizioni.add(posizioniUtente.getValue());
+                        utente=new Utente();
                     }
                     Intent myIntent = new Intent(MainPage.this, ShowMapActivity.class);
                     myIntent.putExtra("array", posizioni);
