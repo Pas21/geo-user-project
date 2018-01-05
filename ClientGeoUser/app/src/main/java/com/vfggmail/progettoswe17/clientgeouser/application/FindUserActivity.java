@@ -180,7 +180,7 @@ public class FindUserActivity extends AppCompatActivity implements AdapterView.O
                 Date d1=null, d2=null;
                 Snackbar sn;
                 View parent = (View) findViewById(R.id.activity_find_user);
-                SimpleDateFormat format=new SimpleDateFormat("dd/MM/yyyy HH:mm");
+                SimpleDateFormat format=new SimpleDateFormat("yyyy/MM/dd HH:mm");
                 if(String.valueOf(userC.getText()).equals("")){
                     sn=Snackbar.make(parent,"inserire un utente da ricercare",Snackbar.LENGTH_SHORT);
                     sn.show();
