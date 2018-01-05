@@ -72,7 +72,7 @@ tasks.check.dependsOn generateJavadoc
 //findbugs tasks settings
 findbugs {
     sourceSets = [sourceSets.main]
-    ignoreFailures = true
+    ignoreFailures = false
     reportsDir = file("$project.buildDir/findbugsReports")
     effort = "max"
     reportLevel = "low"

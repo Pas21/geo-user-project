@@ -29,7 +29,9 @@ notifications:
 after_script:
 - cat /home/travis/build/Pas21/geo-user-project/ServerGeoUserGradle/build/findbugsReports/main.html
 - cat /home/travis/build/Pas21/geo-user-project/ServerGeoUserGradle/build/reports/JUnitReport/index.html
+#Setting MySQL Configuration in Travis CI
 - cat ~travis/.my.cnf
+
 
 sudo: required
 dist: trusty
