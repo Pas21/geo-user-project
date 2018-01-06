@@ -18,7 +18,7 @@ import server.backend.wrapper.UserRegistryAPI;
 import server.web.frontend.UserRegistryWebApplication;
 
 /**
- * The Class UserRegJSON defines Web resources to sign a new user (HTTP method POST) and to authenticate a user (HTTP method PUT).
+ * The Class UserRegJSON defines Web resources to sign up a new user (HTTP method POST) and to authenticate a user (HTTP method PUT).
  */
 public class UserRegJSON extends ServerResource{
 	
@@ -26,7 +26,7 @@ public class UserRegJSON extends ServerResource{
 	/**
 	 * Signs a new user.
 	 *
-	 * @param payload the user to sign in JSON
+	 * @param payload the user to sign up in JSON
 	 * @return the string with the result of the HTTP request
 	 */
 	//Metodo per l'aggiunta di un utente

@@ -523,15 +523,12 @@ public class MainPage extends AppCompatActivity implements OnMapReadyCallback{
 
 
         protected void onPostExecute(Integer c) {
-            View parent = (View) findViewById(R.id.activity_find_user);
-            Snackbar sn;
             HashSet<Posizione> posizioni=new HashSet<Posizione>();
             Utente utente=new Utente();
 
             if (c == 0) {
                 if(utenti.isEmpty()){
-                    sn=Snackbar.make(parent,"@Nessuna posizione registrata dagli utenti ",Snackbar.LENGTH_SHORT);
-                    sn.show();
+                    Toast.makeText(MainPage.this, "Nessuna posizione registrata dagli utenti", Toast.LENGTH_SHORT).show();
                 }else {
 
                     for(Map.Entry<String, Posizione> posizioniUtente : this.utenti.entrySet()) {
@@ -546,17 +543,13 @@ public class MainPage extends AppCompatActivity implements OnMapReadyCallback{
                     overridePendingTransition(R.anim.push_right_in,R.anim.push_right_out);
                 }
             } else if (c == 1) {
-                sn=Snackbar.make(parent, "Utente non registrato", Snackbar.LENGTH_SHORT);
-                sn.show();
+                Toast.makeText(MainPage.this, "Utente non registrato", Toast.LENGTH_SHORT).show();
 
             } else if (c == 2) {
-                sn=Snackbar.make(parent, "Errore", Snackbar.LENGTH_SHORT);
-                sn.show();
+                Toast.makeText(MainPage.this, "Errore", Toast.LENGTH_SHORT).show();
 
             } else if(c == 3){
-                sn=Snackbar.make(parent, "Date in formato errato", Snackbar.LENGTH_SHORT);
-                sn.show();
-
+                Toast.makeText(MainPage.this, "Date in formato errato", Toast.LENGTH_SHORT).show();
         }
         }
     }
