@@ -283,15 +283,16 @@ public class FindUserActivity extends AppCompatActivity implements AdapterView.O
 
             try{
                 gsonResponse=cr.get().getText();
+                if(cr.getStatus().getCode()== ErrorCodes.INVALID_USERNAME_CODE)
+                    throw gson.fromJson(gsonResponse, InvalidUsernameException.class);
+                else if(cr.getStatus().getCode()==ErrorCodes.INVALID_DATE_CODE)
+                    throw gson.fromJson(gsonResponse, InvalidDateException.class);
+
                 JsonArray arrayJSON=new JsonParser().parse(gsonResponse).getAsJsonArray();
 
                 for (JsonElement elemJSON: arrayJSON){
                     posizioni.add(gson.fromJson(elemJSON,Posizione.class));
                 }
-                if(cr.getStatus().getCode()== ErrorCodes.INVALID_USERNAME_CODE)
-                    throw gson.fromJson(gsonResponse, InvalidUsernameException.class);
-                else if(cr.getStatus().getCode()==ErrorCodes.INVALID_DATE_CODE)
-                    throw gson.fromJson(gsonResponse, InvalidDateException.class);
                 posizioni = gson.fromJson(gsonResponse, new TypeToken<HashSet<Posizione>>() {}.getType());
 
                 return 0;

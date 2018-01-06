@@ -40,7 +40,8 @@
                     android:hint="@string/prompt_username"
                     android:inputType="text"
                     android:maxLines="1"
-                    android:singleLine="true" />
+                    android:singleLine="true"
+                    android:maxLength="30"/>
 
 
 
@@ -54,7 +55,9 @@
                     android:imeOptions="actionUnspecified"
                     android:inputType="textPassword"
                     android:maxLines="1"
-                    android:singleLine="true" />
+                    android:singleLine="true"
+                    android:maxLength="30"/>
+
 
 
             <Button

@@ -36,7 +36,8 @@
                 android:hint="@string/prompt_username"
                 android:inputType="text"
                 android:maxLines="1"
-                android:singleLine="true" />
+                android:singleLine="true"
+                android:maxLength="30"/>
 
 
 

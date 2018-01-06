@@ -34,7 +34,9 @@
                 android:hint="@string/prompt_username"
                 android:inputType="text"
                 android:maxLines="1"
-                android:singleLine="true" />
+                android:singleLine="true"
+                android:maxLength="30"/>
+
 
 
 
@@ -48,7 +50,9 @@
                 android:imeOptions="actionUnspecified"
                 android:inputType="textPassword"
                 android:maxLines="1"
-                android:singleLine="true" />
+                android:singleLine="true"
+                android:maxLength="30"/>
+
 
             <EditText
                 android:id="@+id/signIn_password2"
@@ -60,7 +64,9 @@
                 android:imeOptions="actionUnspecified"
                 android:inputType="textPassword"
                 android:maxLines="1"
-                android:singleLine="true" />
+                android:singleLine="true"
+                android:maxLength="30"/>
+
 
 
             <EditText
@@ -70,7 +76,9 @@
                 android:hint="@string/email"
                 android:inputType="textEmailAddress"
                 android:maxLines="1"
-                android:singleLine="true" />
+                android:singleLine="true"
+                android:maxLength="40"/>
+
 
             <EditText
                 android:id="@+id/signIn_Name"
@@ -79,7 +87,9 @@
                 android:hint="@string/nome"
                 android:inputType="text"
                 android:maxLines="1"
-                android:singleLine="true" />
+                android:singleLine="true"
+                android:maxLength="30"/>
+
 
 
             <EditText
@@ -89,7 +99,9 @@
                 android:hint="@string/cognome"
                 android:inputType="text"
                 android:maxLines="1"
-                android:singleLine="true" />
+                android:singleLine="true"
+                android:maxLength="30"/>
+
 
 
             <Button

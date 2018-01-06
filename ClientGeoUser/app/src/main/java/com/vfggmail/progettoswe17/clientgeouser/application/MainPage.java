@@ -66,7 +66,7 @@ public class MainPage extends AppCompatActivity implements OnMapReadyCallback{
     static String baseURI;
     private String username;
     private String password;
-    private static String TAG = "ANTONIO_APPLICATION";
+    private static String TAG = "SWENG_APPLICATION";
     private Boolean exit = false;
 
 
@@ -530,7 +530,7 @@ public class MainPage extends AppCompatActivity implements OnMapReadyCallback{
 
             if (c == 0) {
                 if(utenti.isEmpty()){
-                    sn=Snackbar.make(parent,"Nessuna posizione registrata dall'utente in quell'intervallo di tempo",Snackbar.LENGTH_SHORT);
+                    sn=Snackbar.make(parent,"@Nessuna posizione registrata dagli utenti ",Snackbar.LENGTH_SHORT);
                     sn.show();
                 }else {
 
@@ -570,7 +570,7 @@ public class MainPage extends AppCompatActivity implements OnMapReadyCallback{
         if (exit) {
             finish(); // finish activity
         } else {
-            Toast.makeText(this, "Press Back again to Exit.",
+            Toast.makeText(this, "Premere indietro un'altra volta per chiudere l'applicazione",
                     Toast.LENGTH_SHORT).show();
             exit = true;
             new Handler().postDelayed(new Runnable() {
