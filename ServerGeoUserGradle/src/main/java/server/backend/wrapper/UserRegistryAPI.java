@@ -140,7 +140,7 @@ public class UserRegistryAPI {
 	 *
 	 * @return posizioni all registered positions
 	 */
-	public TreeMap<IdPosizione, Posizione> getPosizioni() {
+	public synchronized TreeMap<IdPosizione, Posizione> getPosizioni() {
 		return this.userreg.getPosizioni();
 	}
 	

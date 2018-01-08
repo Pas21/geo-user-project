@@ -1,9 +1,12 @@
 package server.web.frontend;
 
 import java.io.BufferedReader;
+import java.io.BufferedWriter;
 import java.io.FileInputStream;
+import java.io.FileOutputStream;
 import java.io.IOException;
 import java.io.InputStreamReader;
+import java.io.OutputStreamWriter;
 import java.net.InetAddress;
 import java.nio.charset.Charset;
 import java.util.Map;
@@ -20,6 +23,7 @@ import org.restlet.security.ChallengeAuthenticator;
 import org.restlet.security.MapVerifier;
 
 import com.google.gson.Gson;
+import com.google.gson.JsonSyntaxException;
 
 import commons.Utente;
 import server.backend.wrapper.UserRegistryAPI;
@@ -102,6 +106,7 @@ public class UserRegistryWebApplication extends Application{
 	
 	/**
 	 * The main method loads server settings from file, loads credentials of registered users on MapVerifier and runs server.
+	 * If the settings file does not exist, it is created by setting the default values (port=8182, web_base_dir:"web")
 	 *
 	 * @param args the arguments of the main method
 	 */
@@ -115,13 +120,30 @@ public class UserRegistryWebApplication extends Application{
 			settings=gson.fromJson(br.readLine(), Settings.class);
 			br.close();
 			System.err.println("Loading settings from file");
-		} catch (IOException e1) {
-			System.err.println("Settings file not found");
-			System.exit(-1);
+		}catch (IOException e1){
+			System.err.println("Settings file not found, creation of the file with default values");
+			try {
+				BufferedWriter writer = new BufferedWriter(new OutputStreamWriter(new FileOutputStream("settings.json"), Charset.defaultCharset()));
+				writer.write("{port:8182,web_base_dir:web}");
+				writer.close();
+			} catch (IOException e) {
+				System.err.println("Error in creation of the file, set the default values");
+			}
+		}catch(JsonSyntaxException e){
+			System.err.println("Wrong settings file, set the default values");
+		}finally{
+			if(settings==null){
+				settings=gson.fromJson("{port:8182,web_base_dir:web}", Settings.class);
+			}				
 		}
 
-		rootDirForWebStaticFiles="file:\\\\"+System.getProperty("user.dir")+"\\"+settings.web_base_dir;
-		System.err.println("Web Directory: " + rootDirForWebStaticFiles);
+		
+		try{
+			rootDirForWebStaticFiles="file:\\\\"+System.getProperty("user.dir")+"\\"+settings.web_base_dir;
+			System.err.println("Web Directory: " + rootDirForWebStaticFiles);
+		}catch(NullPointerException e ){
+			System.err.println("EXCEPTION: Web Directory: " + rootDirForWebStaticFiles + "not found");
+		}
 		
 		//Caricamento utenti nel MapVerifier per il login
 		TreeMap<String,Utente> utenti = urapi.getUtenti();

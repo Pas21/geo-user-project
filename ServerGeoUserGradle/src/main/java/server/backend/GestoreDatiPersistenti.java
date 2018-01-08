@@ -1,9 +1,12 @@
 package server.backend;
 
 import java.io.BufferedReader;
+import java.io.BufferedWriter;
 import java.io.FileInputStream;
+import java.io.FileOutputStream;
 import java.io.IOException;
 import java.io.InputStreamReader;
+import java.io.OutputStreamWriter;
 import java.nio.charset.Charset;
 import java.sql.Connection;
 import java.sql.DriverManager;
@@ -48,16 +51,27 @@ public class GestoreDatiPersistenti {
 			br = new BufferedReader(isr);
 			settingsDB=gson.fromJson(br.readLine(), SettingsDB.class);
 			System.err.println("Loading database settings from file");
-			if(settingsDB.userDB==null){
-				throw new IOException("usernameDB is null");
-			}
-			if(settingsDB.passwordDB==null){
-				settingsDB.passwordDB="";
-			}
 			br.close();
 			fis.close();
-		} catch (IOException e) {
-			System.err.println("Database settings file not found");
+		}catch (IOException e){
+			System.err.println("Database settings file not found, creation of the file with default values");
+			BufferedWriter writer = null;
+			try {
+				writer = new BufferedWriter(new OutputStreamWriter(new FileOutputStream("settingsdb.json"), Charset.defaultCharset()));
+				writer.write("{userDB:'root',passwordDB:''}");
+				settingsDB=gson.fromJson("{userDB:'root',passwordDB:''}", SettingsDB.class);
+				writer.close();
+			} catch (IOException e1) {
+				System.err.println("Error in creation of the file, set the default values");
+			}finally {
+				if(writer!=null){
+					try {
+						writer.close();
+					} catch (IOException e2) {
+						e.printStackTrace();
+					}
+				}
+			}
 		}finally{
 			if(br!=null){
 				try {
@@ -92,7 +106,7 @@ public class GestoreDatiPersistenti {
 		try {
 			this.connection = DriverManager.getConnection(url);
 		} catch (SQLException e) {
-			System.err.println("Errore connessione database");
+			System.err.println("Error in connecting to the database");
 		}
 	}
 	
