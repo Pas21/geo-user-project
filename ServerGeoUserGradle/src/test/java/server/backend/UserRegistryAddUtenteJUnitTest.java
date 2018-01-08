@@ -115,4 +115,31 @@ private UserRegistry userreg = new UserRegistry();
 		this.userreg.addUtente(utente2);
 	}
 	
+	// Il seguente caso di test fa riferimento all'aggiunta di un nuovo utente con username di lunghezza 31 caratteri.
+	@Test
+	public void testAddUtente7() {
+		Utente utente = new Utente("qwertyuiopasdfghjklzxcvbnm12345","pietro.pass","pietro.email","pietro","goglia");
+		try {
+			this.userreg.addUtente(utente);
+		} catch (InvalidUsernameException | InvalidEmailException e) {
+			System.err.println(e.getMessage());
+		} finally {
+			assertTrue(!this.userreg.getUtenti().containsValue(utente));
+		}
+		
+	}
+	
+	// Il seguente caso di test fa riferimento all'aggiunta di un nuovo utente con email di lunghezza 41 caratteri.
+	@Test
+	public void testAddUtente8() {
+		Utente utente = new Utente("pietro.user","pietro.pass","qwertyuiopasdfghjklzxcvbnm12345aswedrfg1h","pietro","goglia");
+		try {
+			this.userreg.addUtente(utente);
+		} catch (InvalidUsernameException | InvalidEmailException e) {
+			System.err.println(e.getMessage());
+		} finally {
+			assertTrue(!this.userreg.getUtenti().containsValue(utente));
+		}
+		
+	}
 }

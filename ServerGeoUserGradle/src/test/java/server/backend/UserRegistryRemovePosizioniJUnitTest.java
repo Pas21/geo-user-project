@@ -83,27 +83,83 @@ private UserRegistry userreg = new UserRegistry();
 	@Test(expected=InvalidUsernameException.class)
 	public void testRemovePosizioni3() throws InvalidUsernameException {
 		//Aggiunta nuovo utente
-				Utente utente = new Utente("pietro.user","pietro.pass","ptr.email","pietro","goglia");
-				try {
-					this.userreg.addUtente(utente);
-				} catch (InvalidUsernameException | InvalidEmailException e) {
-					System.err.println(e.getMessage());
-				} finally {
-					assertTrue(this.userreg.getUtenti().containsValue(utente));
-				}
+		Utente utente = new Utente("pietro.user","pietro.pass","ptr.email","pietro","goglia");
+		try {
+			this.userreg.addUtente(utente);
+		} catch (InvalidUsernameException | InvalidEmailException e) {
+			System.err.println(e.getMessage());
+		} finally {
+			assertTrue(this.userreg.getUtenti().containsValue(utente));
+		}
 				
-				//Aggiunta posizioni utente
-				Posizione pos1 = new Posizione(new IdPosizione(Timestamp.valueOf(LocalDateTime.of(2017, 8, 27, 12, 0, 10)), Math.random(), Math.random()), utente, 20);
-				Posizione pos2 = new Posizione(new IdPosizione(Timestamp.valueOf(LocalDateTime.of(2017, 10, 2, 10, 23, 0)), Math.random(), Math.random()), utente, 20);		
-				try {
-					this.userreg.addPosizione(pos1);
-					this.userreg.addPosizione(pos2);
-				} catch (InvalidUsernameException | InvalidPositionException e) {
-					System.err.println(e.getMessage());
-				} finally {
-					assertTrue(this.userreg.getPosizioni().containsValue(pos1) && this.userreg.getPosizioni().containsValue(pos2));
-				}
+		//Aggiunta posizioni utente
+		Posizione pos1 = new Posizione(new IdPosizione(Timestamp.valueOf(LocalDateTime.of(2017, 8, 27, 12, 0, 10)), Math.random(), Math.random()), utente, 20);
+		Posizione pos2 = new Posizione(new IdPosizione(Timestamp.valueOf(LocalDateTime.of(2017, 10, 2, 10, 23, 0)), Math.random(), Math.random()), utente, 20);		
+		try {
+			this.userreg.addPosizione(pos1);
+			this.userreg.addPosizione(pos2);
+		} catch (InvalidUsernameException | InvalidPositionException e) {
+			System.err.println(e.getMessage());
+		} finally {
+			assertTrue(this.userreg.getPosizioni().containsValue(pos1) && this.userreg.getPosizioni().containsValue(pos2));
+		}
 				
-				this.userreg.removePosizioni("antonio.user");
+		this.userreg.removePosizioni("antonio.user");
+	}
+	
+	//Il seguente caso di test fa riferimento alla rimozione delle posizioni di un utente con username di lunghezza 0 caratteri
+	@Test(expected=InvalidUsernameException.class)
+	public void testRemovePosizioni4() throws InvalidUsernameException {
+		//Aggiunta nuovo utente
+		Utente utente = new Utente("pietro.user","pietro.pass","ptr.email","pietro","goglia");
+		try {
+			this.userreg.addUtente(utente);
+		} catch (InvalidUsernameException | InvalidEmailException e) {
+			System.err.println(e.getMessage());
+		} finally {
+			assertTrue(this.userreg.getUtenti().containsValue(utente));
+		}
+				
+		//Aggiunta posizioni utente
+		Posizione pos1 = new Posizione(new IdPosizione(Timestamp.valueOf(LocalDateTime.of(2017, 8, 27, 12, 0, 10)), Math.random(), Math.random()), utente, 20);
+		Posizione pos2 = new Posizione(new IdPosizione(Timestamp.valueOf(LocalDateTime.of(2017, 10, 2, 10, 23, 0)), Math.random(), Math.random()), utente, 20);		
+		try {
+			this.userreg.addPosizione(pos1);
+			this.userreg.addPosizione(pos2);
+		} catch (InvalidUsernameException | InvalidPositionException e) {
+			System.err.println(e.getMessage());
+		} finally {
+			assertTrue(this.userreg.getPosizioni().containsValue(pos1) && this.userreg.getPosizioni().containsValue(pos2));
+		}
+				
+		this.userreg.removePosizioni("");
+	}
+	
+	//Il seguente caso di test fa riferimento alla rimozione delle posizioni di un utente con username di lunghezza superiore a 30 caratteri
+	@Test(expected=InvalidUsernameException.class)
+	public void testRemovePosizioni5() throws InvalidUsernameException {
+		//Aggiunta nuovo utente
+		Utente utente = new Utente("pietro.user","pietro.pass","ptr.email","pietro","goglia");
+		try {
+			this.userreg.addUtente(utente);
+		} catch (InvalidUsernameException | InvalidEmailException e) {
+			System.err.println(e.getMessage());
+		} finally {
+			assertTrue(this.userreg.getUtenti().containsValue(utente));
+		}
+				
+		//Aggiunta posizioni utente
+		Posizione pos1 = new Posizione(new IdPosizione(Timestamp.valueOf(LocalDateTime.of(2017, 8, 27, 12, 0, 10)), Math.random(), Math.random()), utente, 20);
+		Posizione pos2 = new Posizione(new IdPosizione(Timestamp.valueOf(LocalDateTime.of(2017, 10, 2, 10, 23, 0)), Math.random(), Math.random()), utente, 20);		
+		try {
+			this.userreg.addPosizione(pos1);
+			this.userreg.addPosizione(pos2);
+		} catch (InvalidUsernameException | InvalidPositionException e) {
+			System.err.println(e.getMessage());
+		} finally {
+			assertTrue(this.userreg.getPosizioni().containsValue(pos1) && this.userreg.getPosizioni().containsValue(pos2));
+		}
+				
+		this.userreg.removePosizioni("qwertyuiopasdfghjklzxcvbnm12345");
 	}
 }
