@@ -2,11 +2,12 @@ package server.backend;
 
 import static org.junit.Assert.*;
 
-import java.sql.ResultSet;
-import java.sql.SQLException;
-import java.sql.Statement;
 import java.sql.Timestamp;
 
+import org.hibernate.Session;
+import org.hibernate.SessionFactory;
+import org.hibernate.Transaction;
+import org.hibernate.query.NativeQuery;
 import org.junit.After;
 import org.junit.AfterClass;
 import org.junit.Before;
@@ -79,68 +80,33 @@ public class GestoreDatiPersistentiRemoveJUnitTest {
 		assertTrue("Aggiunta non consentita di una nuova posizione ad un utente!", g.addPosizione(p1) && g.getPosizioni().containsKey(idPos1));
 
 		//Eliminazione posizioni utente con una posizione
-		assertTrue("Eliminazione non consentita di piu' posizioni dell'utente 'lor' avente una posizione!", g.removePosizioniUtente(u2));
-		//verificare che le posizioni dell'utente sono assenti nel DB
-		Statement stm=null;
-		ResultSet results=null;
-		try {
-			stm = g.getConnection().createStatement();
-			results=stm.executeQuery("select * from posizioni where utente='lor'");
-			results.last();
-			assertTrue("La lista delle posizioni dell'utente 'lor' deve essere vuota!", results.getRow()==0);
-		} catch (SQLException e) {
-			assertTrue("Eccezione sulla query!", false);
-		}finally {
-			try {
-				if(stm!=null)
-					stm.close();
-				if(results!=null)
-					results.close();
-			} catch (SQLException e) {
-				e.printStackTrace();
-			}
-		}
+				assertTrue("Eliminazione non consentita di piu' posizioni dell'utente 'lor' avente una posizione!", g.removePosizioniUtente(u2));
+				//verificare che le posizioni dell'utente sono assenti nel DB
+				SessionFactory sessionFactory = g.getFactory();
+				Session session = sessionFactory.openSession();
+				Transaction tx = session.beginTransaction();
+				NativeQuery<?> results=session.createNativeQuery("select * from posizioni where utente='lor'");
+				assertTrue("La lista delle posizioni dell'utente 'lor' deve essere vuota!", results.getFirstResult()==0);
+				tx.commit();
+				session.close();
 
-		//Verificare che l'utente u1 abbia piu' di una posizione memorizzata nel DB
-		try{
-			stm = g.getConnection().createStatement();
-			results=stm.executeQuery("select * from posizioni where utente='pas'");
-			results.last();
-			System.out.println(results.getRow());
-			assertTrue("La lista delle posizioni dell'utente 'pas' deve avere piu' di una posizione!", results.getRow()>1);
-		} catch (SQLException e) {
-			assertTrue("Eccezione sulla query!", false);
-		}finally {
-			try {
-				if(stm!=null)
-					stm.close();
-				if(results!=null)
-					results.close();
-			} catch (SQLException e) {
-				e.printStackTrace();
-			}
-		}
-
-		//Eliminazione posizioni utente con piu' di una posizione
-		assertTrue("Eliminazione non consentita di piu' posizioni dell'utente 'pas' avente piu' posizioni!", g.removePosizioniUtente(u1));
-
-		//Verificare che le posizioni dell'utente sono assenti nel DB
-		try{
-			stm = g.getConnection().createStatement();
-			results=stm.executeQuery("select * from posizioni where utente='pas'");
-			results.last();
-			assertTrue("La lista delle posizioni dell'utente 'pas' deve essere vuota!", results.getRow()==0);
-		} catch (SQLException e) {
-			assertTrue("Eccezione sulla query!", false);
-		}finally {
-			try {
-				if(stm!=null)
-					stm.close();
-				if(results!=null)
-					results.close();
-			} catch (SQLException e) {
-				e.printStackTrace();
-			}
-		}
+				//Eliminazione posizioni utente con piu' di una posizione
+				sessionFactory = g.getFactory();
+				session = sessionFactory.openSession();
+				tx = session.beginTransaction();
+				results=session.createNativeQuery("select * from posizioni where utente='pas'");
+				assertTrue("La lista delle posizioni dell'utente 'pas' deve avere piu' di una posizione!", results.getResultList().size()>1);
+				tx.commit();
+				session.close();
+				
+				assertTrue("Eliminazione non consentita di piu' posizioni dell'utente 'pas' avente piu' posizioni!", g.removePosizioniUtente(u1));
+				//Verificare che le posizioni dell'utente sono assenti nel DB
+				sessionFactory = g.getFactory();
+				session = sessionFactory.openSession();
+				tx = session.beginTransaction();
+				results=session.createNativeQuery("select * from posizioni where utente='pas'");
+				assertTrue("La lista delle posizioni dell'utente 'lor' deve essere vuota!", results.getFirstResult()==0);
+				tx.commit();
+				session.close();
 	}
 }
