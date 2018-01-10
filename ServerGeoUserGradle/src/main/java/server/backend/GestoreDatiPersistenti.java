@@ -197,7 +197,7 @@ public class GestoreDatiPersistenti {
 	/**
 	 * Deletes an existent position from database.
 	 *
-	 * @param position the position to delete
+	 * @param posizione the position to delete
 	 * @return true, if successful and false otherwise
 	 */
 	//Rimozione posizione dal database
